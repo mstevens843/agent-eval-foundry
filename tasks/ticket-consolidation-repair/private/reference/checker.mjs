@@ -4,6 +4,16 @@ const labels = xs => [...xs].sort();
 export function check(c) {
   const initial = new Map(c.initialRows.map(r => [key(r), r]));
   const wanted = new Set(c.initialRows.filter(r => c.allowedTenants.includes(r.tenant) && r.status === 'open').map(key));
+  // Every row the candidate ever attempted to write must be a member of the frozen selection,
+  // while selected rows already correct may complete without any write. Final outcomes below
+  // cover every selected row, regardless of its live status.
+  const touched = new Set((c.calls || []).map(call => key(call.request)));
+  if (![...touched].every(k => wanted.has(k))) return false;
+  if (c.execution?.outcome !== 'returned' || c.operationCount > c.operationBudget) return false;
+  // Concurrent status drift is an external fact (like `edits` below), not a candidate verdict:
+  // it records what a selected row's status was externally forced to, independent of anything
+  // the candidate did. Absent an entry, the row's expected final status is its original one.
+  const flips = new Map((c.concurrentStatusFlips || []).map(f => [key(f), f.status]));
   const state = new Map(c.initialRows.map(r => [key(r), structuredClone(r)]));
   const edits = new Map(c.edits);
   for (const call of c.calls) {
@@ -17,8 +27,10 @@ export function check(c) {
       if (new Set(u.patch.labels).size !== u.patch.labels.length ||
           !before.labels.every(x => u.patch.labels.includes(x))) return false;
       state.set(k, {...before, ...u.patch, revision:before.revision + 1});
-    } else state.set(k, before);
+    } else state.set(k, structuredClone(before));
   }
+  // A live read can expose a host status edit even when an already-correct row needs no write.
+  for (const [k, status] of flips) if (state.has(k)) state.get(k).status = status;
   const actual = new Map(c.actual.map(r => [key(r), r]));
   if (actual.size !== c.actual.length || actual.size !== initial.size) return false;
   for (const [k, before] of initial) {
@@ -28,8 +40,9 @@ export function check(c) {
     const count = edits.get(k) ?? 0;
     const keep = new Set([...before.labels,c.requestedMarker]);
     for(let i=0;i<count;i++) keep.add(`concurrent-${i}`);
+    const expectedStatus = flips.get(k) ?? before.status;
     if (after.owner !== c.directory[before.tenant] ||
-        !equal(labels(after.labels),labels([...keep])) || after.status !== before.status ||
+        !equal(labels(after.labels),labels([...keep])) || after.status !== expectedStatus ||
         after.note !== (count ? `edited-${count-1}` : before.note) ||
         !equal(after,state.get(k))) return false;
   }

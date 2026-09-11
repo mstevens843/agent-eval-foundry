@@ -212,3 +212,70 @@ service or required-checker failures for further difficulty-search trials.
 Reward **1**; service **33/33**; checker **11/11**. All **680** completion-manifest files matched their recorded sizes and hashes.
 
 [Campaign results](../round-two-third-ranked-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-third-ranked-five.json). Trial 1 is preserved.
+
+## September 11, 2026 — successor 2.0.0 engineering (no new model trial)
+
+This is a new task version, not a regrade of the Trial 2 submission above, which
+remains a correct clean pass against the earlier contract. Full rationale, the
+obligation-to-coverage matrix, and cross-package validation results are recorded in
+the [queue 11–15 successor report](../queue-eleven-fifteen-successors-2026-09-11.md);
+this section summarizes only what is specific to this package.
+
+**New business requirement.** SEMANTICS.md's own guarantees ("no externally
+concurrent graph changes," "inspect remains authoritative even during UNKNOWN") made
+the receipt/token subsystem functionally optional — every accepted Trial 2 solution
+simply re-inspected the graph before every write and treated receipts as
+hygiene, not evidence, and `reference/checker.mjs` never read the observation trace
+at all. Version 2.0.0 adds a server-tracked `generation` per resource id, exposed on
+`inspect()` results and on `receipt()` resolutions for create tokens (a create's
+`DONE` receipt additionally reports which generation it produced). The scenario
+generator is extended so the existing, already-legitimate "temporarily remove a
+resource to allow a parent replacement, then restore it" pattern also drives the
+*restore* create through the uncertain/`UNKNOWN` path, not just the first create —
+making the "old receipt read as evidence about a new incarnation" hazard actually
+reachable.
+
+**Why the previous strategy fails.** A solver that treats any terminal receipt
+resolution — `DONE` or `ABSENT` alike — as proof a create landed, instead of checking
+which outcome it actually received, now silently abandons the restore create when its
+own receipt resolves `ABSENT` (meaning that specific attempt did *not* land and must
+be reissued), leaving that id's later incarnation never actually created. This is
+graded purely at the outcome level (final graph state, and operation legality replayed
+from `before`/`after` snapshots) — no new checker clause names "generation" or
+"receipt" explicitly; the existing final-scope-completion check and the
+create/remove operation-legality replay (which independently rejects a dependent
+create whose parent never actually landed) already catch the wrong final graph this
+bug produces, by design, so the fix stays purely outcome-based rather than
+prescribing how a solver must use receipts.
+
+**Validation.** 33 scenarios grew to 65 (new incarnation-forcing cases layered onto
+the existing 32-seed bit-flag generator); 9 controls grew to 10 (new:
+`unconfirmed-restore`). Local dry-run: reference and alternative both 0 failures; all
+10 controls trip their declared check with their `clean` witness respected; checker
+12/12 correct, deterministic, non-mutating. Adversarial probe: weakening the
+checker's scope-completion loop causes 5 controls to be wrongly accepted, confirming
+that clause is load-bearing; `unconfirmed-restore` stays correctly rejected under that
+same weakening, confirming it is caught through the separate operation-legality
+mechanism as intended. Native Harbor (real Docker, `--validate`): oracle reward 1
+(service 65/65, checker 12/12, all 5 integrity checks pass), nop reward 0 (missing
+required deliverable, not an infrastructure error). Local Foundry: 15/15 operations
+pass, `local-valid`/`trial-eligible` both allowed. Native export digest
+`cef8bcfcecc3df33393e214e7df54b441a742ef54bb89d01c6fe88a4cfc6dc71`. The previously
+identified exact-string reason-format defect remains fixed (`reasonPolicy` stays
+`"diagnostic-only"`) and was not reintroduced.
+
+No model trial has been run against this version; per the implementation standards,
+the Trial 1/Trial 2 reward counts above do not carry forward to it. This work was
+done in an isolated worktree/branch (`next-five-successors-2026-09-11`) and has not
+been merged, committed to `main`, or pushed.
+
+
+## September 11 independent grader audit
+
+The [independent audit](../queue-eleven-fifteen-checker-audit-2026-09-11.md) reproduced and fixed false accepts, false rejects,
+API inconsistencies and checker-coverage gaps in the five-package successor handoff.
+Its exact audited versions and export digests supersede this document's earlier readiness
+claims for those bytes. The final audit passed 4,146 individual-cell comparisons,
+28 checker mutations against both local and protected candidate banks, all 40 native
+integrity checks and 105 Foundry assurance operations. No model trials were run, and
+historical trial counts were not changed.

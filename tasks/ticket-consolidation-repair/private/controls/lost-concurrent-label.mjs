@@ -1,8 +1,8 @@
-export function settle(initial, v, a) {
-  const owner = a.resolve({ tenant: initial.tenant, team: v.team }).owner;
+export async function settle(initial, v, a) {
+  const owner = (await a.resolve({ tenant: initial.tenant, team: v.team })).owner;
   for (let i = 0; i < 3; i++) {
-    const r = a.read(initial);
-    const out = a.batch({
+    const r = await a.read(initial);
+    const out = await a.batch({
       updates: [
         {
           tenant: r.tenant,

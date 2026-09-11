@@ -2,6 +2,14 @@ import { session, checks, equal } from "./adapter.mjs";
 const normalized = (r) => ({ ...r, parents: [...new Set(r.parents)].sort() });
 export async function runScenario(s, execute, storage) {
   const actual = new Map(s.current.map((r) => [r.id, structuredClone(r)])),
+    // Server-tracked incarnation bookkeeping, kept OUTSIDE `actual`'s own content on purpose: it
+    // must never affect the "same-content create is a safe idempotent no-op" comparison below,
+    // which still looks only at {parents,payload}. Every id ever present starts at generation 1
+    // (either seeded by the scenario's initial state, or the first time it's freshly created
+    // during the run) and increments by 1 only when a create LANDS while the id was genuinely
+    // absent -- i.e. a real remove-then-recreate, not a duplicate no-op create of an id that was
+    // never removed.
+    generationOf = new Map(s.current.map((r) => [r.id, 1])),
     operations = [],
     observations = [],
     reports = [],
@@ -17,6 +25,7 @@ export async function runScenario(s, execute, storage) {
       scope &&
       (method === "create"
         ? resource &&
+          typeof resource.payload === "string" &&
           Array.isArray(resource.parents) &&
           resource.parents.every((p) => actual.has(p)) &&
           (!actual.has(id) || equal(normalized(actual.get(id)), normalized(resource)))
@@ -27,13 +36,23 @@ export async function runScenario(s, execute, storage) {
       first = !attempted.has(key);
     attempted.add(key);
     const landed = !(first && s.uncertain === 2);
+    // Stable across an attempt/retry pair for the same key: nothing else can touch this id's
+    // presence in between (single-threaded, synchronous run, no externally concurrent changes).
+    const wasPresent = actual.has(id);
     if (landed) {
-      if (method === "create") actual.set(id, structuredClone(resource));
-      else actual.delete(id);
+      if (method === "create") {
+        if (!wasPresent) generationOf.set(id, (generationOf.get(id) || 0) + 1);
+        actual.set(id, structuredClone(resource));
+      } else actual.delete(id);
     }
     if (first && s.uncertain) {
       const token = "receipt-" + ++serial;
-      tokens.set(token, { left: 1, status: landed ? "DONE" : "ABSENT" });
+      // The generation THIS specific create call produced (or will produce once it lands) is
+      // knowable up front from `wasPresent`, independent of whether it lands on this attempt or
+      // needs a retry -- so the receipt can report it accurately regardless of timing.
+      const generation =
+        method === "create" ? (landed || wasPresent ? generationOf.get(id) : (generationOf.get(id) || 0) + 1) : undefined;
+      tokens.set(token, { left: 1, status: landed ? "DONE" : "ABSENT", generation });
       return { status: "UNKNOWN", token };
     }
     return { status: "DONE" };
@@ -42,13 +61,23 @@ export async function runScenario(s, execute, storage) {
     session(
       { scope: s.scope, target: s.target, storage },
       {
-        inspect: () => ({ resources: structuredClone([...actual.values()]) }),
+        inspect: () => ({
+          resources: [...actual.values()].map((r) => ({
+            ...structuredClone(r),
+            generation: generationOf.get(r.id),
+          })),
+        }),
         create: (a) => operate("create", a),
         remove: (a) => operate("remove", a),
         receipt: ({ token }) => {
           const r = tokens.get(token);
           if (!r) return { status: "ABSENT" };
-          return r.left-- > 0 ? { status: "PENDING", token } : { status: r.status };
+          if (r.left-- > 0) return { status: "PENDING", token };
+          // A resolved create token additionally reports the generation it concerns; a resolved
+          // remove token (or an ABSENT create token) does not -- a receipt is bound to the call
+          // that produced it, not to the resource's current identity.
+          if (r.status === "DONE" && r.generation !== undefined) return { status: "DONE", generation: r.generation };
+          return { status: r.status };
         },
       },
       (r) => reports.push(r),
@@ -77,6 +106,14 @@ export async function runScenario(s, execute, storage) {
     // way to judge completion/payload from a trace alone, since a scenario's target/scope is
     // scenario-specific structured data with no way to be derived purely from the candidate's own
     // (possibly wrong) actions.
+    //
+    // Note on `generation`: it appears only on resources inside `observations` entries (the
+    // candidate's own api.inspect/api.receipt call records) -- never inside `actual`,
+    // `expected`, `requestedTarget`, `initialResources`, or `operations[].before`, all of which
+    // stay exactly the {id,parents,payload} shape they always were. A checker does not need
+    // `generation` to grade correctly: final-state correctness (derived exactly as before from
+    // `actual`/`operations`/`before`) already implies correct incarnation handling, because a
+    // scenario bank exists where MISUSING a stale receipt provably produces a wrong final state.
     requestedScope: s.scope,
     requestedTarget: s.target,
     initialResources: s.current,

@@ -147,3 +147,70 @@ reward-zero candidates for the next failure-finding trials.
 Reward **1**; service **18/18**; checker **11/11**. All **787** completion-manifest files matched their recorded sizes and hashes.
 
 [Campaign results](../round-two-fourth-ranked-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-fourth-ranked-five.json). Earlier trial records are preserved.
+
+## September 11, 2026 — successor 3.0.0 engineering (no new model trial)
+
+This is a new task version, not a regrade of the Trial 2 submission above, which
+remains a correct clean pass against the earlier contract. Full rationale, the
+obligation-to-coverage matrix, and cross-package validation results are recorded in
+the [queue 11–15 successor report](../queue-eleven-fifteen-successors-2026-09-11.md);
+this section summarizes only what is specific to this package. Note:
+`public/package.json`'s version field was still `1.0.0` despite `SEMANTICS.md`
+already prose-labeling itself "version two" since the Trial 2 rewrite — this
+successor corrects that mismatch and becomes 3.0.0 in both places, retitling
+SEMANTICS.md "version three."
+
+**New business requirement.** This package already had the strongest recovery story
+of the five (one durable job-entry snapshot resolving a single, post-`stage`
+interruption boundary), and Trial 2's own conclusion recommended extending it, not
+replacing it. Version 3.0.0 generalizes the crash boundary to `bind`/`warm`/`cleanup`
+as well as `stage`; makes `cleanup({id})` on a non-currently-live staging record
+illegal (previously a silent no-op); and adds scenarios where a genuinely later,
+different job for the same service completes while an earlier job's own delivery is
+still interrupted and un-redelivered. A new obligation, `supersession`, requires a
+job whose own delivery was interrupted to recognize, on redelivery, when a
+higher-numbered job has already staged the same service, and defer to it rather than
+overwrite it.
+
+**Why the previous strategy fails.** The old mechanism (one durable job-entry
+snapshot, unconditional redo of stage/telemetry/bind/warm/cleanup on redelivery) was
+sufficient only because everything after `stage()` was trivially safe to blindly
+redo — telemetry regenerates for free after any stage, and cleanup was idempotent-safe
+on anything. Making cleanup illegal on an already-gone id forces genuine per-record
+progress tracking instead of a blind unconditional resweep; a solver that never
+cross-checks whether a different job has already claimed a service since its own job
+started will clobber that newer, legitimately-applied deployment on redelivery.
+
+**Validation.** 18 scenarios grew to 22 (new bind/warm/cleanup-boundary crashes and
+successive-job supersession cases); 9 controls grew to 11 (new: `double-cleanup`,
+`blind-redeliver-clobber`). Local dry-run: reference and alternative both 0 failures;
+all 11 controls trip their declared check with their `clean` witness respected;
+checker 13/13 correct, deterministic, non-mutating. Adversarial probe: removing the
+`cleanup` non-live-id check causes `double-cleanup` to be wrongly accepted (a clean,
+isolated confirmation it is uniquely load-bearing); removing the top-level cross-job
+`actionOwnershipOk` gate did not cause `blind-redeliver-clobber` to be wrongly
+accepted, since it remains independently caught by the checker's later per-run
+status/release cross-check (defense-in-depth, not a gap). Native Harbor (real Docker,
+`--validate`): oracle reward 1 (service 22/22, checker 13/13, all 5 integrity checks
+pass), nop reward 0 (missing required deliverable, not an infrastructure error).
+Local Foundry: 16/16 operations pass, `local-valid`/`trial-eligible` both allowed.
+Native export digest `5e52d6ddd28d5c052edf240b224f5780bc4855762383fe94e1077d46398dc38a`.
+The previously-rejected "unhealthy rollback fallback" design and the deliberate
+absence of a mandated durable-journal format both remain unchanged, preserving two
+structurally different correct implementations.
+
+No model trial has been run against this version; per the implementation standards,
+the Trial 1/Trial 2 reward counts above do not carry forward to it. This work was
+done in an isolated worktree/branch (`next-five-successors-2026-09-11`) and has not
+been merged, committed to `main`, or pushed.
+
+
+## September 11 independent grader audit
+
+The [independent audit](../queue-eleven-fifteen-checker-audit-2026-09-11.md) reproduced and fixed false accepts, false rejects,
+API inconsistencies and checker-coverage gaps in the five-package successor handoff.
+Its exact audited versions and export digests supersede this document's earlier readiness
+claims for those bytes. The final audit passed 4,146 individual-cell comparisons,
+28 checker mutations against both local and protected candidate banks, all 40 native
+integrity checks and 105 Foundry assurance operations. No model trials were run, and
+historical trial counts were not changed.

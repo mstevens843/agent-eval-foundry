@@ -16,7 +16,7 @@ function check(c) {
     if (!scope.has(id)) return false;
     if (method === "create") {
       const resource = args.resource;
-      if (!resource || !Array.isArray(resource.parents)) return false;
+      if (!resource || typeof resource.payload !== "string" || !Array.isArray(resource.parents)) return false;
       if (resource.parents.some(p => !before.some(r => r.id === p))) return false;
       const current = before.find(r => r.id === id);
       if (current && !same(current, resource)) return false;

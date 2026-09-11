@@ -1,9 +1,9 @@
 export const subject = {
-  run(v, api) {
+  async run(v, api) {
     const selected = new Map();
     let cursor = null;
     do {
-      const page = api.page({ cursor });
+      const page = await api.page({ cursor });
       if (page.status === "EXPIRED") {
         cursor = page.resume;
         continue;
@@ -16,18 +16,20 @@ export const subject = {
     let pending = [...selected.values()];
     // Independently batch all outstanding rows and match reordered per-row statuses by compound identity.
     for (let round = 0; round < 3 && pending.length; round++) {
-      const updates = pending
-        .map((r) => api.read({ tenant: r.tenant, id: r.id }))
-        .map((r) => ({
+      const current = [];
+      for (const r of pending) current.push(await api.read({ tenant: r.tenant, id: r.id }));
+      const updates = [];
+      for (const r of current)
+        updates.push({
           tenant: r.tenant,
           id: r.id,
           revision: r.revision,
           patch: {
-            owner: api.resolve({ tenant: r.tenant, team: v.team }).owner,
+            owner: (await api.resolve({ tenant: r.tenant, team: v.team })).owner,
             labels: [...new Set([v.marker, ...r.labels])],
           },
-        }));
-      const results = api.batch({ updates }).results;
+        });
+      const results = (await api.batch({ updates })).results;
       pending = pending.filter(
         (r) => !results.some((x) => x.tenant === r.tenant && x.id === r.id && x.status === "APPLIED"),
       );

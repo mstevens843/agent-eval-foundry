@@ -18,5 +18,5 @@ export interface API {
   cleanup(request: {id: string}): {ok: true};
 }
 export interface Subject {
-  run(view: View, api: API): {job: number; results: {service: string; status: 'deployed'|'rolled-back'|'unavailable'; release: string}[]};
+  run(view: View, api: API): {job: number; results: {service: string; status: 'deployed'|'rolled-back'|'unavailable'|'superseded'; release: string}[]};
 }

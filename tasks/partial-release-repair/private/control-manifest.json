@@ -1,7 +1,7 @@
 [
   {
     "id": "missing-dependent-closure",
-    "clean": "case-032",
+    "clean": "case-trivial-empty",
     "overlay": {
       "src/plan.mjs": "controls/missing-dependent-closure.mjs",
       "src/transport.mjs": "controls/abandon-unknown.mjs"
@@ -11,7 +11,7 @@
   },
   {
     "id": "parent-first-removal",
-    "clean": "case-032",
+    "clean": "case-trivial-empty",
     "overlay": {
       "src/graph.mjs": "controls/parent-first-removal.mjs",
       "src/transport.mjs": "controls/abandon-unknown.mjs"
@@ -21,7 +21,7 @@
   },
   {
     "id": "abandon-unknown",
-    "clean": "case-032",
+    "clean": "case-trivial-empty",
     "overlay": {
       "src/transport.mjs": "controls/abandon-unknown.mjs"
     },
@@ -75,7 +75,48 @@
       "src/plan.mjs": "controls/missing-restoration.mjs"
     },
     "check": "completion",
-    "clean": "case-032",
+    "clean": "case-trivial-empty",
     "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "unconfirmed-restore",
+    "overlay": {
+      "src/transport.mjs": "controls/unconfirmed-restore.mjs"
+    },
+    "check": "completion",
+    "clean": "case-trivial-empty",
+    "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "transient-invalid-payload",
+    "overlay": {
+      "entry.mjs": "controls/transient-invalid-payload.mjs"
+    },
+    "check": "dependency_order",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "repair-after-illegal-remove",
+    "overlay": {
+      "entry.mjs": "controls/repair-after-illegal-remove.mjs"
+    },
+    "check": "dependency_order",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "repair-after-illegal-create",
+    "overlay": {
+      "entry.mjs": "controls/repair-after-illegal-create.mjs"
+    },
+    "check": "dependency_order",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "extra-scoped-resource",
+    "overlay": {
+      "entry.mjs": "controls/extra-scoped-resource.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "correction-regression"
   }
 ]

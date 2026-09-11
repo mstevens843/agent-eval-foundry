@@ -6,11 +6,14 @@ independent execution. Accept a case exactly when every cell satisfies SEMANTICS
 
 ## Cell fields
 
-- view: original {hosts, services, placement, requests, dependencies}.
-- actual: final {placement, done}.
+- view: original {hosts, services, placement, requests, dependencies}. `view.placement` is
+  the unphased ORIGINAL topology ({host,service} pairs) that the final placement must match.
+- actual: final {placement, done}. `actual.placement` rows are phase-tagged
+  {host, service, phase: "provisioning" | "active"}.
 - history: {placement, done} after each successful state-changing API operation.
-  Placement and done arrays have no significant ordering.
-- observations: actual state/add/remove/maintain/finish calls and responses.
+  Placement rows are phase-tagged as above. Placement and done arrays have no significant
+  ordering.
+- observations: actual state/add/remove/activate/maintain/finish calls and responses.
 
 ## Common fields and output
 

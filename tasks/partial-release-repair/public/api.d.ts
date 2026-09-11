@@ -2,6 +2,11 @@ export interface Resource {
   id: string;
   parents: string[];
   payload: string;
+  // Present on every resource returned by api.inspect(); counts how many times this id has been
+  // created (1 the first time, +1 each time it is created again after having been removed).
+  // Server-assigned bookkeeping only: not part of content equality, and not supplied (ignored if
+  // present) when constructing a resource for api.create().
+  generation?: number;
 }
 export interface View {
   scope: string[];
@@ -13,7 +18,9 @@ export interface API {
   inspect(request: Record<string, never>): { resources: Resource[] };
   create(request: { resource: Resource }): Response;
   remove(request: { id: string }): Response;
-  receipt(request: { token: string }): { status: "DONE" | "ABSENT" | "PENDING"; token?: string };
+  // `generation` is present only when status is "DONE" for a create's token: the generation that
+  // specific create call produced. It is never present for a remove's token, or while PENDING.
+  receipt(request: { token: string }): { status: "DONE" | "ABSENT" | "PENDING"; token?: string; generation?: number };
 }
 export interface Subject {
   run(view: View, api: API): unknown;

@@ -1,5 +1,7 @@
 {
   "required": true,
   "reasonPolicy": "diagnostic-only",
-  "submissionModules": "workspace"
+  "submissionModules": "workspace",
+  "scenarioCoverage": "all",
+  "tokenCoverage": "opaque-v1"
 }

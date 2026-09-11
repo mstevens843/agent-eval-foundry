@@ -169,3 +169,67 @@ submission or qualify this version as a task that reliably defeats the model.
 Reward **1**; service **45/45**; checker **13/13**. All **851** completion-manifest files matched their recorded sizes and hashes.
 
 [Campaign results](../round-two-third-ranked-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-third-ranked-five.json). Trial 1 is preserved.
+
+## September 11, 2026 — successor 2.0.0 engineering (no new model trial)
+
+This is a new task version, not a regrade of the Trial 2 submission above, which
+remains a correct clean pass against the earlier contract. Full rationale, the
+obligation-to-coverage matrix, and cross-package validation results are recorded in
+the [queue 11–15 successor report](../queue-eleven-fifteen-successors-2026-09-11.md);
+this section summarizes only what is specific to this package.
+
+**New business requirement.** The prior contract was exactly one `execute()` call per
+scenario with no crash/resume concept anywhere, and `view.storage` was declared in
+the type but read by nothing — "durable staging distinct from active" was
+structurally impossible to test. Version 2.0.0 makes `view.storage` a real durable
+installation-line identifier persisted across multiple invocations sharing it, adds a
+new interruption boundary after `finish`'s server-side effect lands but before its
+response arrives (the identical attempt is redelivered against the mutated durable
+state), and adds scenarios chaining a genuinely different, later release onto the
+same storage line while an earlier interrupted attempt's staged content is still
+outstanding. A new obligation, `supersession`, requires no release ever lands
+installed twice, and that a redelivered or newly-arrived attempt never activates
+stale/superseded staged content.
+
+**Why the previous strategy fails.** The old reference and alternative both did one
+clean forward pass (verify → assemble → stage → finish) with no notion of a second,
+later attempt needing to recognize prior leftover state. A solver ported unchanged
+either blindly redelivers/re-activates its own already-completed work, or lets a
+genuinely newer release's install be clobbered by a stale earlier attempt's staged
+bytes finally landing — both are now checkable outcomes via the raw, per-attempt
+`actions`/`finishes` log the checker receives, independent of anything domain.mjs
+concluded privately.
+
+**Validation.** 45 scenarios grew to 53 (new multi-attempt successive/interrupted
+cases); 11 controls grew to 13 (new: `stale-staged-reuse`, `ignore-durability`). Local
+dry-run: reference and alternative both 0 failures; all 13 controls trip their
+declared check with their `clean` witness respected; checker 15/15 correct,
+deterministic, non-mutating. Adversarial probe: removing the entire `supersession`
+validation block did not cause either new control to be wrongly accepted — both
+remain independently caught by the existing per-attempt `completion`/`contents`
+equality checks (defense-in-depth; `supersession` is still independently derived from
+raw actions/finishes and required at the service-grading level). Native Harbor (real
+Docker, `--validate`): oracle reward 1 (service 53/53, checker 15/15, all 5 integrity
+checks pass), nop reward 0 (missing required deliverable, not an infrastructure
+error). Local Foundry: 18/18 operations pass, `local-valid`/`trial-eligible` both
+allowed. Native export digest
+`bb8910b7c5372253a416b5b75e28a1f3edbeb44fc4329cee0446f7385ff16aac`. The real dual-source
+digest/size/gunzip/plainDigest verification chain, the precise two-pass layer merge,
+and the reserved-filename prototype-pollution safety net are all unchanged and
+re-confirmed still enforced.
+
+No model trial has been run against this version; per the implementation standards,
+the Trial 1/Trial 2 reward counts above do not carry forward to it. This work was
+done in an isolated worktree/branch (`next-five-successors-2026-09-11`) and has not
+been merged, committed to `main`, or pushed.
+
+
+## September 11 independent grader audit
+
+The [independent audit](../queue-eleven-fifteen-checker-audit-2026-09-11.md) reproduced and fixed false accepts, false rejects,
+API inconsistencies and checker-coverage gaps in the five-package successor handoff.
+Its exact audited versions and export digests supersede this document's earlier readiness
+claims for those bytes. The final audit passed 4,146 individual-cell comparisons,
+28 checker mutations against both local and protected candidate banks, all 40 native
+integrity checks and 105 Foundry assurance operations. No model trials were run, and
+historical trial counts were not changed.
