@@ -185,3 +185,62 @@ attempts; a solver pass is not a Foundry reward-zero success.
 Reward **1**; service **27/27**; checker **12/12**. All **692** completion-manifest files matched their recorded sizes and hashes.
 
 [Campaign results](../round-two-third-ranked-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-third-ranked-five.json). Trial 1 is preserved.
+
+## September 11, 2026 — successor 2.0.0 engineering (no new model trial)
+
+This is a new task version, not a regrade of the Trial 2 submission above, which
+remains a correct clean pass against the earlier contract. Full rationale, the
+obligation-to-coverage matrix, and cross-package validation results are recorded in
+the [queue 11–15 successor report](../queue-eleven-fifteen-successors-2026-09-11.md);
+this section summarizes only what is specific to this package.
+
+**New business requirement.** Trial 1's own conclusion was that this package's
+complete finite state is visible and small, and that maintenance duration being "one
+atomic operation" is exactly why a flat BFS over (placement × done) could solve it
+without any real planning structure. Version 2.0.0 removes that atomicity: placements
+now carry a `provisioning`/`active` phase. `api.add` creates a provisioning placement
+(consumes host capacity, does not yet count toward a service's availability/perZone);
+a new `api.activate` promotes it to active; `api.remove` works on either phase;
+`api.maintain` requires the target host to be empty of placements in *either* phase.
+A new obligation, `readiness`, requires no placement remain provisioning at `finish`.
+`public/package.json`'s version field (previously absent) is now `"2.0.0"`.
+
+**Why the previous strategy fails.** Both the historical reference (global BFS with a
+static admissibility pre-filter) and alternative (local per-host relocation BFS)
+treated `add` as instantly counting toward availability — a solver ported unchanged
+onto 2.0.0 fails the very first multi-service relocation the moment it removes an old
+placement before activating its replacement. Reimplementing the historical planner's
+exact flat-state search over the new three-phase-per-slot space was also verified to
+be combinatorially infeasible at the declared 6-host/3-service bound (a real,
+observed multi-minute hang during implementation); the new reference instead
+decomposes into a per-request local-search planner.
+
+**Validation.** 27 scenarios (unchanged base fixture set) grew to 29 (one new
+identity-adjacent case exercising the phase split at declared scale); 10 controls
+grew to 13 (three new: `credits-provisioning`, `capacity-active-only`,
+`premature-finish`, plus `remove-before-replacement`'s exploit logic rewritten for
+the new phase semantics — see the coverage matrix in the linked report for exactly
+which obligation each targets). Local dry-run: reference and alternative both 0
+failures; all 13 controls trip their declared check with their `clean` witness
+respected; checker 15/15 correct, deterministic, non-mutating. Native Harbor (real
+Docker, `--validate`): oracle reward 1 (service 29/29, checker 15/15, all 5 integrity
+checks pass), nop reward 0 (missing required deliverable, not an infrastructure
+error). Local Foundry (`buildPortfolioPackage`/`validatePortfolioPackage`): 18/18
+operations pass, `local-valid` and `trial-eligible` both allowed. Native export
+digest `860613db732205aaa9f546c17bbf6967e5d0c7782739dc2814336f2d57d3565b`.
+
+No model trial has been run against this version; per the implementation standards,
+the Trial 1/Trial 2 reward counts above do not carry forward to it. This work was
+done in an isolated worktree/branch (`next-five-successors-2026-09-11`) and has not
+been merged, committed to `main`, or pushed.
+
+
+## September 11 independent grader audit
+
+The [independent audit](../queue-eleven-fifteen-checker-audit-2026-09-11.md) reproduced and fixed false accepts, false rejects,
+API inconsistencies and checker-coverage gaps in the five-package successor handoff.
+Its exact audited versions and export digests supersede this document's earlier readiness
+claims for those bytes. The final audit passed 4,146 individual-cell comparisons,
+28 checker mutations against both local and protected candidate banks, all 40 native
+integrity checks and 105 Foundry assurance operations. No model trials were run, and
+historical trial counts were not changed.

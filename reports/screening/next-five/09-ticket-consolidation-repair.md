@@ -153,3 +153,72 @@ observed required-deliverable failures for further failure-finding trials.
 Reward **1**; service **33/33**; checker **13/13**. All **821** completion-manifest files matched their recorded sizes and hashes.
 
 [Campaign results](../round-two-fourth-ranked-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-fourth-ranked-five.json). Earlier trial records are preserved.
+
+## September 11, 2026 — successor 2.0.0 engineering (no new model trial)
+
+This is a new task version, not a regrade of the Trial 2 submission above, which
+remains a correct clean pass against the earlier contract. Full rationale, the
+obligation-to-coverage matrix, and cross-package validation results are recorded in
+the [queue 11–15 successor report](../queue-eleven-fifteen-successors-2026-09-11.md);
+this section summarizes only what is specific to this package.
+
+**New business requirement.** The prior contract guaranteed "at most two conflicts
+per selected row" (making a fixed 3-attempt retry provably sufficient) and that
+concurrent edits never touch `status`/`tenant` (making the nominal
+snapshot-vs-current membership distinction never actually diverge, since Trial 2's
+own follow-up recommended "richer ownership relationships" or "explicitly authorized
+changes in selection eligibility" as the honest next step). Version 2.0.0 adds a
+crash/redelivery boundary on `api.batch` (page and conflict-injection budgets now
+persist across the crash rather than resetting per delivery), and allows a
+concurrently-injected edit to flip a selected row's status to `closed` mid-run after
+it was captured in the snapshot as open — the row must still be migrated, per the
+existing "population is frozen at snapshot time" rule, while `status` itself must
+still never be overwritten. A new obligation, `membership`, independently verifies
+the written set equals exactly the snapshot-frozen selection regardless of later live
+drift.
+
+**Why the previous strategy fails.** A solver that re-reads each row's live status
+before settling it, and skips one whose live status is no longer "open," now wrongly
+disqualifies a row that was legitimately snapshot-eligible. Separately, a solver that
+discards all progress and restarts full pagination-and-resettlement from scratch on
+every redelivery can now exhaust the combined (crash-inclusive) operation budget in
+at least one deliberately tight scenario, while resyncing from fresh reads with
+storage-tracked progress stays comfortably inside every scenario's budget, including
+most crash scenarios — the budget pressure exists in only a hand-picked subset so a
+solver must actually respond to it, not assume worst-case scarcity everywhere.
+
+**Validation.** 33 scenarios grew to 67 (the 32-seed bit-flag generator extended to
+64 seeds for the crash/status-flip dimensions, plus dedicated tight/loose-budget
+cases); 11 controls grew to 13 (new: `live-recheck-membership`,
+`budget-blind-restart`). Local dry-run: reference and alternative both 0 failures;
+all 13 controls trip their declared check with their `clean` witness respected;
+checker 15/15 correct, deterministic, non-mutating. Adversarial probe: removing the
+membership cross-check (`touched`/`wanted`) did not, in the specific hand run
+performed, cause `live-recheck-membership` to be wrongly accepted under the real
+shipped checker — the general final-state equality loop appears to also catch it;
+recorded as a secondary redundant-coverage observation in the linked report, not as
+evidence against the dedicated `membership` clause, which passed 15/15 in the real,
+unweakened, Docker-sandboxed native run below. Native Harbor (real Docker,
+`--validate`): oracle reward 1 (service 67/67, checker 15/15, all 5 integrity checks
+pass), nop reward 0 (missing required deliverable, not an infrastructure error).
+Local Foundry: 18/18 operations pass, `local-valid`/`trial-eligible` both allowed.
+Native export digest `f5f160cdb3642fc6cbadd401c7dcc2a7ef8088ec6808972601a5a6937ef7443a`.
+Identity-by-(tenant,id), reordered-batch-result matching by identity, per-call label
+monotonicity, and revision-guarded writes are all unchanged and re-confirmed still
+enforced.
+
+No model trial has been run against this version; per the implementation standards,
+the Trial 1/Trial 2 reward counts above do not carry forward to it. This work was
+done in an isolated worktree/branch (`next-five-successors-2026-09-11`) and has not
+been merged, committed to `main`, or pushed.
+
+
+## September 11 independent grader audit
+
+The [independent audit](../queue-eleven-fifteen-checker-audit-2026-09-11.md) reproduced and fixed false accepts, false rejects,
+API inconsistencies and checker-coverage gaps in the five-package successor handoff.
+Its exact audited versions and export digests supersede this document's earlier readiness
+claims for those bytes. The final audit passed 4,146 individual-cell comparisons,
+28 checker mutations against both local and protected candidate banks, all 40 native
+integrity checks and 105 Foundry assurance operations. No model trials were run, and
+historical trial counts were not changed.

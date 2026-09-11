@@ -12,7 +12,13 @@ independent execution. Accept a case exactly when every cell satisfies SEMANTICS
 - operations: create/remove attempts as {method, args, before}; before is the
   complete resource array immediately preceding the attempt.
 - observations: actual inspect/create/remove/receipt calls and responses.
-  Resource arrays and parent sets have no significant ordering.
+  Resource arrays and parent sets have no significant ordering. Every resource inside an
+  inspect response, and every DONE receipt response for a create token, additionally
+  carries a generation number (see SEMANTICS.md). This is informational only: it appears
+  nowhere else (not in actual, requestedTarget, initialResources, or operations[].before,
+  all of which stay the plain {id,parents,payload} shape); final correctness is fully
+  determined from actual/operations/before exactly as for every other field, and a checker
+  is not required to inspect generation to grade correctly.
 
 ## Common fields and output
 

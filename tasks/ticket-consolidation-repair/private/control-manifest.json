@@ -1,7 +1,7 @@
 [
   {
     "id": "empty-page-stop",
-    "clean": "case-032",
+    "clean": "case-solo",
     "overlay": {
       "src/pages.mjs": "controls/empty-page-stop.mjs"
     },
@@ -10,7 +10,7 @@
   },
   {
     "id": "unqualified-identity",
-    "clean": "case-032",
+    "clean": "case-solo",
     "overlay": {
       "src/selection.mjs": "controls/unqualified-identity.mjs"
     },
@@ -19,7 +19,7 @@
   },
   {
     "id": "ignore-partial-result",
-    "clean": "case-032",
+    "clean": "case-solo",
     "overlay": {
       "src/update.mjs": "controls/ignore-partial-result.mjs"
     },
@@ -28,7 +28,7 @@
   },
   {
     "id": "lost-concurrent-label",
-    "clean": "case-032",
+    "clean": "case-solo",
     "overlay": {
       "src/update.mjs": "controls/lost-concurrent-label.mjs"
     },
@@ -37,7 +37,7 @@
   },
   {
     "id": "global-directory",
-    "clean": "case-032",
+    "clean": "case-solo",
     "overlay": {
       "src/update.mjs": "controls/global-directory.mjs"
     },
@@ -83,7 +83,7 @@
       "entry.mjs": "controls/positional-batch-results.mjs"
     },
     "check": "completion",
-    "clean": "case-032",
+    "clean": "case-solo",
     "selectionRole": "post-selection-validation"
   },
   {
@@ -92,6 +92,32 @@
       "entry.mjs": "controls/intermediate-label-loss.mjs"
     },
     "check": "labels",
-    "clean": "case-032"
+    "clean": "case-solo"
+  },
+  {
+    "id": "live-recheck-membership",
+    "overlay": {
+      "entry.mjs": "controls/live-recheck-membership.mjs"
+    },
+    "check": "membership",
+    "clean": "case-solo",
+    "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "budget-blind-restart",
+    "overlay": {
+      "entry.mjs": "controls/budget-blind-restart.mjs"
+    },
+    "check": "completion",
+    "clean": "case-loose-budget-crash",
+    "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "complete-then-error",
+    "overlay": {
+      "entry.mjs": "controls/complete-then-error.mjs"
+    },
+    "check": "execution",
+    "selectionRole": "correction-regression"
   }
 ]

@@ -95,5 +95,60 @@
     "check": "contents",
     "clean": "case-032",
     "selectionRole": "correction-regression"
+  },
+  {
+    "id": "stale-staged-reuse",
+    "overlay": {
+      "src/install.mjs": "controls/stale-staged-reuse.mjs"
+    },
+    "check": "supersession",
+    "clean": "case-032",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "ignore-durability",
+    "overlay": {
+      "src/install.mjs": "controls/ignore-durability.mjs"
+    },
+    "check": "availability",
+    "clean": "case-032",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "early-wrong-commitment",
+    "overlay": {
+      "entry.mjs": "controls/early-wrong-commitment.mjs"
+    },
+    "check": "commitment",
+    "selectionRole": "correction-regression",
+    "clean": "case-032"
+  },
+  {
+    "id": "early-false-unavailable",
+    "overlay": {
+      "entry.mjs": "controls/early-false-unavailable.mjs",
+      "src/persisted-content.mjs": "controls/persisted-content.mjs"
+    },
+    "check": "availability",
+    "selectionRole": "correction-regression",
+    "clean": "case-032"
+  },
+  {
+    "id": "skip-earlier-attempt",
+    "overlay": {
+      "entry.mjs": "controls/skip-earlier-attempt.mjs",
+      "src/persisted-content.mjs": "controls/persisted-content.mjs"
+    },
+    "check": "completion",
+    "clean": "case-032",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "write-after-completion",
+    "overlay": {
+      "entry.mjs": "controls/write-after-completion.mjs"
+    },
+    "check": "legal_operations",
+    "selectionRole": "correction-regression"
   }
 ]

@@ -4,6 +4,7 @@ export const checkIds = [
   "availability",
   "placement",
   "restoration",
+  "readiness",
   "legal_operations",
 ];
 export function scenarios() {
@@ -48,7 +49,7 @@ export function scenarios() {
     }
     return { id: "case-" + String(i).padStart(3, "0"), hosts, services, placement, requests, dependencies };
   });
-  const cases = [...base, fullScaleCase()];
+  const cases = [...base, fullScaleCase(), phaseForcingCase(), capacityBlindTargetCase()];
   const identity = structuredClone(base[0]);
   identity.id = "case-026";
   const hostIds = new Map(identity.hosts.map((h, i) => [h.id, ["h:0", "h,1", "h/2", "constructor", "__proto__"][i]]));
@@ -65,6 +66,10 @@ export function scenarios() {
   identity.requests = identity.requests.map(id => hostIds.get(id));
   identity.dependencies = identity.dependencies.map(d => ({ before: hostIds.get(d.before), after: hostIds.get(d.after) }));
   cases.push(identity);
+  const eligibility = phaseForcingCase();
+  eligibility.id = "case-restricted-eligibility";
+  eligibility.services[0].eligible = ["h0", "h4"];
+  cases.push(eligibility);
   return cases;
 }
 
@@ -111,4 +116,66 @@ function fullScaleCase() {
     { before: "h2", after: "h5" },
   ];
   return { id: "case-025", hosts, services, placement, requests, dependencies };
+}
+
+/** The scenario above (and every "n & 4" base case) still lets a requested host be evacuated by
+ * pure removal, since its services carry slack above min -- the ONLY add+activate pair it forces
+ * is the final restore. This case is deliberately zero-slack per service (min == starting active
+ * count, with max exactly one above it for legal transient headroom): relocating h0's sole s1
+ * instance is impossible via "add-then-instantly-count" bookkeeping. You must reach a state where
+ * the OLD active row (on h0) and the NEW provisioning row (on a same-zone-free host) occupy
+ * capacity SIMULTANEOUSLY, then activate the new one (bringing active count to max, momentarily
+ * doubled) before it is safe to remove the old one (dropping back to min) -- and symmetrically for
+ * h3's sole-slack s2 instance, which a dependency forces to be handled only after h0.
+ */
+function phaseForcingCase() {
+  const hosts = [
+    { id: "h0", zone: "a", capacity: 4 },
+    { id: "h1", zone: "a", capacity: 2 },
+    { id: "h2", zone: "b", capacity: 4 },
+    { id: "h3", zone: "b", capacity: 2 },
+    { id: "h4", zone: "c", capacity: 2 },
+  ];
+  const services = [
+    { id: "s1", size: 2, min: 1, max: 2, perZone: 1, eligible: hosts.map((h) => h.id) },
+    { id: "s2", size: 1, min: 2, max: 3, perZone: 1, eligible: hosts.map((h) => h.id) },
+  ];
+  const placement = [
+    { host: "h0", service: "s1" },
+    { host: "h1", service: "s2" },
+    { host: "h3", service: "s2" },
+  ];
+  const requests = ["h0", "h3"];
+  const dependencies = [{ before: "h0", after: "h3" }];
+  return { id: "case-027", hosts, services, placement, requests, dependencies };
+}
+
+/** Built for the "capacity-active-only" control (a candidate that only sums ACTIVE loads toward
+ * a host's capacity, letting provisioning rows ride free). Two possible relocation targets exist
+ * for h0's sole s1 instance: h1, which already carries an unrelated active s2 instance leaving
+ * only 1 REAL unit of headroom (not enough for a size-2 provisioning row), and h2, which is empty
+ * and has real room to spare. A candidate that ignores provisioning load when checking capacity
+ * sees h1 as admissible (1 active unit counted against capacity 2, since the new provisioning row
+ * itself is excluded); the real, phase-agnostic capacity invariant then catches the overcommit (1
+ * active + 2 provisioning = 3 > 2) the instant that add lands. A correct planner's capacity check
+ * (summing every phase) rejects h1 outright and is forced to route through h2 instead, so the
+ * scenario stays solvable for reference/alternative while still exposing the bug.
+ */
+function capacityBlindTargetCase() {
+  const hosts = [
+    { id: "h0", zone: "a", capacity: 3 },
+    { id: "h1", zone: "b", capacity: 2 },
+    { id: "h2", zone: "c", capacity: 4 },
+  ];
+  const services = [
+    { id: "s1", size: 2, min: 1, max: 2, perZone: 2, eligible: ["h0", "h1", "h2"] },
+    { id: "s2", size: 1, min: 1, max: 1, perZone: 2, eligible: ["h0", "h1", "h2"] },
+  ];
+  const placement = [
+    { host: "h0", service: "s1" },
+    { host: "h1", service: "s2" },
+  ];
+  const requests = ["h0"];
+  const dependencies = [];
+  return { id: "case-028", hosts, services, placement, requests, dependencies };
 }

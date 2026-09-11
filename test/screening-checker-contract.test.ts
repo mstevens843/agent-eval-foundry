@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  checkerToken,
   completeVerdicts,
   namesCheck,
   namesObservedFailure,
@@ -7,6 +8,17 @@ import {
 } from "../src/packages/checker-contract.js";
 
 describe("screening checker contracts", () => {
+  it("requires own verdicts for opaque tokens, including prototype names", () => {
+    const tokens = Array.from({ length: 16 }, (_, i) => checkerToken(i, "opaque-v1"));
+    expect(new Set(tokens).size).toBe(tokens.length);
+    expect(tokens).toContain("__proto__");
+    const valid = Object.fromEntries(tokens.map((token) => [token, { ok: true }]));
+    expect(completeVerdicts(JSON.parse(JSON.stringify({ verdicts: valid })), tokens)).toBe(true);
+    const dropped: Record<string, { ok: boolean }> = {};
+    for (const token of tokens) dropped[token] = { ok: true };
+    expect(completeVerdicts(JSON.parse(JSON.stringify({ verdicts: dropped })), tokens)).toBe(false);
+    expect(checkerToken(0)).toBe("candidate-A");
+  });
   it("requires a Boolean verdict for every token, independently of optional diagnostics", () => {
     const tokens = ["good", "bad"];
     expect(completeVerdicts({ verdicts: { good: { ok: true }, bad: { ok: false } } }, tokens)).toBe(true);

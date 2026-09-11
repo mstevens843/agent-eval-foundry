@@ -85,5 +85,68 @@
     "check": "completion",
     "clean": "case-024",
     "selectionRole": "correction-regression"
+  },
+  {
+    "id": "credits-provisioning",
+    "overlay": {
+      "src/capacity.mjs": "controls/credits-provisioning.mjs"
+    },
+    "check": "availability",
+    "clean": "case-024",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "capacity-active-only",
+    "overlay": {
+      "src/capacity.mjs": "controls/capacity-active-only.mjs"
+    },
+    "check": "capacity",
+    "clean": "case-024",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "premature-finish",
+    "overlay": {
+      "entry.mjs": "controls/premature-finish.mjs"
+    },
+    "check": "readiness",
+    "clean": "case-024",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "leave-slack-provisioning",
+    "overlay": {
+      "entry.mjs": "controls/leave-slack-provisioning.mjs"
+    },
+    "check": "readiness",
+    "selectionRole": "correction-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "transient-ineligible",
+    "overlay": {
+      "entry.mjs": "controls/transient-ineligible.mjs"
+    },
+    "check": "placement",
+    "selectionRole": "correction-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "transient-active-ceiling",
+    "overlay": {
+      "entry.mjs": "controls/transient-active-ceiling.mjs"
+    },
+    "check": "availability",
+    "selectionRole": "correction-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "ignore-dependencies",
+    "overlay": {
+      "entry.mjs": "controls/ignore-dependencies.mjs"
+    },
+    "check": "legal_operations",
+    "selectionRole": "correction-regression",
+    "clean": "case-024"
   }
 ]

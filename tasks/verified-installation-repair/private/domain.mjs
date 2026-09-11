@@ -14,11 +14,16 @@ import { tmpdir } from "node:os";
 import { gunzipSync } from "node:zlib";
 import { createHash } from "node:crypto";
 const sha = (b) => createHash("sha256").update(b).digest("hex");
-export function expected(s) {
+
+// Pure, order-independent: the required tree for ONE attempt's own descriptors/blobs/cache,
+// or null if that attempt's own sources cannot verify every layer. Identical merge algorithm
+// to v1's expected() -- unchanged two-pass remove/opaque-then-regular, empty-tree base, dual
+// cache-or-origin verification with neither source taking precedence.
+export function expected(attempt) {
   let rows = [];
-  for (const d of s.descriptors) {
+  for (const d of attempt.descriptors) {
     let plain = null;
-    for (const encoded of [s.blobs[d.digest], s.cache[d.url]]) {
+    for (const encoded of [attempt.blobs[d.digest], attempt.cache[d.url]]) {
       if (!encoded) continue;
       try {
         const raw = Buffer.from(encoded, "base64");
@@ -72,18 +77,25 @@ function readTree(root, relative = "") {
   }
   return result;
 }
+
+// Durable, multi-invocation installer lifecycle over a shared filesystem-backed staging area
+// (view.storage identifies the line). A scenario supplies an ORDERED list of `attempts`, each
+// one an independent `execute()` call (a fresh process/adapter) against the SAME durable root:
+//   - attempt.crash === "before": this attempt's own finish() call is ACKed normally to the
+//     solver (it believes it completed) but its effect never lands -- active is untouched and
+//     whatever it staged is left sitting on disk, uncommitted, discoverable by later attempts
+//     via api.list()/api.status(). Models a process that dies just before its commit fsyncs.
+//   - attempt.crash === "after": finish()'s effect lands for REAL (active is atomically updated,
+//     or staging is discarded back to active) but the acknowledgement is never delivered to the
+//     solver -- its await api.finish(...) call throws instead, as if the process were killed
+//     between the server recording the effect and the response arriving. The NEXT attempt in
+//     the array (if any) is driven against a fresh adapter over the same durable root -- a
+//     redelivery of the identical request when it shares the same release, or a legitimately
+//     new install when it names a different one.
 export async function runScenario(s, execute, storage) {
   const root = mkdtempSync(join(tmpdir(), "foundry-install-")),
     staging = join(root, "stage");
   mkdirSync(staging);
-  const initial = structuredClone(s.initial),
-    truth = expected(s),
-    observations = [],
-    reports = [],
-    finishes = [];
-  let legal = true,
-    active = structuredClone(initial),
-    closed = false;
   const valid = (p) =>
     typeof p === "string" &&
     p.length < 512 &&
@@ -112,83 +124,179 @@ export async function runScenario(s, execute, storage) {
     else writeFileSync(join(staging, path), Buffer.from(entry.data, "base64"));
     chmodSync(join(staging, path), entry.mode);
   };
-  for (const [path, entry] of Object.entries(initial)) write({ path, entry });
-  const op = (fn) => (x) => {
-    if (closed) {
-      legal = false;
-      return { ok: false, error: "finished" };
-    }
-    try {
-      fn(x);
-      return { ok: true };
-    } catch (e) {
-      return { ok: false, error: String(e.message) };
-    }
+  const reconcileStagingTo = (tree) => {
+    for (const name of readdirSync(staging)) rmSync(join(staging, name), { recursive: true, force: true });
+    for (const [path, entry] of Object.entries(tree)) write({ path, entry });
   };
+
+  const initial = structuredClone(s.initial);
+  reconcileStagingTo(initial);
+  let active = structuredClone(initial);
+  let activeRelease = s.initialRelease ?? null;
+  let stagedRelease = null; // release id of durable, uncommitted staged content, or null.
+  const allFinishes = []; // every LANDED (server-side committed) finish, across all attempts.
+  const attemptTraces = [], attemptLegality = [];
   try {
-    await execute(
-      session(
-        { release: s.release, descriptors: s.descriptors, initial, storage },
-        {
-          cache: ({ url }) => (s.cache[url] ? { bytes: s.cache[url] } : null),
-          fetch: ({ url, digest }) =>
-            s.descriptors.some((d) => d.url === url && d.digest === digest) && s.blobs[digest]
-              ? { bytes: s.blobs[digest] }
-              : null,
-          list: () => readTree(staging),
-          remove: op(({ path }) => {
-            if (!valid(path)) throw Error("path");
-            rmSync(join(staging, path), { recursive: true, force: true });
-          }),
-          write: op(write),
-          finish: op(({ status, digests }) => {
-            if (!["installed", "unavailable"].includes(status) || !Array.isArray(digests))
-              throw Error("finish schema");
-            if (status === "installed") active = readTree(staging);
-            finishes.push({ status, digests, tree: structuredClone(active) });
-            closed = true;
-          }),
-        },
-        (r) => reports.push(r),
+    for (let attemptIndex = 0; attemptIndex < s.attempts.length; attemptIndex++) {
+      const attempt = s.attempts[attemptIndex];
+      const initialForAttempt = structuredClone(active);
+      const initialStatus = { active: activeRelease, staged: stagedRelease };
+      let interruption = null;
+      const observations = [],
+        reports = [];
+      let legal = true,
+        closed = false,
+        crashedThisAttempt = false;
+      const op = (fn) => (x) => {
+        if (closed) {
+          legal = false;
+          return { ok: false, error: "finished" };
+        }
+        try {
+          fn(x);
+          return { ok: true };
+        } catch (e) {
+          return { ok: false, error: String(e.message) };
+        }
+      };
+      const finish = async (x) => {
+        if (closed) {
+          legal = false;
+          return { ok: false, error: "finished" };
+        }
+        const { status, digests } = x ?? {};
+        if (!["installed", "unavailable"].includes(status) || !Array.isArray(digests)) {
+          return { ok: false, error: "finish schema" };
+        }
+        closed = true;
+        if (attempt.crash === "before") {
+          // Solver believes it completed; the durable effect never lands. Whatever it staged
+          // (if anything) stays exactly as written -- a leftover for a later attempt to find.
+          stagedRelease = status === "installed" ? attempt.release : null;
+          return { ok: true };
+        }
+        if (status === "installed") {
+          active = readTree(staging);
+          activeRelease = attempt.release;
+        } else {
+          reconcileStagingTo(active);
+        }
+        stagedRelease = null;
+        allFinishes.push({ attemptIndex, release: attempt.release, status, digests, tree: structuredClone(active) });
+        return { ok: true };
+      };
+      try {
+        const adapter = session(
+            { release: attempt.release, descriptors: attempt.descriptors, initial: initialForAttempt, storage },
+            {
+              cache: ({ url }) => (attempt.cache[url] ? { bytes: attempt.cache[url] } : null),
+              fetch: ({ url, digest }) =>
+                attempt.descriptors.some((d) => d.url === url && d.digest === digest) && attempt.blobs[digest]
+                  ? { bytes: attempt.blobs[digest] }
+                  : null,
+              list: () => readTree(staging),
+              status: () => ({ active: activeRelease, staged: stagedRelease }),
+              remove: op(({ path }) => {
+                if (!valid(path)) throw Error("path");
+                rmSync(join(staging, path), { recursive: true, force: true });
+              }),
+              write: op(write),
+              finish,
+            },
+            (r) => reports.push(r),
+            observations,
+          );
+        const invoke = adapter.invoke.bind(adapter);
+        adapter.invoke = async (name, args) => {
+          const value = await invoke(name, args);
+          if (name === "api.finish" && value?.ok === true && attempt.crash && !crashedThisAttempt) {
+            crashedThisAttempt = true;
+            const record = observations.at(-1);
+            record.interrupted = true;
+            interruption = { method: "finish", seq: record.seq, boundary: attempt.crash };
+            throw Error("installer-authority/lost-response");
+          }
+          return value;
+        };
+        await execute(adapter);
+      } catch (err) {
+        if (!crashedThisAttempt || !String(err).includes("installer-authority/lost-response")) throw err;
+      }
+      attemptLegality.push(legal);
+      attemptTraces.push({
+        attemptIndex,
+        release: attempt.release,
+        descriptors: attempt.descriptors,
+        blobs: attempt.blobs,
+        cache: attempt.cache,
+        initial: initialForAttempt,
         observations,
-      ),
-    );
+        reports,
+        initialStatus,
+        interruption,
+        staging: readTree(staging),
+      });
+    }
+    // Judge each delivery in chronological order. A later success cannot repair an earlier
+    // unavailable/incorrect commitment, and future sources cannot verify an earlier attempt.
+    const verified = new Map(), activated = new Set();
+    if (s.initialRelease !== null && s.initialRelease !== undefined) activated.add(s.initialRelease);
+    let completion = true, availability = true, contents = true, commitment = true,
+      atomicity = true, supersession = true;
+    for (const a of attemptTraces) {
+      const local = expected(a);
+      if (local !== null) verified.set(a.release, local);
+      const alreadyActive = a.initialStatus.active === a.release && a.initialStatus.staged === null;
+      const truth = verified.get(a.release) ?? (alreadyActive ? a.initial : null);
+      const available = truth !== null;
+      const landed = allFinishes.filter(f => f.attemptIndex === a.attemptIndex);
+      const attempts = a.observations.filter(o => o.method === "finish" && o.value?.ok === true);
+      completion &&= alreadyActive ? attempts.length === 0 :
+        attempts.length === 1 && (landed.length === 1 || a.interruption?.boundary === "before");
+      if (alreadyActive) supersession &&= !a.observations.some(o => ["write", "remove", "finish"].includes(o.method));
+      for (const o of attempts) {
+        availability &&= o.request.status === (available ? "installed" : "unavailable");
+        if (o.request.status === "installed") {
+          commitment &&= equal(o.request.digests, a.descriptors.map(d => d.digest));
+          // Even a lost pre-commit attempt must leave the verified staged bytes it claims.
+          contents &&= available && equal(a.interruption?.boundary === "before" ? a.staging : landed[0]?.tree, truth);
+        }
+      }
+      for (const f of landed) {
+        if (f.status === "installed") {
+          supersession &&= !activated.has(f.release);
+          activated.add(f.release);
+          contents &&= available && equal(f.tree, truth);
+        } else atomicity &&= equal(f.tree, a.initial);
+      }
+      if (alreadyActive) contents &&= equal(a.initial, truth) && equal(a.staging, a.initial);
+    }
     return {
       ...checks({
-        completion: finishes.length === 1,
-        availability: finishes.length === 1 && finishes[0].status === (truth ? "installed" : "unavailable"),
-        contents: equal(active, truth ?? initial),
-        commitment:
-          finishes.length === 1 &&
-          (finishes[0].status !== "installed" ||
-            equal(
-              finishes[0].digests,
-              s.descriptors.map((d) => d.digest),
-            )),
-        atomicity: truth !== null || equal(active, initial),
-        legal_operations: legal,
+        completion,
+        availability,
+        contents,
+        commitment,
+        atomicity,
+        legal_operations: attemptLegality.every(Boolean),
+        supersession,
       }),
       actual: active,
-      expected: truth ?? initial,
-      finishes,
-      observations,
-      reports,
-      // Legitimate PROBLEM input, not the answer: this is exactly the same `descriptors` array
-      // (url/digest/size/plainDigest per layer, in declared order) already handed to entry.mjs
-      // via view.descriptors -- a solver already has it. It is not echoed back anywhere else in
-      // this return value, so without it an independently-written checker has no way to verify
-      // digest/gunzip/plainDigest itself, or to know true descriptor order (a compliant
-      // candidate may legitimately query fetch/cache in a different order than declared, e.g.
-      // cache-first for everything). Adding it lets a checker recompute `commitment` (declared
-      // order, not observed query order) and independently re-derive `expected()`-equivalent
-      // content from the CANDIDATE's own observed fetch/cache bytes, instead of from any
-      // grader-only field.
-      descriptors: s.descriptors,
-      initial,
-      // Raw available artifact sources let a checker assess availability even when a
-      // candidate omits a fetch. These are inputs, not the computed installation tree.
-      blobs: s.blobs,
-      cache: s.cache,
+      initialRelease: s.initialRelease ?? null,
+      // Per-attempt PROBLEM input (release/descriptors/blobs/cache/initial -- what view.* the
+      // candidate actually received, in declared order) plus its own observation trace. A
+      // compliant candidate already had all of this; without it an independently-written
+      // checker has no way to re-derive expected()-equivalent content per attempt, or to know
+      // what was durably active entering each attempt (view.initial), or to re-check per-
+      // attempt API-call legality from observations -- exactly analogous to why v1 exposed
+      // descriptors/blobs/cache/initial at the top level.
+      attempts: attemptTraces,
+      // Host-authoritative record of every attempt whose finish() effect ACTUALLY landed
+      // (committed), regardless of whether the acknowledgement ever reached that invocation's
+      // solver process. This is a raw observable fact about the durable line, not a verdict:
+      // a candidate that is redelivered a request it already durably completed can only tell
+      // via api.status() during its OWN next invocation, never by inspecting this array.
+      finishes: allFinishes,
     };
   } finally {
     rmSync(root, { recursive: true });

@@ -70,5 +70,44 @@
     },
     "check": "rollback",
     "clean": "case-000"
+  },
+  {
+    "id": "double-cleanup",
+    "overlay": {
+      "src/cleanup.mjs": "controls/double-cleanup.mjs"
+    },
+    "check": "legal_operations"
+  },
+  {
+    "id": "blind-redeliver-clobber",
+    "overlay": {
+      "src/supersession.mjs": "controls/blind-redeliver-clobber.mjs"
+    },
+    "check": "supersession",
+    "clean": "case-000"
+  },
+  {
+    "id": "null-report",
+    "overlay": {
+      "entry.mjs": "controls/null-report.mjs"
+    },
+    "check": "reports",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "warm-stale-alias",
+    "overlay": {
+      "entry.mjs": "controls/warm-stale-alias.mjs"
+    },
+    "check": "cache",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "bind-before-observation",
+    "overlay": {
+      "entry.mjs": "controls/bind-before-observation.mjs"
+    },
+    "check": "observed_health",
+    "selectionRole": "correction-regression"
   }
 ]

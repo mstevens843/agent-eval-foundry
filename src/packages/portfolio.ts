@@ -26,7 +26,12 @@ import {
   assertAssuranceCoverage,
   runAssurance,
 } from "./assurance.js";
-import { completeVerdicts, namesObservedFailure, positiveVariantKeys } from "./checker-contract.js";
+import {
+  checkerToken,
+  completeVerdicts,
+  namesObservedFailure,
+  positiveVariantKeys,
+} from "./checker-contract.js";
 import { hashFile, localProcess } from "./local-process.js";
 import { decidePackage } from "./policy.js";
 import {
@@ -551,13 +556,17 @@ function seededShuffle<T>(items: readonly T[], seed: string): T[] {
 
 const CHECKER_BOOTSTRAP = `
 import { readFileSync } from "node:fs";
+const encode = JSON.stringify.bind(JSON), decode = JSON.parse.bind(JSON);
+const freeze = Object.freeze, values = Object.values;
+function immutable(x) { if (x && typeof x === "object") { for (const v of values(x)) immutable(v); freeze(x); } return x; }
 const { cases } = JSON.parse(readFileSync("/cases/cases.json", "utf8"));
+immutable(cases);
+const before = encode(cases);
 const { run } = await import("/checker/checker.mjs");
-const before = JSON.stringify(cases);
 const first = await run({ cases });
-const firstJSON = JSON.stringify(first);
+const firstJSON = encode(first);
 const second = await run({ cases });
-process.stdout.write(JSON.stringify({ first: JSON.parse(firstJSON), second, mutated: before !== JSON.stringify(cases) }));
+process.stdout.write(encode({ first: decode(firstJSON), second, mutated: before !== encode(cases) }));
 `;
 
 /** Removes any key literally named "expected", "truth" or "groundTruth" from the TOP LEVEL of a
@@ -693,18 +702,26 @@ export async function gradeChecker(
     (f) => f.path === "private/checker-required.json",
   );
   const checkerConfig = checkerConfigFile
-    ? get<{ reasonPolicy?: string; submissionModules?: string }>(snapshot, "verifier", checkerConfigFile.path)
+    ? get<{
+        reasonPolicy?: string;
+        submissionModules?: string;
+        scenarioCoverage?: string;
+        tokenCoverage?: string;
+      }>(snapshot, "verifier", checkerConfigFile.path)
     : {};
   const diagnosticReasons = checkerConfig.reasonPolicy === "diagnostic-only";
   const controls = get<Control[]>(snapshot, "controls", "private/control-manifest.json");
   const allScenarios = get<Scenario[]>(snapshot, "scenarios", "private/scenarios.json");
-  const { scenarioIds, undetectable } = await resolveDistinguishingScenarios(
+  const selection = await resolveDistinguishingScenarios(
     directory,
     join(output, "resolve"),
     controls,
     allScenarios,
     snapshot.record.digest,
   );
+  const { undetectable } = selection;
+  const scenarioIds =
+    checkerConfig.scenarioCoverage === "all" ? allScenarios.map((s) => s.id) : selection.scenarioIds;
   if (undetectable.length)
     throw Error(
       `PORTFOLIO_CONTROL_UNDETECTABLE: ${undetectable.join(", ")} produce no observable difference from the reference anywhere in the declared scenario space — this is a scenario-coverage defect in the package, not a sampling issue, and must be fixed before checker grading is meaningful.`,
@@ -781,7 +798,7 @@ export async function gradeChecker(
         : !observedFailingChecks.includes(candidate.expectedFailingCheck)
     )
       throw Error(`CHECKER_CANDIDATE_TRUTH_MISMATCH: ${candidate.id}`);
-    const token = `candidate-${String.fromCharCode(65 + index)}`;
+    const token = checkerToken(index, checkerConfig.tokenCoverage);
     index += 1;
     cases.push({ token, cells });
     groundTruth.set(token, {

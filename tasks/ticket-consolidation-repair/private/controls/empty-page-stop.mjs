@@ -1,8 +1,8 @@
-export function collect(a) {
+export async function collect(a) {
   const rows = [];
   let c = null;
   do {
-    const p = a.page({ cursor: c });
+    const p = await a.page({ cursor: c });
     if (p.status === "EXPIRED") {
       c = p.resume;
       continue;
