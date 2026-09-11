@@ -1,4 +1,5 @@
 export function principal(job, jobs) {
-  if (job.parent === null) return job.principal;
-  return jobs.find((j) => j.id === job.parent).principal;
+  const index = new Map(jobs.map((j) => [j.id, j]));
+  while (job.parent !== null) job = index.get(job.parent);
+  return job.principal;
 }

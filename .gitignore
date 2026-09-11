@@ -36,3 +36,7 @@ secrets.json
 
 # Private implementation briefs derived from the local analyses.
 /IMPLEMENTATION-PROMPTS/
+
+# Generated browser inspection captures.
+.playwright-cli/
+output/playwright/

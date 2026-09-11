@@ -1,80 +1,58 @@
 [
   {
-    "id": "immediate-parent-origin",
+    "id": "pending-complete",
     "overlay": {
-      "src/context.mjs": "controls/immediate-parent-origin.mjs"
+      "entry.mjs": "controls/pending-complete.mjs"
     },
-    "check": "origin_identity",
-    "selectionRole": "development-regression",
-    "clean": "case-024"
+    "check": "completion",
+    "clean": "case-025"
   },
   {
-    "id": "redecide-terminal-job",
+    "id": "wrong-origin",
     "overlay": {
-      "src/dispatcher.mjs": "controls/redecide-terminal-job.mjs"
+      "entry.mjs": "controls/wrong-origin-v3.mjs"
     },
-    "check": "terminal_history",
-    "selectionRole": "development-regression",
-    "clean": "case-024"
+    "check": "origin_identity",
+    "clean": "case-025"
   },
   {
     "id": "deny-all",
     "overlay": {
-      "src/grants.mjs": "controls/deny-all.mjs"
+      "entry.mjs": "controls/deny-v3.mjs"
     },
     "check": "positive_work",
-    "selectionRole": "development-regression"
+    "clean": "case-027"
   },
   {
-    "id": "ignore-action-attenuation",
+    "id": "wrong-payload",
     "overlay": {
-      "src/grants.mjs": "controls/ignore-action-attenuation.mjs"
-    },
-    "check": "policy_at_effect",
-    "selectionRole": "development-regression",
-    "clean": "case-024"
-  },
-  {
-    "id": "reactivate-revoked-path",
-    "overlay": {
-      "entry.mjs": "controls/reactivate-revoked-path.mjs"
-    },
-    "check": "policy_at_effect",
-    "selectionRole": "development-regression",
-    "clean": "case-024"
-  },
-  {
-    "id": "wrong-effect-payload",
-    "overlay": {
-      "entry.mjs": "controls/wrong-effect-payload.mjs"
+      "entry.mjs": "controls/payload-v3.mjs"
     },
     "check": "effect_payload",
-    "selectionRole": "development-regression"
+    "clean": "case-025"
   },
   {
-    "id": "abandon-stale-admission",
+    "id": "empty-path",
     "overlay": {
-      "entry.mjs": "controls/abandon-stale-admission.mjs"
+      "entry.mjs": "controls/path-v3.mjs"
+    },
+    "check": "policy_at_effect",
+    "clean": "case-024"
+  },
+  {
+    "id": "admission-only",
+    "overlay": {
+      "entry.mjs": "controls/admission-only.mjs"
     },
     "check": "completion",
-    "selectionRole": "development-regression",
-    "clean": "case-024"
+    "clean": "case-027"
   },
   {
     "id": "no-work",
     "overlay": {
       "entry.mjs": "controls/no-work.mjs"
     },
-    "check": "completion",
-    "selectionRole": "development-regression"
-  },
-  {
-    "id": "forged-completion",
-    "overlay": {
-      "entry.mjs": "controls/forged-completion.mjs"
-    },
-    "check": "completion",
-    "selectionRole": "development-regression"
+    "check": "completion"
   },
   {
     "id": "isolation",
@@ -82,25 +60,34 @@
       "entry.mjs": "controls/isolation.mjs"
     },
     "check": "completion",
-    "selectionRole": "development-regression",
     "isolation": true
   },
   {
-    "id": "misattribute-delivery",
+    "id": "superseded-path",
     "overlay": {
-      "entry.mjs": "controls/misattribute-delivery.mjs"
+      "entry.mjs": "controls/superseded-path.mjs"
     },
-    "check": "completion",
-    "clean": "case-024",
-    "selectionRole": "post-selection-validation"
+    "check": "policy_at_effect"
   },
   {
-    "id": "crash-unsafe-memoization",
+    "id": "superseded-origin",
     "overlay": {
-      "entry.mjs": "controls/crash-unsafe-memoization.mjs"
+      "entry.mjs": "controls/superseded-origin.mjs"
     },
-    "check": "terminal_history",
-    "selectionRole": "development-regression",
-    "clean": "case-024"
+    "check": "origin_identity"
+  },
+  {
+    "id": "superseded-payload",
+    "overlay": {
+      "entry.mjs": "controls/superseded-payload.mjs"
+    },
+    "check": "effect_payload"
+  },
+  {
+    "id": "wrong-delivery-association",
+    "overlay": {
+      "entry.mjs": "controls/wrong-delivery-association.mjs"
+    },
+    "check": "completion"
   }
 ]

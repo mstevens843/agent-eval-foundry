@@ -1,0 +1,315 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-11",
+  "providerCallsMade": 0,
+  "historicalRewardsChanged": 0,
+  "taskPackagesChanged": false,
+  "graderPackagesChanged": false,
+  "records": [
+    {
+      "id": "route-policy-repair",
+      "provider": "codex",
+      "historicalTrial": 6,
+      "versionRound": 4,
+      "recordedReward": 1,
+      "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+      "originalCompletion": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/route-policy-repair-attempt-1/completion.json",
+        "sha256": "f529ec062e584f9fce0c96bd07dfbd8afb01235babe9cc6a4ede7a051bac9438"
+      },
+      "originalGrade": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/route-policy-repair-attempt-1/grade.json",
+        "sha256": "b031742640ef5be5d51bfb02c58d808bfa4ea7377e57bd58885b1e604fe10fb7"
+      },
+      "originalChecker": {
+        "correct": 13,
+        "total": 13
+      },
+      "originalManifestFilesVerified": 910,
+      "submissionFiles": [
+        {
+          "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/route-policy-repair-attempt-1/submission/checker.mjs",
+          "sha256": "0bffad64f7e5f96bbee2f6dbe3b44bc71adf94e29147e6dcd92adc2a7241b8d3"
+        },
+        {
+          "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/route-policy-repair-attempt-1/submission/entry.mjs",
+          "sha256": "f412569f905f5641f6200151e34074fc5e072283f9cab84598d1c4ce8f91a3bf"
+        },
+        {
+          "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/route-policy-repair-attempt-1/submission/routing-lib.mjs",
+          "sha256": "2287060fc85816737939a95812b9103d9cc5decd3ef3021b44b88580bad77492"
+        },
+        {
+          "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/route-policy-repair-attempt-1/submission/target.mjs",
+          "sha256": "08c0730fe3d611ff91e74f75403204d4bd4ffeff397fb44d16b613c3d82334a6"
+        }
+      ],
+      "finding": "no-defect-found-in-bounded-audit",
+      "retainRecordedPass": true,
+      "audit": {
+        "seed": 831991,
+        "generated": 300,
+        "validCases": 299,
+        "skippedCapacity": 1,
+        "serviceChecks": 299,
+        "checkerPositive": 299,
+        "checkerNegative": 299,
+        "failures": [],
+        "maxTargetRules": 84
+      }
+    },
+    {
+      "id": "browser-replay-repair",
+      "provider": "codex",
+      "historicalTrial": 6,
+      "versionRound": 4,
+      "recordedReward": 1,
+      "packageDigest": "712f97575821006724eef7f3b3161c97512019897af62e46ab32b9c32dcddf31",
+      "originalCompletion": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/browser-replay-repair-attempt-1/completion.json",
+        "sha256": "f22831aeb72abe95fb3efc43ee896001bdbd4b54ff6c6227505be3435f686fba"
+      },
+      "originalGrade": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/browser-replay-repair-attempt-1/grade.json",
+        "sha256": "a8d25d300d94e57b4961114dcfd6e02a7fd105809d880c6f36f9a24b5bc768d5"
+      },
+      "originalChecker": {
+        "correct": 14,
+        "total": 14
+      },
+      "originalManifestFilesVerified": 1389,
+      "submissionFiles": [
+        {
+          "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/browser-replay-repair-attempt-1/submission/checker.mjs",
+          "sha256": "74a3198eb7b16eaccdca6059c291042b3f2bc57d4bf015f46263d5f950695ede"
+        },
+        {
+          "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/browser-replay-repair-attempt-1/submission/dev.mjs",
+          "sha256": "bb005abe0329ac6bcacd79b4e86b39c6a010396a09f9bcf1151e80c4fdff365f"
+        },
+        {
+          "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/browser-replay-repair-attempt-1/submission/entry.mjs",
+          "sha256": "02d62bfd78f0830b891d88d4038ec9f53b60fb635fe5371f91238c11f8f23ee9"
+        },
+        {
+          "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/browser-replay-repair-attempt-1/submission/replay.mjs",
+          "sha256": "2b6a7176e2e647d3766eb3527d2d03869db74a32063039d63e23f76f98443a2d"
+        }
+      ],
+      "finding": "false-pass-missing-valid-dialog-recovery-coverage",
+      "diagnosticRewardWithSupplement": 0,
+      "countingDisposition": "original reward remains 1; no void/replacement or qualification-count update performed",
+      "audit": {
+        "baseCandidates": 14,
+        "extraPositiveScenarios": 3,
+        "referenceServicePasses": 3,
+        "submittedServicePasses": 3,
+        "submittedChecker": {
+          "complete": true,
+          "deterministic": true,
+          "total": 17,
+          "correct": 16,
+          "errors": [
+            {
+              "token": "signed-step--1",
+              "expected": true,
+              "actual": false,
+              "reasons": [
+                "cell 0: operation [\"signed-step\",-1] has no accepted UI submission"
+              ]
+            }
+          ]
+        },
+        "referenceChecker": {
+          "complete": true,
+          "deterministic": true,
+          "total": 17,
+          "correct": 17,
+          "errors": []
+        }
+      },
+      "ruleBasis": [
+        {
+          "path": "tasks/browser-replay-repair/public/SEMANTICS.md",
+          "line": 13,
+          "obligation": "unique integer steps; negative steps are not excluded"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/SEMANTICS.md",
+          "line": 44,
+          "obligation": "conditional confirmation by dialog ID, operation ID and session"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/CHECKER-INPUT.md",
+          "line": 3,
+          "obligation": "accept iff every cell satisfies the semantics"
+        }
+      ],
+      "counterexample": {
+        "step": -1,
+        "traceId": "signed-step",
+        "operationId": "[\"signed-step\",-1]",
+        "existingDialogId": "stale",
+        "existingDialogMarkedStale": true,
+        "freshSubmitRequiredByPublicContract": false,
+        "actualAcceptedAction": {
+          "kind": "confirm",
+          "session": 1
+        },
+        "completedAttempts": 2,
+        "effectsPerCompletedAttempt": 4,
+        "otherStepControls": [
+          -2,
+          0
+        ]
+      },
+      "evidence": [
+        {
+          "path": ".local/hardened-round-four-pass-audit-confirmed-2026-09-11/browser-replay-repair/signed-steps-reference/input.json",
+          "sha256": "35c08632810370dd2a9c7de71d3f7a54007e0b82d2829357586b4ea6589c866d"
+        },
+        {
+          "path": ".local/hardened-round-four-pass-audit-confirmed-2026-09-11/browser-replay-repair/signed-steps-reference/result.json",
+          "sha256": "5043d2d22b58af268c8e3c41b43314604432049b47efd0cc26d796f24113c001"
+        },
+        {
+          "path": ".local/hardened-round-four-pass-audit-confirmed-2026-09-11/browser-replay-repair/signed-steps-submitted-service/result.json",
+          "sha256": "295dab07d58896ebb936035fe592910b7e4f906a07bcf9d852303220b0b94cc3"
+        },
+        {
+          "path": ".local/hardened-round-four-pass-audit-confirmed-2026-09-11/browser-replay-repair/augmented-submitted-checker/result.json",
+          "sha256": "f704cf4b5f6764ba0ae185e76bf425414bd9775447bb8154b45e3fa2cc7ac639"
+        },
+        {
+          "path": ".local/hardened-round-four-pass-audit-confirmed-2026-09-11/browser-replay-repair/augmented-reference-checker/result.json",
+          "sha256": "27238b794d479906bc5e10421bacce783a713dd6047052d20b62878f3e6a9d1d"
+        },
+        {
+          "path": ".local/hardened-round-four-pass-audit-confirmed-2026-09-11/browser-replay-repair/augmented-submitted-checker/cases.json",
+          "sha256": "0ccd9ecc99c48b494587afecd18e379f5e61f260c6877906f9064d4ac86f9cd1"
+        }
+      ]
+    }
+  ],
+  "integrityEvidence": [
+    {
+      "id": "route-policy-repair",
+      "integrityControls": [
+        {
+          "name": "missing-verdicts",
+          "passed": true
+        },
+        {
+          "name": "always-accept",
+          "passed": true
+        },
+        {
+          "name": "always-reject",
+          "passed": true
+        },
+        {
+          "name": "mutated-input",
+          "passed": true
+        },
+        {
+          "name": "mutation-restored-before-return",
+          "passed": true
+        },
+        {
+          "name": "mutation-hidden-by-json-hook",
+          "passed": true
+        },
+        {
+          "name": "private-read-and-reward-write-denied",
+          "passed": true
+        },
+        {
+          "name": "detached-descendant-reaped",
+          "passed": true
+        },
+        {
+          "name": "forged-reward-and-output-symlink-rejected",
+          "passed": true
+        }
+      ],
+      "status": "existing validated evidence for unchanged exports; not new cheat trials",
+      "manifest": {
+        "path": ".local/next-five-coverage-v2-2026-09-11/harbor/route-policy-repair/export-manifest.json",
+        "sha256": "1eca7e941a777cf332f189843931e09214ae35050a32d4d06e4f60e6f6b2faf7",
+        "bytes": 19344
+      }
+    },
+    {
+      "id": "browser-replay-repair",
+      "integrityControls": [
+        {
+          "name": "missing-verdicts",
+          "passed": true
+        },
+        {
+          "name": "always-accept",
+          "passed": true
+        },
+        {
+          "name": "always-reject",
+          "passed": true
+        },
+        {
+          "name": "mutated-input",
+          "passed": true
+        },
+        {
+          "name": "mutation-restored-before-return",
+          "passed": true
+        },
+        {
+          "name": "mutation-hidden-by-json-hook",
+          "passed": true
+        },
+        {
+          "name": "private-read-and-reward-write-denied",
+          "passed": true
+        },
+        {
+          "name": "detached-descendant-reaped",
+          "passed": true
+        },
+        {
+          "name": "forged-reward-and-output-symlink-rejected",
+          "passed": true
+        }
+      ],
+      "status": "existing validated evidence for unchanged exports; not new cheat trials",
+      "manifest": {
+        "path": ".local/next-five-coverage-v2-2026-09-11/harbor/browser-replay-repair/export-manifest.json",
+        "sha256": "34ce87a0ab6424f4d5b20e16a667eef1f2bdd8eda8e691b6449bffa46b3befce",
+        "bytes": 20836
+      }
+    }
+  ],
+  "reproduction": {
+    "command": "node scripts/audit-hardened-round-four-passes.mjs FRESH_OUTPUT_DIRECTORY",
+    "summary": {
+      "path": ".local/hardened-round-four-pass-audit-confirmed-2026-09-11/summary.json",
+      "sha256": "c17ec2495bd3ceaa280a30e3f79e4227e4f320b0cd5b7a1dd1784379213f49c7"
+    },
+    "routeResult": {
+      "path": ".local/hardened-round-four-pass-audit-confirmed-2026-09-11/route-fuzz-result.json",
+      "sha256": "4618306902c0bb34d4338b91d04c1b0b6e0965d53962ba2dd9ae246b75920734"
+    },
+    "sourceFiles": [
+      {
+        "path": "scripts/audit-hardened-round-four-passes.mjs",
+        "sha256": "c6525f204fc0c5dcac6b74354b8e3a710ed072e5792b37994e36ecb5e776d740"
+      },
+      {
+        "path": "data/hardened-round-four-pass-audit/replay.mjs",
+        "sha256": "c2d7ceccd196a0be4bbf61d82252fe564b9a54bd96b0ab5023e43ed924e64dc1"
+      },
+      {
+        "path": "data/hardened-round-four-pass-audit/route-fuzz.mjs",
+        "sha256": "114cd6a5e334fa475501a96c7ad3316133cc32a647c8f72efefc8500af98c4fd"
+      }
+    ]
+  }
+}

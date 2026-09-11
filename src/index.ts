@@ -1059,6 +1059,13 @@ export {
 } from "./execution/profiles.js";
 export type { ExecutionProfile, ProfileObservation, QualificationEvidence } from "./execution/profiles.js";
 export { executeSimulation, driveReservedJob, executionSourceIdentity } from "./execution/execute.js";
+export {
+  EVIDENCE_PUBLICATION_BUDGET_BYTES,
+  publishEvidence,
+  verifyEvidence,
+  regularTree,
+  reserveDirectory,
+} from "./execution/artifacts.js";
 export { executionPackage, gradeExecutionPackage } from "./execution/package-route.js";
 export {
   executeRealProvider,

@@ -1,18 +1,22 @@
 # Screening results and trial histories
 
-**Five finalists meet the reported ≥5/6 target: three packages at 6/6 reward=0 and two at 5/6.** Their complete sets contain 30 counted trials, with three Codex and three Claude attempts per package.
+**Nine tasks meet the ≥5/6 target: seven at 6/6 reward=0 and two at 5/6.** There are 52 failures across 54 counted finalist trials, with three Codex and three Claude trials per task.
 
-| Package and full history | Reward=0 / counted trials | Codex reward=0 | Claude reward=0 |
+| Task and full trial history | Reward=0 / counted trials | Codex reward=0 | Claude reward=0 |
 | --- | ---: | ---: | ---: |
-| [21 — Incremental build](fifth-five/21-incremental-build-repair.md) | **6/6** | 3/3 | 3/3 |
-| [25 — Issued report](fifth-five/25-issued-report-repair.md) | **6/6** | 3/3 | 3/3 |
-| [19 — Variant cache](fourth-five/19-variant-cache-repair.md) | **6/6** | 3/3 | 3/3 |
-| [11 — Snapshot recovery](third-five/11-snapshot-recovery-repair.md) | **5/6** | 3/3 | 2/3 |
-| [10 — Temporal capacity](next-five/10-temporal-capacity-repair.md) | **5/6** | 2/3 | 3/3 |
+| [03 — Browser replay](../../reports/screening/original-five/03-browser-replay-repair.md) | **6/6** | 3/3 | 3/3 |
+| [04 — Delegated budget](../../reports/screening/original-five/04-delegated-budget-repair.md) | **6/6** | 3/3 | 3/3 |
+| [18 — Recurring calendar](../../reports/screening/fourth-five/18-recurring-calendar-repair.md) | **6/6** | 3/3 | 3/3 |
+| [19 — Variant cache](../../reports/screening/fourth-five/19-variant-cache-repair.md) | **6/6** | 3/3 | 3/3 |
+| [20 — Workflow authority](../../reports/screening/fourth-five/20-workflow-authority-repair.md) | **6/6** | 3/3 | 3/3 |
+| [21 — Incremental build](../../reports/screening/fifth-five/21-incremental-build-repair.md) | **6/6** | 3/3 | 3/3 |
+| [25 — Issued report](../../reports/screening/fifth-five/25-issued-report-repair.md) | **6/6** | 3/3 | 3/3 |
+| [10 — Temporal capacity](../../reports/screening/next-five/10-temporal-capacity-repair.md) | **5/6** | 2/3 | 3/3 |
+| [11 — Snapshot recovery](../../reports/screening/third-five/11-snapshot-recovery-repair.md) | **5/6** | 3/3 | 2/3 |
 
-[Final results and counting method](final-results-2026-09-09.md) · [Machine-readable summary](evidence/2026-09-09-final-results.json) · [Last campaign](three-replacements-2026-09-09.md).
+[Results and counting method](final-results-2026-09-11.md) · [Machine-readable evidence](evidence/2026-09-11-final-results.json) · [Latest campaign](hardened-six-continuation-2026-09-11.md).
 
-The successor program contains 54 attempts: 50 counted trials (28 reward=0, 22 reward=1), three preserved grading voids, and one infrastructure interruption. The original 25 selected screening records remain separate below. No finalist slots remain pending.
+Browser replay, Recurring calendar, Workflow authority and Delegated budget are the four newly completed 6/6 tasks. Route policy stopped at 3/5 failures; its two Codex passes remain counted after independent audits. All nine qualifying sets are complete. Original trial numbers, grading corrections, voids and infrastructure interruptions remain in the histories below.
 
 ## Implementation and campaign history
 
@@ -29,6 +33,38 @@ are now complete: six browser integrity controls, five Harbor oracle passes and
 five expected nop zeroes without infrastructure errors. The
 [Trial 2 handoff](../../docs/next-five-trial-2-handoff.md) was used for the [recorded campaign](round-two-next-five-2026-09-09.md);
 its implementation work itself made no model calls.
+
+These same five packages were later rebuilt as a hardened 3.0.0 major version
+with full-scenario checker coverage (see each analysis document's "Pretrial
+hardening" section). The [hardened-next-five-trial-one handoff](../../docs/hardened-next-five-trial-one-handoff.md)
+was used for the [recorded campaign](hardened-next-five-trial-one-2026-09-10.md):
+two Claude reward-one outcomes and three Codex reward-zero outcomes.
+The [subsequent audit](../hardened-next-five-pass-audit-2026-09-11.md) reproduced
+checker coverage gaps in both recorded passes, confirmed Calendar and Budget's
+checker failures, and found both a host-response bug and an independent checker
+defect in Workflow. The original grades remain recorded; new probes are separate
+audit evidence. The [coverage-v2 integration](next-five-coverage-v2-2026-09-11.md) is complete: all five saved checkers fail corrected coverage, and all five services pass, with no new model calls. Two Codex attempts hit an `EVIDENCE_BYTE_LIMIT` publication
+infrastructure incident after grading had already completed; both were
+recovered and published by a separate, hash-identified recovery tool, with no
+additional model call. This is the first scored trial on the 3.0.0 revision and
+is independent of the Trial 1/Trial 2 history above, which concerns the earlier
+package contract.
+
+[Trial 4](hardened-next-five-trial-two-2026-09-11.md) then ran five fresh
+concurrent attempts on the corrected coverage-v2 packages: all five services
+passed, but all five failed the required checker. Three (route policy, browser
+replay, recurring calendar) independently hit the same systemic bug — their
+checkers build a plain object as a token-keyed dictionary, and coverage-v2's
+opaque tokens include the literal string `"__proto__"`, which a plain-object
+bracket assignment cannot represent as an own property, tripping the harness's
+strict shape gate into a synthetic all-zero result rather than a real score.
+Workflow authority's checker avoided that bug but genuinely misjudges the
+reference and alternative implementations plus two retry variants. Delegated
+budget has the same shape-gate bug stacked with an unrelated, more severe
+defect that never reads any candidate's real input. No infrastructure errors
+occurred this trial. The [third 3.0.0 attempt](hardened-next-five-trial-three-2026-09-11.md), Trial 5, then ran five concurrently on the same providers and exact Trial 4 packages/runtime: four scored, one infrastructure interruption. All four scored repairs passed service; all four failed the required checker, but the specific defect did not uniformly recur from Trial 4 — only route policy independently reproduced the `"__proto__"` shape-gate bug, while recurring calendar and delegated budget both moved to genuine content-level false positives (rejecting `reference`/`alternative`), and workflow authority regressed to a checker that never implements the required `verdicts` output shape at all. Browser replay's attempt crashed (container exit 134, SIGABRT) ~31m39s into authoring, before grading began; neither the capture line-limit nor byte-quota guard fired before exit; the underlying cause remains unconfirmed. No confirmed defect was found; the container's 2048 MiB memory cap alongside a real Chromium instance and a long, thinking-heavy session is a plausible but unproven explanation. The old standalone Browser/Claude retry remains unlaunched and is deferred from the next campaign.
+
+[Historical Trial 6](hardened-next-five-trial-four-2026-09-11.md) switched all five providers and recorded two reward-one results and three required-checker failures, with no infrastructure interruptions. A later audit retained Route's pass and voided Browser's result after reproducing a checker defect on a permitted recovery case. Browser's earlier Claude interruption stayed unscored; the completed continuation later filled its missing counted Claude slot. The current nine-task standings above include these final dispositions.
 
 The [September 9 second-trial review](second-trial-priority-2026-09-09.md) ranks all 25
 packages, recommends five candidates, and identifies remaining source-integration and
@@ -97,7 +133,7 @@ That is useful negative evidence about our difficulty hypotheses—not twenty-fi
 
 First-batch times are the campaign's rounded dispatch-through-grading durations. Later-batch times are authoring durations; do not compare them as identical measurements. Service scenarios, individual checks, checker candidates and an agent's self-tests are separate denominators.
 
-## What the evidence supports
+## What the original screenings showed
 
 - The agents often reconstructed the public contracts, built their own simulators or checkers, and solved the multi-file services in minutes. More files and more near-miss controls did not establish difficulty.
 - Causal replica provides a concrete incomplete-self-check observation: the repair is correct, but its checker requires redundant writes that the contract does not require. This remains a single, not independently blind-adjudicated observation.
@@ -118,7 +154,7 @@ The first CAA dispatch used an author README containing the solution explanation
 
 The first campaign also documented an accidental timed-out provider call during setup. It is not hidden inside the five final outcomes. The second campaign requested simultaneous dispatch but actually ran sequentially; its attempted parallel takeover made no additional provider calls. There were five attempts, no automatic retries and no recorded invalid executions in that second campaign.
 
-## Provenance, privacy and remaining uncertainty
+## Original screening provenance and limitations
 
 The next-five analyses also retain concurrently supplied follow-up notes about a local reasons-format repair, clarified replica wording and diagnostic regrades. These refer to a **separate local successor tree**, not the root implementation integrated in this publication. Their restricted regrade record is not part of the ten original manifest verifications below. Original outcomes remain unchanged; do not treat a successor regrade as a new model attempt or merge it into a replication count.
 

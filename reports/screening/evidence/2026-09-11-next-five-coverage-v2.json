@@ -1,0 +1,1131 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-11",
+  "purpose": "Integrate independently reproduced Trial 3 grading gaps under the unchanged public 3.0.0 contracts",
+  "gradingRevision": "coverage-v2",
+  "providerCallsMade": 0,
+  "historicalRewardsChanged": 0,
+  "newModelTrials": 0,
+  "tasks": [
+    {
+      "id": "route-policy-repair",
+      "version": "3.0.0",
+      "gradingRevision": "coverage-v2",
+      "publicRequirementsChanged": false,
+      "reference": {
+        "total": 33,
+        "passes": 33,
+        "failures": 0
+      },
+      "alternative": {
+        "total": 33,
+        "passes": 33,
+        "failures": 0
+      },
+      "starter": {
+        "total": 33,
+        "passes": 0,
+        "failures": 33
+      },
+      "assuranceChecks": 16,
+      "checker": {
+        "correct": 13,
+        "total": 13,
+        "scenarioCoverage": "all",
+        "tokenCoverage": "opaque-v1",
+        "reasonPolicy": "diagnostic-only"
+      },
+      "foundry": {
+        "directory": ".local/next-five-coverage-v2-2026-09-11/release/route-policy-repair/export",
+        "digest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+        "pointer": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/release/route-policy-repair/export/package.json",
+          "sha256": "15e8946e97a181c7e650b20c88225cd95ba5003d188d2f7f5c6439751ea4d7c6",
+          "bytes": 103
+        },
+        "assurance": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/release/route-policy-repair/validation/assurance.json",
+          "sha256": "7457130e947a1010206cc181acdd4bc83f218dfc6a1eb8a9ccf27c125ae31e7c",
+          "bytes": 119045
+        },
+        "checkerEvidence": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/release/route-policy-repair/oracle-checker/grade-summary.json",
+          "sha256": "5fed11858a0b4d7a294ae075f5f8f4fdfa1aefecc7b08521d8e9844dcc45c8a9",
+          "bytes": 3351
+        },
+        "reproducible": true
+      },
+      "native": {
+        "directory": ".local/next-five-coverage-v2-2026-09-11/harbor/route-policy-repair",
+        "digest": "bc6822a2590a3b01a1311af70b5d02415635c913042dac2a658a25c1af21eda4",
+        "manifest": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/harbor/route-policy-repair/export-manifest.json",
+          "sha256": "1eca7e941a777cf332f189843931e09214ae35050a32d4d06e4f60e6f6b2faf7",
+          "bytes": 19344
+        },
+        "reproducible": true,
+        "oracle": {
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "result": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-oracle/route-policy-repair__ci6UAJ6/result.json",
+            "sha256": "d4be2c0c0d35adc930ea6630f8b30b4ffb6381a50fb6556a9220eea894478ad8",
+            "bytes": 3927
+          },
+          "summary": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-oracle/route-policy-repair__ci6UAJ6/verifier/summary.json",
+            "sha256": "0c6a67e07daef7a72ebb1db196bb1c7de744fda7a6829a77daabce80f30f044a",
+            "bytes": 1355
+          }
+        },
+        "nop": {
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "result": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-nop/route-policy-repair__yrJRezg/result.json",
+            "sha256": "70337ed5038e7391ee309a4811a781d4a8d6faaeee69378a920750ef2b319850",
+            "bytes": 3915
+          },
+          "summary": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-nop/route-policy-repair__yrJRezg/verifier/summary.json",
+            "sha256": "e01d584b10923ddb0651ead2626fcec12c6c0ac78955f3e0eeb38e755faa0891",
+            "bytes": 460
+          }
+        },
+        "integrity": [
+          {
+            "name": "missing-verdicts",
+            "passed": true
+          },
+          {
+            "name": "always-accept",
+            "passed": true
+          },
+          {
+            "name": "always-reject",
+            "passed": true
+          },
+          {
+            "name": "mutated-input",
+            "passed": true
+          },
+          {
+            "name": "mutation-restored-before-return",
+            "passed": true
+          },
+          {
+            "name": "mutation-hidden-by-json-hook",
+            "passed": true
+          },
+          {
+            "name": "private-read-and-reward-write-denied",
+            "passed": true
+          },
+          {
+            "name": "detached-descendant-reaped",
+            "passed": true
+          },
+          {
+            "name": "forged-reward-and-output-symlink-rejected",
+            "passed": true
+          }
+        ]
+      },
+      "savedSubmissionReplay": {
+        "id": "route-policy-repair",
+        "originalReward": 1,
+        "originalCompletionSha256": "5d744f38632971583d5116a979337a9e219b0f8057246ff229932526235cdd06",
+        "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+        "service": {
+          "correct": 33,
+          "total": 33,
+          "pass": true
+        },
+        "checker": {
+          "complete": false,
+          "deterministic": false,
+          "correct": 12,
+          "total": 13,
+          "pass": false,
+          "errors": [
+            {
+              "candidate": "reference",
+              "token": "__proto__",
+              "expected": true,
+              "actual": null
+            }
+          ]
+        },
+        "ordinaryTokens": {
+          "complete": true,
+          "deterministic": true,
+          "correct": 13,
+          "total": 13,
+          "pass": true,
+          "errors": []
+        },
+        "replayReward": 0,
+        "evidence": ".local/next-five-coverage-v2-2026-09-11/saved-submission-replay-v2/route-policy-repair"
+      }
+    },
+    {
+      "id": "browser-replay-repair",
+      "version": "3.0.0",
+      "gradingRevision": "coverage-v2",
+      "publicRequirementsChanged": false,
+      "reference": {
+        "total": 19,
+        "passes": 19,
+        "failures": 0
+      },
+      "alternative": {
+        "total": 19,
+        "passes": 19,
+        "failures": 0
+      },
+      "starter": {
+        "total": 19,
+        "passes": 0,
+        "failures": 19
+      },
+      "assuranceChecks": 17,
+      "checker": {
+        "correct": 14,
+        "total": 14,
+        "scenarioCoverage": "all",
+        "tokenCoverage": "opaque-v1",
+        "reasonPolicy": "diagnostic-only"
+      },
+      "foundry": {
+        "directory": ".local/next-five-coverage-v2-2026-09-11/release/browser-replay-repair/export",
+        "digest": "712f97575821006724eef7f3b3161c97512019897af62e46ab32b9c32dcddf31",
+        "pointer": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/release/browser-replay-repair/export/package.json",
+          "sha256": "adbe1bb05b9b94594b19d4ab8e9b04c194b903a14612f518c7dba6b6b6e59f4c",
+          "bytes": 103
+        },
+        "assurance": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/release/browser-replay-repair/validation/assurance.json",
+          "sha256": "72a9a95f8aa72a6566bdc79a65c072a1e3474f4bf52d04bb53e6cda2b3b0787f",
+          "bytes": 163935
+        },
+        "checkerEvidence": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/release/browser-replay-repair/oracle-checker/grade-summary.json",
+          "sha256": "0a8f784e77a5b8b0b7ec22e8b1d2c8003f4af39a097b114b63de9aeb962618ae",
+          "bytes": 3200
+        },
+        "reproducible": true
+      },
+      "native": {
+        "directory": ".local/next-five-coverage-v2-2026-09-11/harbor/browser-replay-repair",
+        "digest": "1d56e2a33aaec542853dccb88ff95fd556d8bcded31bf365d99727bfa71f8560",
+        "manifest": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/harbor/browser-replay-repair/export-manifest.json",
+          "sha256": "34ce87a0ab6424f4d5b20e16a667eef1f2bdd8eda8e691b6449bffa46b3befce",
+          "bytes": 20836
+        },
+        "reproducible": true,
+        "oracle": {
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "result": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-oracle/browser-replay-repair__aLbdoAN/result.json",
+            "sha256": "ecb8938f3cf4990d9c72378566001748b436784c736d0e3b8c7828b0b1b14b8e",
+            "bytes": 3939
+          },
+          "summary": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-oracle/browser-replay-repair__aLbdoAN/verifier/summary.json",
+            "sha256": "5688831825754684c14af31e62b30e670746d7994ec11ba36cb947d515405f7d",
+            "bytes": 1484
+          }
+        },
+        "nop": {
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "result": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-nop/browser-replay-repair__vVjLFjW/result.json",
+            "sha256": "2f3f1a5f0b943ff82c3f98843f3358432a986c4e1bb59032c2141e4fd0d60e5c",
+            "bytes": 3927
+          },
+          "summary": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-nop/browser-replay-repair__vVjLFjW/verifier/summary.json",
+            "sha256": "e01d584b10923ddb0651ead2626fcec12c6c0ac78955f3e0eeb38e755faa0891",
+            "bytes": 460
+          }
+        },
+        "integrity": [
+          {
+            "name": "missing-verdicts",
+            "passed": true
+          },
+          {
+            "name": "always-accept",
+            "passed": true
+          },
+          {
+            "name": "always-reject",
+            "passed": true
+          },
+          {
+            "name": "mutated-input",
+            "passed": true
+          },
+          {
+            "name": "mutation-restored-before-return",
+            "passed": true
+          },
+          {
+            "name": "mutation-hidden-by-json-hook",
+            "passed": true
+          },
+          {
+            "name": "private-read-and-reward-write-denied",
+            "passed": true
+          },
+          {
+            "name": "detached-descendant-reaped",
+            "passed": true
+          },
+          {
+            "name": "forged-reward-and-output-symlink-rejected",
+            "passed": true
+          }
+        ]
+      },
+      "savedSubmissionReplay": {
+        "id": "browser-replay-repair",
+        "originalReward": 1,
+        "originalCompletionSha256": "c637ece78ff2c3f09cbf523cc5a99dd9297bd1ca4d1b79489c3a1b0848b3fa70",
+        "packageDigest": "712f97575821006724eef7f3b3161c97512019897af62e46ab32b9c32dcddf31",
+        "service": {
+          "correct": 19,
+          "total": 19,
+          "pass": true
+        },
+        "checker": {
+          "complete": true,
+          "deterministic": true,
+          "correct": 12,
+          "total": 14,
+          "pass": false,
+          "errors": [
+            {
+              "candidate": "missing-report-after-interruption",
+              "token": "",
+              "expected": false,
+              "actual": true
+            },
+            {
+              "candidate": "wrapped-completion-report",
+              "token": "candidate-J",
+              "expected": false,
+              "actual": true
+            }
+          ]
+        },
+        "ordinaryTokens": {
+          "complete": true,
+          "deterministic": true,
+          "correct": 12,
+          "total": 14,
+          "pass": false,
+          "errors": [
+            {
+              "candidate": "missing-report-after-interruption",
+              "token": "replay-3",
+              "expected": false,
+              "actual": true
+            },
+            {
+              "candidate": "wrapped-completion-report",
+              "token": "replay-9",
+              "expected": false,
+              "actual": true
+            }
+          ]
+        },
+        "replayReward": 0,
+        "evidence": ".local/next-five-coverage-v2-2026-09-11/saved-submission-replay-v2/browser-replay-repair"
+      }
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "version": "3.0.0",
+      "gradingRevision": "coverage-v2",
+      "publicRequirementsChanged": false,
+      "reference": {
+        "total": 37,
+        "passes": 37,
+        "failures": 0
+      },
+      "alternative": {
+        "total": 37,
+        "passes": 37,
+        "failures": 0
+      },
+      "starter": {
+        "total": 37,
+        "passes": 0,
+        "failures": 37
+      },
+      "assuranceChecks": 19,
+      "checker": {
+        "correct": 16,
+        "total": 16,
+        "scenarioCoverage": "all",
+        "tokenCoverage": "opaque-v1",
+        "reasonPolicy": "diagnostic-only"
+      },
+      "foundry": {
+        "directory": ".local/next-five-coverage-v2-2026-09-11/release/recurring-calendar-repair/export",
+        "digest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+        "pointer": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/release/recurring-calendar-repair/export/package.json",
+          "sha256": "2990ef15f7d6d8c49adce39d9a72f2908471aae07b3576b0ff4ae518732e7299",
+          "bytes": 103
+        },
+        "assurance": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/release/recurring-calendar-repair/validation/assurance.json",
+          "sha256": "25fd2ff6a0cfa4832469c9bcfcd9b4dac431cac27c0147394ecb019fcb8c5fb4",
+          "bytes": 143415
+        },
+        "checkerEvidence": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/release/recurring-calendar-repair/oracle-checker/grade-summary.json",
+          "sha256": "4df08ef8dae8e214cb7fa248b530dc0f65868e432cd4a5928f62626b94129a8b",
+          "bytes": 3900
+        },
+        "reproducible": true
+      },
+      "native": {
+        "directory": ".local/next-five-coverage-v2-2026-09-11/harbor/recurring-calendar-repair",
+        "digest": "d6d2a3ddf185fb2a902d11b248bd89856980a4a9dd8f2d0c2bdfcc07cc63baed",
+        "manifest": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/harbor/recurring-calendar-repair/export-manifest.json",
+          "sha256": "86c2d0a15455d3865d26523915ef7132877db978ecb101edd8cc4a6068a856d2",
+          "bytes": 19727
+        },
+        "reproducible": true,
+        "oracle": {
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "result": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-oracle/recurring-calendar-repair__sPtyJ3k/result.json",
+            "sha256": "df1da2b8513c0cdc19bb12b3c8a6f046c607b53c916cb64a90dc69e7c3bcf326",
+            "bytes": 3963
+          },
+          "summary": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-oracle/recurring-calendar-repair__sPtyJ3k/verifier/summary.json",
+            "sha256": "39104ec0ce0b0878ab46618203b77e65b955811d818cbe4e95996c4eec3f95a8",
+            "bytes": 1642
+          }
+        },
+        "nop": {
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "result": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-nop/recurring-calendar-repair__kXYEGW8/result.json",
+            "sha256": "1bd9301d856214e0c16955e2cae47fc9f4bf753851ec86aafa9f031d83f6935a",
+            "bytes": 3951
+          },
+          "summary": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-nop/recurring-calendar-repair__kXYEGW8/verifier/summary.json",
+            "sha256": "e01d584b10923ddb0651ead2626fcec12c6c0ac78955f3e0eeb38e755faa0891",
+            "bytes": 460
+          }
+        },
+        "integrity": [
+          {
+            "name": "missing-verdicts",
+            "passed": true
+          },
+          {
+            "name": "always-accept",
+            "passed": true
+          },
+          {
+            "name": "always-reject",
+            "passed": true
+          },
+          {
+            "name": "mutated-input",
+            "passed": true
+          },
+          {
+            "name": "mutation-restored-before-return",
+            "passed": true
+          },
+          {
+            "name": "mutation-hidden-by-json-hook",
+            "passed": true
+          },
+          {
+            "name": "private-read-and-reward-write-denied",
+            "passed": true
+          },
+          {
+            "name": "detached-descendant-reaped",
+            "passed": true
+          },
+          {
+            "name": "forged-reward-and-output-symlink-rejected",
+            "passed": true
+          }
+        ]
+      },
+      "savedSubmissionReplay": {
+        "id": "recurring-calendar-repair",
+        "originalReward": 0,
+        "originalCompletionSha256": "177125813859b1d49b355ca94b61467939421154e28a5784eee22e49c9344872",
+        "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+        "service": {
+          "correct": 37,
+          "total": 37,
+          "pass": true
+        },
+        "checker": {
+          "complete": true,
+          "deterministic": true,
+          "correct": 14,
+          "total": 16,
+          "pass": false,
+          "errors": [
+            {
+              "candidate": "reference",
+              "token": "toString",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "alternative",
+              "token": "candidate-H",
+              "expected": true,
+              "actual": false
+            }
+          ]
+        },
+        "ordinaryTokens": {
+          "complete": true,
+          "deterministic": true,
+          "correct": 14,
+          "total": 16,
+          "pass": false,
+          "errors": [
+            {
+              "candidate": "reference",
+              "token": "replay-2",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "alternative",
+              "token": "replay-7",
+              "expected": true,
+              "actual": false
+            }
+          ]
+        },
+        "replayReward": 0,
+        "evidence": ".local/next-five-coverage-v2-2026-09-11/saved-submission-replay-v2/recurring-calendar-repair"
+      }
+    },
+    {
+      "id": "workflow-authority-repair",
+      "version": "3.0.0",
+      "gradingRevision": "coverage-v2",
+      "publicRequirementsChanged": false,
+      "reference": {
+        "total": 36,
+        "passes": 36,
+        "failures": 0
+      },
+      "alternative": {
+        "total": 36,
+        "passes": 36,
+        "failures": 0
+      },
+      "starter": {
+        "total": 36,
+        "passes": 1,
+        "failures": 35
+      },
+      "assuranceChecks": 19,
+      "checker": {
+        "correct": 16,
+        "total": 16,
+        "scenarioCoverage": "all",
+        "tokenCoverage": "opaque-v1",
+        "reasonPolicy": "diagnostic-only"
+      },
+      "foundry": {
+        "directory": ".local/next-five-coverage-v2-2026-09-11/release/workflow-authority-repair/export",
+        "digest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+        "pointer": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/release/workflow-authority-repair/export/package.json",
+          "sha256": "fe15696a6222b2f6cc76db096dc47f0de91e58a916fd14521a05c80d80fbd0e6",
+          "bytes": 103
+        },
+        "assurance": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/release/workflow-authority-repair/validation/assurance.json",
+          "sha256": "e3a1da04ecd8a1fd9bae9ecff9e55ff63e164972e2dfed8719ff6ebfa45a7842",
+          "bytes": 127627
+        },
+        "checkerEvidence": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/release/workflow-authority-repair/oracle-checker/grade-summary.json",
+          "sha256": "d963da27915ad966a7e32a4e042bffeb365fbee995ecd23987c29d3e1c4cccee",
+          "bytes": 3424
+        },
+        "reproducible": true
+      },
+      "native": {
+        "directory": ".local/next-five-coverage-v2-2026-09-11/harbor/workflow-authority-repair",
+        "digest": "a69587281007bfa2d7a9ecef8915cfa8a7cd5e22367c71e3b8d177fa03f4fc90",
+        "manifest": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/harbor/workflow-authority-repair/export-manifest.json",
+          "sha256": "19651f6bea1e032f4e068861f120e4ebfe2f3276dde56d7af808a149a68b2f33",
+          "bytes": 21964
+        },
+        "reproducible": true,
+        "oracle": {
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "result": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-oracle/workflow-authority-repair__oQkmB38/result.json",
+            "sha256": "3585b8331eb108475650fc5e8efc8520c1ea2b732376f626814cf3fdeb49ebfa",
+            "bytes": 3963
+          },
+          "summary": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-oracle/workflow-authority-repair__oQkmB38/verifier/summary.json",
+            "sha256": "ae787eec0c2f1f71148e1337ec619ba66a69e274475d858045d46dfe34f9e86f",
+            "bytes": 1617
+          }
+        },
+        "nop": {
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "result": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-nop/workflow-authority-repair__HmeRU9J/result.json",
+            "sha256": "c7b56eca2b1aa682fa71de4307aa5144cd1701ac65dc35bb7c455a98003404d3",
+            "bytes": 3951
+          },
+          "summary": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-nop/workflow-authority-repair__HmeRU9J/verifier/summary.json",
+            "sha256": "e01d584b10923ddb0651ead2626fcec12c6c0ac78955f3e0eeb38e755faa0891",
+            "bytes": 460
+          }
+        },
+        "integrity": [
+          {
+            "name": "missing-verdicts",
+            "passed": true
+          },
+          {
+            "name": "always-accept",
+            "passed": true
+          },
+          {
+            "name": "always-reject",
+            "passed": true
+          },
+          {
+            "name": "mutated-input",
+            "passed": true
+          },
+          {
+            "name": "mutation-restored-before-return",
+            "passed": true
+          },
+          {
+            "name": "mutation-hidden-by-json-hook",
+            "passed": true
+          },
+          {
+            "name": "private-read-and-reward-write-denied",
+            "passed": true
+          },
+          {
+            "name": "detached-descendant-reaped",
+            "passed": true
+          },
+          {
+            "name": "forged-reward-and-output-symlink-rejected",
+            "passed": true
+          }
+        ]
+      },
+      "savedSubmissionReplay": {
+        "id": "workflow-authority-repair",
+        "originalReward": 0,
+        "originalCompletionSha256": "3fb9aa8ddc8ce97f44ab4f80795c4a3684ea9f6301baf7c724c2b1c127c3b130",
+        "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+        "service": {
+          "correct": 36,
+          "total": 36,
+          "pass": true
+        },
+        "checker": {
+          "complete": true,
+          "deterministic": true,
+          "correct": 15,
+          "total": 16,
+          "pass": false,
+          "errors": [
+            {
+              "candidate": "variant-terminal-dispatch-retry",
+              "token": "toString",
+              "expected": true,
+              "actual": false
+            }
+          ]
+        },
+        "ordinaryTokens": {
+          "complete": true,
+          "deterministic": true,
+          "correct": 15,
+          "total": 16,
+          "pass": false,
+          "errors": [
+            {
+              "candidate": "variant-terminal-dispatch-retry",
+              "token": "replay-2",
+              "expected": true,
+              "actual": false
+            }
+          ]
+        },
+        "replayReward": 0,
+        "evidence": ".local/next-five-coverage-v2-2026-09-11/saved-submission-replay-v2/workflow-authority-repair"
+      }
+    },
+    {
+      "id": "delegated-budget-repair",
+      "version": "3.0.0",
+      "gradingRevision": "coverage-v2",
+      "publicRequirementsChanged": false,
+      "reference": {
+        "total": 21,
+        "passes": 21,
+        "failures": 0
+      },
+      "alternative": {
+        "total": 21,
+        "passes": 21,
+        "failures": 0
+      },
+      "starter": {
+        "total": 21,
+        "passes": 0,
+        "failures": 21
+      },
+      "assuranceChecks": 20,
+      "checker": {
+        "correct": 17,
+        "total": 17,
+        "scenarioCoverage": "all",
+        "tokenCoverage": "opaque-v1",
+        "reasonPolicy": "diagnostic-only"
+      },
+      "foundry": {
+        "directory": ".local/next-five-coverage-v2-2026-09-11/release/delegated-budget-repair/export",
+        "digest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+        "pointer": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/release/delegated-budget-repair/export/package.json",
+          "sha256": "29e20adc818cfbf0684cff146312ff57bb740d3421e158984ddae859ad5a1739",
+          "bytes": 103
+        },
+        "assurance": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/release/delegated-budget-repair/validation/assurance.json",
+          "sha256": "545fdbb523796e05f9efb1efb3dee32103eb734eea79c2c08cfceeb8fec68566",
+          "bytes": 116975
+        },
+        "checkerEvidence": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/release/delegated-budget-repair/oracle-checker/grade-summary.json",
+          "sha256": "73bb7f7877e10270e3f6a911ed7ed41766c8ae6866815a41c06e09556f3afa97",
+          "bytes": 3748
+        },
+        "reproducible": true
+      },
+      "native": {
+        "directory": ".local/next-five-coverage-v2-2026-09-11/harbor/delegated-budget-repair",
+        "digest": "5fda80084dbde7ad265e5fe4c2f6f00bdf9194dea71b2fe6757f34f2f2921a5a",
+        "manifest": {
+          "path": ".local/next-five-coverage-v2-2026-09-11/harbor/delegated-budget-repair/export-manifest.json",
+          "sha256": "d889e213f5b1452db059bfc5987d34783c51758d8322c51d5ee50065fcceeba3",
+          "bytes": 19782
+        },
+        "reproducible": true,
+        "oracle": {
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "result": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-oracle/delegated-budget-repair__2JMvhrj/result.json",
+            "sha256": "bac33047993aa5a093f9e0ed1f29ecac28d20b0735f38739ff246761cbeae61c",
+            "bytes": 3951
+          },
+          "summary": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-oracle/delegated-budget-repair__2JMvhrj/verifier/summary.json",
+            "sha256": "97da2de68c5bd3a6b7279acc8374d42722cd8bb0c19a07e1067c90b047a28204",
+            "bytes": 1732
+          }
+        },
+        "nop": {
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "result": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-nop/delegated-budget-repair__rCvSTJd/result.json",
+            "sha256": "f55f4088f68dc75afae4522710498e8bdc93a16894049e9bf271db825b8d0537",
+            "bytes": 3939
+          },
+          "summary": {
+            "path": ".local/next-five-coverage-v2-2026-09-11/jobs/coverage-v2-nop/delegated-budget-repair__rCvSTJd/verifier/summary.json",
+            "sha256": "e01d584b10923ddb0651ead2626fcec12c6c0ac78955f3e0eeb38e755faa0891",
+            "bytes": 460
+          }
+        },
+        "integrity": [
+          {
+            "name": "missing-verdicts",
+            "passed": true
+          },
+          {
+            "name": "always-accept",
+            "passed": true
+          },
+          {
+            "name": "always-reject",
+            "passed": true
+          },
+          {
+            "name": "mutated-input",
+            "passed": true
+          },
+          {
+            "name": "mutation-restored-before-return",
+            "passed": true
+          },
+          {
+            "name": "mutation-hidden-by-json-hook",
+            "passed": true
+          },
+          {
+            "name": "private-read-and-reward-write-denied",
+            "passed": true
+          },
+          {
+            "name": "detached-descendant-reaped",
+            "passed": true
+          },
+          {
+            "name": "forged-reward-and-output-symlink-rejected",
+            "passed": true
+          }
+        ]
+      },
+      "savedSubmissionReplay": {
+        "id": "delegated-budget-repair",
+        "originalReward": 0,
+        "originalCompletionSha256": "ce82994a2ef11ead1688a54ed2b1ef584fc9ea921ee2b2067aef8900a06b2442",
+        "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+        "service": {
+          "correct": 21,
+          "total": 21,
+          "pass": true
+        },
+        "checker": {
+          "complete": false,
+          "deterministic": false,
+          "correct": 13,
+          "total": 17,
+          "pass": false,
+          "errors": [
+            {
+              "candidate": "isolation",
+              "token": "__proto__",
+              "expected": false,
+              "actual": null
+            },
+            {
+              "candidate": "variant-idempotent-settlement",
+              "token": "constructor",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "alternative",
+              "token": "toString",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "reference",
+              "token": "01",
+              "expected": true,
+              "actual": false
+            }
+          ]
+        },
+        "ordinaryTokens": {
+          "complete": true,
+          "deterministic": true,
+          "correct": 14,
+          "total": 17,
+          "pass": false,
+          "errors": [
+            {
+              "candidate": "variant-idempotent-settlement",
+              "token": "replay-1",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "alternative",
+              "token": "replay-2",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "reference",
+              "token": "replay-5",
+              "expected": true,
+              "actual": false
+            }
+          ]
+        },
+        "replayReward": 0,
+        "evidence": ".local/next-five-coverage-v2-2026-09-11/saved-submission-replay-v2/delegated-budget-repair"
+      }
+    }
+  ],
+  "validation": {
+    "assuranceChecks": 91,
+    "checkerCandidates": 76,
+    "nativeOraclePasses": 5,
+    "nativeNopZeroes": 5,
+    "nativeIntegrityControls": 45,
+    "staticChecks": 110,
+    "mutationsDetected": 23,
+    "regressionTests": 86
+  },
+  "evidence": {
+    "integrity": {
+      "path": ".local/next-five-coverage-v2-2026-09-11/integrity/summary.json",
+      "sha256": "fd3540f4db9587ce8ca908e9a2a1f0992d880995eab8da00bf1445a67dcc830b",
+      "bytes": 22326
+    },
+    "statics": {
+      "path": ".local/next-five-coverage-v2-2026-09-11/static/summary.json",
+      "sha256": "6879bc2b67c6c3c42294d9d2dc94f178f7582f7818ae2b664056f67a0305434f",
+      "bytes": 25746
+    },
+    "mutations": {
+      "path": ".local/next-five-coverage-v2-2026-09-11/mutations/summary.json",
+      "sha256": "9a9d384a970e207306997b8da835456bd255de7b085717b08312a91848301721",
+      "bytes": 18721
+    },
+    "regressions": {
+      "path": ".local/next-five-coverage-v2-2026-09-11/regressions-focused.json",
+      "sha256": "4dde502477f7df47bf00edcd23933f66088b5e893bb9703391f8443e1404a219",
+      "bytes": 31510
+    },
+    "replays": {
+      "path": ".local/next-five-coverage-v2-2026-09-11/saved-submission-replay-v2/summary.json",
+      "sha256": "0199c5282aed757d663090abd8f2573f81973158a0dfb2704614865d7a5698b7",
+      "bytes": 7362
+    },
+    "publicPreservation": {
+      "path": ".local/next-five-coverage-v2-2026-09-11/public-baseline.json",
+      "sha256": "78e6c9483193593cfb513571940371a6c6df7fbdc74370265d0fcd8d3ce2c26e",
+      "bytes": 5551
+    },
+    "recipientReproduction": {
+      "path": ".local/next-five-coverage-v2-2026-09-11/release/recipient/result.json",
+      "sha256": "085be6ddc7377976cad0d6f296a0e404069539f5438b9db1f7bdc821894eeaba",
+      "bytes": 2210
+    }
+  },
+  "publicFiles": [
+    {
+      "path": "tasks/route-policy-repair/public/CHECKER-INPUT.md",
+      "sha256": "508190e3f8921d06b73f52be7770085450a9fb6eac030bbb9d9bbe8b730653e5"
+    },
+    {
+      "path": "tasks/route-policy-repair/public/SEMANTICS.md",
+      "sha256": "490914b89c1c1ce94a89561002740ffa7479a33daaa26fa05266222cc5270392"
+    },
+    {
+      "path": "tasks/route-policy-repair/public/api.d.ts",
+      "sha256": "61bcbdd1fdd9382f85340fa14755d20b02e03f38a7459544d2548447e0e96e26"
+    },
+    {
+      "path": "tasks/route-policy-repair/public/entry.mjs",
+      "sha256": "65d1804c2d43ada53fbec3229f66083c212a66d18f8914fe1ea43e9d2a416876"
+    },
+    {
+      "path": "tasks/route-policy-repair/public/instruction.md",
+      "sha256": "3bc385cde816be4c2f1e8a85a5126a5c4171c1dce17b0481bb7acaf282dec521"
+    },
+    {
+      "path": "tasks/route-policy-repair/public/package.json",
+      "sha256": "24ea07a7a2496ab366b29eaf5e22b44a274a58f49ce6e4ba8e0e09fdc7ae00ff"
+    },
+    {
+      "path": "tasks/route-policy-repair/public/target.mjs",
+      "sha256": "08c0730fe3d611ff91e74f75403204d4bd4ffeff397fb44d16b613c3d82334a6"
+    },
+    {
+      "path": "tasks/browser-replay-repair/public/CHECKER-INPUT.md",
+      "sha256": "16335f5ac73eed2a4347f17225ed2fcb9e71417ca7718b9a3118a831020faa7c"
+    },
+    {
+      "path": "tasks/browser-replay-repair/public/SEMANTICS.md",
+      "sha256": "a94f1d2fa0e79a6aede416e4b3b001ec198fa6638ef1448bbe8b4eae958c64c4"
+    },
+    {
+      "path": "tasks/browser-replay-repair/public/app/driver.mjs",
+      "sha256": "eb8a8778fa28bb5cd0b705e15fda2a24999dbbf9998d826cd84c98afe019dc84"
+    },
+    {
+      "path": "tasks/browser-replay-repair/public/app/page.mjs",
+      "sha256": "18a9d34174b1be81a7ad0aff0f12a5e9cf9fad141b437e904c5d45b0c905b1df"
+    },
+    {
+      "path": "tasks/browser-replay-repair/public/app/server.mjs",
+      "sha256": "d1872eae22dfbd9a589a2d5f671240a0c489cf1603c6c6167f6070c49ba8a53c"
+    },
+    {
+      "path": "tasks/browser-replay-repair/public/dev.mjs",
+      "sha256": "bb005abe0329ac6bcacd79b4e86b39c6a010396a09f9bcf1151e80c4fdff365f"
+    },
+    {
+      "path": "tasks/browser-replay-repair/public/entry.mjs",
+      "sha256": "65d1804c2d43ada53fbec3229f66083c212a66d18f8914fe1ea43e9d2a416876"
+    },
+    {
+      "path": "tasks/browser-replay-repair/public/fixture.json",
+      "sha256": "149698662b2cf5c974049380a897c0dbc896e1e9c63c23c206224ce2ac3f32ca"
+    },
+    {
+      "path": "tasks/browser-replay-repair/public/instruction.md",
+      "sha256": "30fdca9e81fd226a93ec7ff3ea11d451a02789ff3625f92cbf1288e734d5e918"
+    },
+    {
+      "path": "tasks/browser-replay-repair/public/package.json",
+      "sha256": "ebd12b9e36ed111944143d3a0d2d4c9eed933b544555023d7f9be9fe1913505c"
+    },
+    {
+      "path": "tasks/browser-replay-repair/public/replay.mjs",
+      "sha256": "2b6a7176e2e647d3766eb3527d2d03869db74a32063039d63e23f76f98443a2d"
+    },
+    {
+      "path": "tasks/recurring-calendar-repair/public/CHECKER-INPUT.md",
+      "sha256": "efe056e49d2481267acee634e1f86c9b065b9de570fe64397ccd58d3facf9a5c"
+    },
+    {
+      "path": "tasks/recurring-calendar-repair/public/SEMANTICS.md",
+      "sha256": "d4ede68331f5f0b78e161076b254159c77adc9f07f6d95b653be516a05dc058c"
+    },
+    {
+      "path": "tasks/recurring-calendar-repair/public/api.d.ts",
+      "sha256": "8e72f6b8fa0fedbfd586a6c3bbe2dfedb173156f982f032dbab3fee05de52e26"
+    },
+    {
+      "path": "tasks/recurring-calendar-repair/public/entry.mjs",
+      "sha256": "65d1804c2d43ada53fbec3229f66083c212a66d18f8914fe1ea43e9d2a416876"
+    },
+    {
+      "path": "tasks/recurring-calendar-repair/public/instruction.md",
+      "sha256": "4047d78ac001af779d6e07d23bd4a193a3ec03885d31f7d08d1e9209ffc9230d"
+    },
+    {
+      "path": "tasks/recurring-calendar-repair/public/package.json",
+      "sha256": "24ea07a7a2496ab366b29eaf5e22b44a274a58f49ce6e4ba8e0e09fdc7ae00ff"
+    },
+    {
+      "path": "tasks/workflow-authority-repair/public/CHECKER-INPUT.md",
+      "sha256": "61088e7d680b9d3ec7a305b99edfb57ffbdbac15416b1f02e430516f6140d980"
+    },
+    {
+      "path": "tasks/workflow-authority-repair/public/SEMANTICS.md",
+      "sha256": "1629deccac6b64d1137ac1dcbde496ae49a29e9eb3d62c358ca5dc5e36977242"
+    },
+    {
+      "path": "tasks/workflow-authority-repair/public/api.d.ts",
+      "sha256": "131d6b42e0cc3b4b0628db8533535e8266fa7b59cfff2449714367150f365cbe"
+    },
+    {
+      "path": "tasks/workflow-authority-repair/public/entry.mjs",
+      "sha256": "65d1804c2d43ada53fbec3229f66083c212a66d18f8914fe1ea43e9d2a416876"
+    },
+    {
+      "path": "tasks/workflow-authority-repair/public/instruction.md",
+      "sha256": "f43148f22aac9518f914daf95c951d388462ba32c5e50c35fc599c2913ca0dba"
+    },
+    {
+      "path": "tasks/workflow-authority-repair/public/package.json",
+      "sha256": "24ea07a7a2496ab366b29eaf5e22b44a274a58f49ce6e4ba8e0e09fdc7ae00ff"
+    },
+    {
+      "path": "tasks/delegated-budget-repair/public/CHECKER-INPUT.md",
+      "sha256": "08d9922934abc96eb4a72718004910d02d02006e385e7d9766855b1c99a51152"
+    },
+    {
+      "path": "tasks/delegated-budget-repair/public/SEMANTICS.md",
+      "sha256": "060e600e403bc74bbad295155335082cff345c2cad322dd2b91101b3437166f0"
+    },
+    {
+      "path": "tasks/delegated-budget-repair/public/api.d.ts",
+      "sha256": "18e3edef2c70e733f85805eb077d1ec96b9198c6a531cc186649ae86686ae86f"
+    },
+    {
+      "path": "tasks/delegated-budget-repair/public/entry.mjs",
+      "sha256": "65d1804c2d43ada53fbec3229f66083c212a66d18f8914fe1ea43e9d2a416876"
+    },
+    {
+      "path": "tasks/delegated-budget-repair/public/instruction.md",
+      "sha256": "dd1af402e9b9df6f9e2270b54de1a8db9e9057141fc6d53ea3e345758635e1a8"
+    },
+    {
+      "path": "tasks/delegated-budget-repair/public/package.json",
+      "sha256": "24ea07a7a2496ab366b29eaf5e22b44a274a58f49ce6e4ba8e0e09fdc7ae00ff"
+    }
+  ],
+  "accounting": {
+    "originalRecordedRewards": [
+      1,
+      1,
+      0,
+      0,
+      0
+    ],
+    "originalWorkflowCause": "host defect; independent legal-retry checker defect reproduced with host corrected",
+    "replayRewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "replaysAreNewTrials": false,
+    "recoveredCalendarAndBudget": "Original completed, graded evidence published after storage-limit repair; no model rerun",
+    "previousFiveFinalistsUnchanged": true
+  },
+  "changes": [
+    "Browser: missing report following genuine interruption and wrongly wrapped report controls",
+    "Workflow: validate terminal dispatch token before returning PENDING; accept legal terminal retry variant",
+    "All five: private opaque-token output coverage in Foundry and Harbor",
+    "Runtime: retain scoped 512 MiB evidence publication budget and lossless gzip process logs"
+  ],
+  "limitations": [
+    "Finite test coverage does not prove absence of all remaining defects.",
+    "Provider-free replays are diagnostic evidence, not additional trials or new six-run qualification."
+  ]
+}

@@ -1,4 +1,6 @@
 import { session, checks, equal } from "./adapter.mjs";
+import { evaluateTarget, validateTarget } from "./target.mjs";
+import { equivalent, vocabulary } from "./equivalence.mjs";
 function cidr(text) {
   if (typeof text !== "string") throw Error("prefix");
   const [ip, len, ...extra] = text.split("/"),
@@ -55,72 +57,10 @@ export function evaluate(config, egress, input) {
     communities: [...route.communities].sort(),
   };
 }
-function validate(config) {
-  if (!config || !config.policies || !config.egresses || Object.keys(config.policies).length > 128)
-    throw Error("config shape");
-  let terms = 0;
-  function action(a) {
-    if (
-      !a ||
-      !["accept", "reject", "continue", "return", "call"].includes(a.kind) ||
-      Object.keys(a).some((k) => !["kind", "policy", "preference", "add", "remove"].includes(k))
-    )
-      throw Error("action");
-    if (a.kind === "call" && !Object.hasOwn(config.policies, a.policy)) throw Error("call target");
-    if (
-      a.preference !== undefined &&
-      (!Number.isInteger(a.preference) || a.preference < 0 || a.preference > 1000)
-    )
-      throw Error("preference");
-    for (const k of ["add", "remove"])
-      if (
-        a[k] !== undefined &&
-        (!Array.isArray(a[k]) || a[k].length > 12 || a[k].some((x) => typeof x !== "string" || x.length > 64))
-      )
-        throw Error("communities");
-  }
-  for (const p of Object.values(config.policies)) {
-    if (!Array.isArray(p.terms) || terms + p.terms.length > 1024) throw Error("terms");
-    terms += p.terms.length;
-    action(p.fallback);
-    for (const t of p.terms) {
-      const m = t.match;
-      if (!m || Object.keys(m).some((k) => !["prefix", "ge", "le", "communities"].includes(k)))
-        throw Error("match");
-      const c = cidr(m.prefix ?? "0.0.0.0/0");
-      if (
-        !Number.isInteger(m.ge ?? c.length) ||
-        !Number.isInteger(m.le ?? 32) ||
-        (m.ge ?? c.length) < c.length ||
-        (m.le ?? 32) > 32 ||
-        (m.ge ?? c.length) > (m.le ?? 32)
-      )
-        throw Error("range");
-      if (
-        m.communities !== undefined &&
-        (!Array.isArray(m.communities) ||
-          m.communities.length > 12 ||
-          m.communities.some((x) => typeof x !== "string"))
-      )
-        throw Error("match communities");
-      action(t.action);
-    }
-  }
-  function visit(name, path) {
-    if (!Object.hasOwn(config.policies, name) || path.includes(name) || path.length >= 16)
-      throw Error("graph");
-    const p = config.policies[name];
-    for (const a of [...p.terms.map((t) => t.action), p.fallback])
-      if (a.kind === "call") visit(a.policy, [...path, name]);
-  }
-  for (const name of Object.keys(config.policies)) visit(name, []);
-  for (const name of Object.values(config.egresses))
-    if (!Object.hasOwn(config.policies, name)) throw Error("egress");
-}
 export async function runScenario(s, execute, storage) {
   const observations = [],
     reports = [];
-  let config = structuredClone(s.config),
+  let config = null,
     published = false,
     legal = true;
   const expected = s.routes.map((r) => {
@@ -142,7 +82,7 @@ export async function runScenario(s, execute, storage) {
         publish: ({ config: next }) => {
           try {
             if (published) throw Error("published");
-            validate(next);
+            validateTarget(next, vocabulary(s.config, s.request));
             if (!equal(Object.keys(next.egresses).sort(), Object.keys(s.config.egresses).sort()))
               throw Error("egress scope");
             config = next;
@@ -161,7 +101,7 @@ export async function runScenario(s, execute, storage) {
   const actual = [];
   for (const r of s.routes) {
     try {
-      actual.push(evaluate(config, r.egress, r.route));
+      actual.push(evaluateTarget(config, r.egress, r.route));
     } catch (e) {
       actual.push({ error: String(e) });
       legal = false;
@@ -177,6 +117,7 @@ export async function runScenario(s, execute, storage) {
         (e, i) => (e.scoped && e.original.decision === "accept") || equal(actual[i], e.result),
       ),
       legal_config: legal,
+      translation: published && legal && equivalent(s.config, s.request, config, evaluate),
     }),
     actual,
     expected,

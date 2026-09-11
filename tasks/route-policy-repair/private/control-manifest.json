@@ -1,62 +1,42 @@
 [
   {
-    "id": "all-egresses",
+    "id": "original-preference",
     "overlay": {
-      "src/plan.mjs": "controls/all-egresses.mjs"
+      "src/plan.mjs": "controls/original-preference-v3.mjs"
     },
-    "check": "preservation",
-    "clean": "case-024",
-    "selectionRole": "development-regression"
+    "check": "translation",
+    "clean": "case-024"
   },
   {
-    "id": "falsy-preference",
+    "id": "mutated-scope",
     "overlay": {
-      "src/plan.mjs": "controls/falsy-preference.mjs"
+      "src/plan.mjs": "controls/mutated-scope-v3.mjs"
     },
-    "check": "scoped_behavior",
-    "clean": "case-024",
-    "selectionRole": "development-regression"
+    "check": "translation",
+    "clean": "case-024"
   },
   {
-    "id": "early-accept",
+    "id": "lost-return",
     "overlay": {
-      "src/plan.mjs": "controls/early-accept.mjs"
+      "src/plan.mjs": "controls/lost-return-v3.mjs"
     },
-    "check": "scoped_behavior",
-    "selectionRole": "development-regression"
+    "check": "translation",
+    "clean": "case-024"
   },
   {
-    "id": "leave-nested-calls",
+    "id": "drop-mutation",
     "overlay": {
-      "src/plan.mjs": "controls/leave-nested-calls.mjs"
+      "src/plan.mjs": "controls/drop-mutation-v3.mjs"
     },
-    "check": "positive_change",
-    "selectionRole": "development-regression"
-  },
-  {
-    "id": "ignore-prefix-length",
-    "overlay": {
-      "src/plan.mjs": "controls/ignore-prefix-length.mjs"
-    },
-    "check": "preservation",
-    "clean": "case-024",
-    "selectionRole": "development-regression"
+    "check": "translation",
+    "clean": "case-024"
   },
   {
     "id": "no-work",
     "overlay": {
       "entry.mjs": "controls/no-work.mjs"
     },
-    "check": "completion",
-    "selectionRole": "development-regression"
-  },
-  {
-    "id": "forged-completion",
-    "overlay": {
-      "entry.mjs": "controls/forged-completion.mjs"
-    },
-    "check": "completion",
-    "selectionRole": "development-regression"
+    "check": "completion"
   },
   {
     "id": "isolation",
@@ -64,25 +44,34 @@
       "entry.mjs": "controls/isolation.mjs"
     },
     "check": "completion",
-    "selectionRole": "development-regression",
     "isolation": true
   },
   {
-    "id": "match-mutated-community",
+    "id": "unsampled-route",
     "overlay": {
-      "src/change.mjs": "controls/match-mutated-community.mjs"
+      "entry.mjs": "controls/unsampled-route.mjs"
     },
-    "check": "scoped_behavior",
-    "clean": "case-024",
-    "selectionRole": "post-selection-validation"
+    "check": "translation"
   },
   {
-    "id": "example-hardcoding",
+    "id": "changed-unrequested-egress",
     "overlay": {
-      "entry.mjs": "controls/example-hardcoding.mjs"
+      "entry.mjs": "controls/changed-unrequested-egress.mjs"
     },
-    "check": "positive_change",
-    "clean": "case-024",
-    "selectionRole": "correction-regression"
+    "check": "translation"
+  },
+  {
+    "id": "changed-rejected-attributes",
+    "overlay": {
+      "entry.mjs": "controls/changed-rejected-attributes.mjs"
+    },
+    "check": "translation"
+  },
+  {
+    "id": "publish-after-success",
+    "overlay": {
+      "entry.mjs": "controls/publish-after-success.mjs"
+    },
+    "check": "legal_config"
   }
 ]

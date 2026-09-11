@@ -1,0 +1,37 @@
+[
+  {
+    "id": "route-policy-repair",
+    "historicalGeneratorSha256": "df8961fc298643a7fc4c5c3150a8e0bdaf702fbd3b3d3f3a6bf7f61ec78067e8",
+    "predecessorGeneratorSha256": "01131a405e32d14125a663c19a7f27268f74464da697423489a9ebcb5f22b21c",
+    "generatorSha256": "ce5f48f637cf8f3de57a9e16dbdf4e824375c7c58d5729f8e429ca55268ae859",
+    "preHardeningGeneratorSha256": "ce5f48f637cf8f3de57a9e16dbdf4e824375c7c58d5729f8e429ca55268ae859"
+  },
+  {
+    "id": "browser-replay-repair",
+    "historicalGeneratorSha256": "ae2b03cb33bc171622f3d7551482f8eacdbf7d9caa153a141e0a31a5e18e0953",
+    "predecessorGeneratorSha256": "e405f0560df34bfc01a7d91422f521ec072b6fdda053746d770acf6140270652",
+    "generatorSha256": "c88033b80ecda4c49112a20716c8183177fe606dd609f6882f3bf72616aef797",
+    "preHardeningGeneratorSha256": "bfeac53045d0657e4ad0925eb21103f093cd8a58717d6da6b9414e1b579b362e"
+  },
+  {
+    "id": "recurring-calendar-repair",
+    "historicalGeneratorSha256": "87f447c08d0c8c0c89fa8ebea9d87ed64e3519423da949bcb2d48f94ffbc20dd",
+    "predecessorGeneratorSha256": "87f447c08d0c8c0c89fa8ebea9d87ed64e3519423da949bcb2d48f94ffbc20dd",
+    "generatorSha256": "6186ce08f31e3d7b6b2fbc2e0677e17e8344cce158bd5db129adc3eb25f81a9f",
+    "preHardeningGeneratorSha256": "19cf61bc3f8dfd64b97297eaf4c1b12dbe0a07a8763e7574485772c1d1c0a243"
+  },
+  {
+    "id": "workflow-authority-repair",
+    "historicalGeneratorSha256": "e08d628ac19fd598c9b8c99548e5fee355b3ffa1e64b3acc22c9a329c3d18c2b",
+    "predecessorGeneratorSha256": "e08d628ac19fd598c9b8c99548e5fee355b3ffa1e64b3acc22c9a329c3d18c2b",
+    "generatorSha256": "f2f5cb4bc7cd69e54dc9fc767972679e22d1d14f0a3cc274e3ee1112a2b2d4e7",
+    "preHardeningGeneratorSha256": "f2f5cb4bc7cd69e54dc9fc767972679e22d1d14f0a3cc274e3ee1112a2b2d4e7"
+  },
+  {
+    "id": "delegated-budget-repair",
+    "historicalGeneratorSha256": "ad0e0ba4cece2aa6fb838cb733aad06f9fcc7de7bff0fc7ef0fa3819ef1163ab",
+    "predecessorGeneratorSha256": "6c628d845637f2b0c7d57f6172d287615cab99ef18334c137c5905eab9b47dc3",
+    "generatorSha256": "0ae20674cdd7e0cff69c3f559f95c157d05d9fff904af66ad86120e661739708",
+    "preHardeningGeneratorSha256": "d2173fda6f918de43b356ea9517aa9f7b689acfd1fcd18916e391a504ec2ebbb"
+  }
+]

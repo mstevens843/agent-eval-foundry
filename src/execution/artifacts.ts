@@ -29,6 +29,11 @@ export function writeEvidence(path: string, value: unknown): void {
     closeSync(fd);
   }
 }
+/** Aggregate bound on total bytes in one published grading-evidence record (captures plus
+ * every checker-grade candidate's execution artifacts). Independent of regularTree's generic
+ * default and of the unrelated solver-submission size limits enforced in package-route.ts,
+ * real-provider.ts and copyArtifactTree — those stay at their own explicit values. */
+export const EVIDENCE_PUBLICATION_BUDGET_BYTES = 512 * 1024 * 1024;
 export function regularTree(root: string, maxBytes = 128 * 1024 * 1024) {
   let bytes = 0;
   let nodes = 0;
@@ -123,18 +128,19 @@ export function publishEvidence(
   stage: string,
   destination: string,
   identity: Record<string, unknown>,
+  maxBytes = EVIDENCE_PUBLICATION_BUDGET_BYTES,
 ): string {
   if (existsSync(destination)) throw Error("EVIDENCE_ALREADY_PUBLISHED");
-  if (existsSync(join(stage, "completion.json"))) verifyEvidence(stage);
+  if (existsSync(join(stage, "completion.json"))) verifyEvidence(stage, maxBytes);
   else
     writeEvidence(join(stage, "completion.json"), {
       schemaVersion: 1,
       identity,
-      files: regularTree(stage),
+      files: regularTree(stage, maxBytes),
       complete: true,
     });
   // A manifest flush alone does not make captured data durable across host failure.
-  for (const file of regularTree(stage)) {
+  for (const file of regularTree(stage, maxBytes)) {
     const fd = openSync(join(stage, file.path), constants.O_RDONLY | constants.O_NOFOLLOW);
     try {
       fsyncSync(fd);
@@ -164,7 +170,7 @@ export function publishEvidence(
   }
   return destination;
 }
-export function verifyEvidence(directory: string) {
+export function verifyEvidence(directory: string, maxBytes = EVIDENCE_PUBLICATION_BUDGET_BYTES) {
   const raw = readFileSync(join(directory, "completion.json"));
   if (raw.length > 1024 * 1024) throw Error("EVIDENCE_MANIFEST_LIMIT");
   const m = JSON.parse(raw.toString()) as {
@@ -177,7 +183,7 @@ export function verifyEvidence(directory: string) {
     m.schemaVersion !== 1 ||
     m.complete !== true ||
     canonicalJson(m.files) !==
-      canonicalJson(regularTree(directory).filter((f) => f.path !== "completion.json"))
+      canonicalJson(regularTree(directory, maxBytes).filter((f) => f.path !== "completion.json"))
   )
     throw Error("EVIDENCE_CONTENT_MISMATCH");
   return m;

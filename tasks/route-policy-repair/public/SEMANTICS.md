@@ -1,4 +1,4 @@
-# Aster routing language v1
+# Aster to flat deployment migration — successor 3.0
 
 view has config {egresses:Record<egress,policy>,policies:Record<name,Policy>}, request,
 and storage. A Policy is {terms:Term[],fallback:Action}. A Term is {match,action}.
@@ -26,15 +26,35 @@ that original-input scope must have exactly its original decision and attributes
 Nonrequested egresses must retain all behavior even if they share policy nodes.
 These requirements apply to all valid routes, not just visible test examples.
 
-api.publish({config}) replaces the configuration once; returns {ok:true}, or
-{ok:false,error:string} for malformed, cyclic or oversized configurations. Failed publish
-does not change configuration. After success no more changes. Return values and simulations
-alone do not count. The authority independently evaluates the resulting policy.
-At most 8 original policies, 8 terms per policy, call depth 5, 6 egresses. Published config
-may contain at most 128 policies and 1024 terms, depth 16. Each action add/remove
-list has at most 12 strings of at most 64 characters; a match has at most 12
-community strings. Preferences are integers 0–1000.
-Routes have canonical prefix length 0–32 and at most 12 distinct communities. All input
-policies and requests are valid. No particular edit or policy name is required. The execution envelope is 4000 API calls and 45 seconds.
-Each route evaluation must finish within 4096 executed actions; exceeding that deterministic
-bound is a configuration work failure. The verifier does not rely on wall-time timing.
+## Destination: flat-v1
+Publish {config:{format:"flat-v1",egresses:Record<string,Rule[]>}}. Each egress has an
+ordered flat rule array. Rule is {when:{all:Match[],none:Match[]},action:{decision,
+preference?,add:string[],remove:string[]}}. Matches have the source Match schema
+but ALL inspect ORIGINAL input. A rule matches iff every all predicate matches and
+no none predicate matches. The first matching rule is terminal. Its action removes
+then adds communities, and optionally replaces preference, all against original input.
+If no rule matches, reject with original preference and sorted unique communities.
+There are no calls, returns, intermediate mutations or source-policy objects in a
+deployment. Public target.mjs is the exact destination evaluator and shape validator.
+No particular compilation algorithm or internal graph representation is required.
+
+The deployment supports at most512 total rules,4096 predicate atoms across all/none,
+6 egresses and48 KiB UTF-8 JSON for {config}. add/remove and Match communities have
+at most12 registered strings each. The community registry is the set of identifiers
+appearing anywhere in the source config or request, at most12 distinct strings.
+Target predicates/edits may only use registered identifiers. Input routes may contain
+other community strings; those still have to be preserved. All source instances are
+guaranteed representable within these combined capacities, including serialization.
+Source bounds:8 policies,8 terms/policy,depth5,6 egresses,4096 executed actions/route.
+IPv4 prefixes are canonical; preferences integers0–1000; input community sets <=12.
+List strings have <=64 characters. Source policies/requests are valid.
+
+api.publish({config}) atomically deploys a valid target with exactly the original
+egress keys; returns {ok:true}, otherwise {ok:false,error:string}. Failed calls may
+be corrected. Exactly one successful deployment; no further publish after success.
+The task requires equivalence for ALL valid routes, not only supplied examples.
+No published source graph, simulation result or returned claim counts as deployment.
+
+Node 24 built-ins; storage writable;128 regular files/8 MiB/depth16.45 seconds/process,
+4000 protocol frames,64 KiB/frame,16 MiB/channel. Provided views and compact correct
+publications jointly fit48 KiB. Authoring internet is available; grading is offline.

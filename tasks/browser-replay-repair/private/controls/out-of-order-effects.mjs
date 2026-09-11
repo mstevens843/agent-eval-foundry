@@ -1,0 +1,1 @@
+import {run} from './src/replay.mjs';export const subject={async run(v,a){await run({...v,events:[...v.events].reverse()},a);return {traceId:v.traceId,steps:v.events.map(e=>({step:e.step,status:'completed'}))}}};

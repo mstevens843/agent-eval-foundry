@@ -1,0 +1,371 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-11",
+  "purpose": "Historical Trial 5; third 3.0.0 attempt, identical to Trial 4 packages and providers",
+  "concurrency": 5,
+  "maxProviderCalls": 5,
+  "automaticRetries": false,
+  "billingMode": "subscription-only",
+  "wallMsPerTask": 10800000,
+  "runRoot": ".local/hardened-next-five-trial-three-2026-09-11/real-campaign-frozen",
+  "files": {
+    "controller": {
+      "path": ".local/hardened-next-five-trial-three-2026-09-11/campaign.mjs",
+      "sha256": "c97343e6bcbcef359caad2df0a227dd1f2a1e007fca8f56551967c81ef773947"
+    },
+    "ready": {
+      "path": ".local/hardened-next-five-trial-three-2026-09-11/real-campaign-frozen/READY.json",
+      "sha256": "af173319104888f69a80acf5ca3eb37d159f998137d149941f927ad7a309790b"
+    },
+    "runtimeVerification": {
+      "path": ".local/hardened-next-five-trial-three-2026-09-11/runtime-verification.json",
+      "sha256": "127c4b3cc6aae55e2550759590a23346592c11df5d8cec7b947633045ceff579"
+    },
+    "dependencies": {
+      "path": ".local/hardened-next-five-trial-three-2026-09-11/dependencies.json",
+      "sha256": "f72168d088e67f14854528b93b2962d0b42126fba22646e6b6eb434d9affa24d"
+    },
+    "hardeningEvidence": {
+      "path": ".local/hardened-next-five-trial-three-2026-09-11/evidence.json",
+      "sha256": "1fab5b71e7d3ffd81747442e1b75d98d5695912fc0f2b1a8bf62361911d2bbab"
+    },
+    "runtimeCopy": {
+      "path": ".local/hardened-next-five-trial-three-2026-09-11/runtime-copy.json",
+      "sha256": "577e2d56c40af1b1d28c92c23f6d7e69549048d5c83ca63c17135f18b07ab482"
+    },
+    "previousController": {
+      "path": ".local/hardened-next-five-trial-three-2026-09-11/previous-controller.mjs",
+      "sha256": "8dc611311aa530d2a2c80a9ca5887ec6a56ce60eacb95d047844befdd0421b7b"
+    },
+    "controllerDiff": {
+      "path": ".local/hardened-next-five-trial-three-2026-09-11/controller.diff",
+      "sha256": "108cfe00512ce86737114141b30e4d30a44b7d4dd719c99ce33aae885f0ab75c"
+    },
+    "provenance": {
+      "path": ".local/hardened-next-five-trial-three-2026-09-11/provenance.json",
+      "sha256": "1dccf97974f8b1dc5d91d4f4b606608cb1f27c6e05dc7fea49c366fc0987d5dc"
+    }
+  },
+  "runtime": {
+    "directory": ".local/hardened-next-five-trial-three-2026-09-11/frozen-source",
+    "sourceDigest": "b9c99108fbd1d23f1b8c8c92ff059b1f6d9dcdfe5fe245f9565d5923f90bbfe8",
+    "bundleSha256": "04cd21bb17982ed40cdbd2adbb8bbd75becd4963c769ca91ba22d08c84253d81"
+  },
+  "predecessor": {
+    "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-two-preparation.json",
+    "sha256": "603ea97d46f0d55ddbebdeaa6ab18a6c6e0b58422d464a90e8e0f976377553c7"
+  },
+  "runtimeRebuilt": false,
+  "packageBytesChanged": false,
+  "providerAssignmentsChanged": false,
+  "packages": [
+    {
+      "id": "route-policy-repair",
+      "target": "claude",
+      "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "historicalTrial": 5,
+      "versionAttempt": 3,
+      "gradingRevision": "coverage-v2",
+      "analysisDocument": "reports/screening/third-five/14-route-policy-repair.md",
+      "profile": {
+        "schemaVersion": 1,
+        "target": "claude",
+        "requested": {
+          "provider": "anthropic",
+          "model": "anthropic/claude-opus-5",
+          "effort": "max",
+          "scaffold": "claude-code"
+        },
+        "provenance": {
+          "revision": "83c7a6172d629c6575b785ab12c8db787bb2e323",
+          "source": ".github/harbor-run-defaults.yml@83c7a6172d629c6575b785ab12c8db787bb2e323"
+        },
+        "adapter": {
+          "id": "foundry-subscription-cli",
+          "version": "2",
+          "scaffoldVersion": "2.1.263"
+        },
+        "authoring": {
+          "image": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+          "network": "bridge",
+          "tools": [
+            "node",
+            "shell",
+            "claude"
+          ],
+          "credentials": "broker"
+        },
+        "gradingRoute": "professional-multifile/authority-process@1",
+        "context": {
+          "handling": "scaffold-default-unobserved",
+          "outputTokens": 128000
+        },
+        "limits": {
+          "wallMs": 10800000,
+          "outputBytes": 33554432,
+          "artifactBytes": 8388608,
+          "memoryMiB": 2048,
+          "cpus": 2,
+          "pids": 256
+        }
+      }
+    },
+    {
+      "id": "browser-replay-repair",
+      "target": "claude",
+      "packageDigest": "712f97575821006724eef7f3b3161c97512019897af62e46ab32b9c32dcddf31",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "historicalTrial": 5,
+      "versionAttempt": 3,
+      "gradingRevision": "coverage-v2",
+      "analysisDocument": "reports/screening/original-five/03-browser-replay-repair.md",
+      "profile": {
+        "schemaVersion": 1,
+        "target": "claude",
+        "requested": {
+          "provider": "anthropic",
+          "model": "anthropic/claude-opus-5",
+          "effort": "max",
+          "scaffold": "claude-code"
+        },
+        "provenance": {
+          "revision": "83c7a6172d629c6575b785ab12c8db787bb2e323",
+          "source": ".github/harbor-run-defaults.yml@83c7a6172d629c6575b785ab12c8db787bb2e323"
+        },
+        "adapter": {
+          "id": "foundry-subscription-cli",
+          "version": "2",
+          "scaffoldVersion": "2.1.263"
+        },
+        "authoring": {
+          "image": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+          "network": "bridge",
+          "tools": [
+            "node",
+            "shell",
+            "claude"
+          ],
+          "credentials": "broker"
+        },
+        "gradingRoute": "professional-multifile/authority-process@1",
+        "context": {
+          "handling": "scaffold-default-unobserved",
+          "outputTokens": 128000
+        },
+        "limits": {
+          "wallMs": 10800000,
+          "outputBytes": 33554432,
+          "artifactBytes": 8388608,
+          "memoryMiB": 2048,
+          "cpus": 2,
+          "pids": 256
+        }
+      }
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "target": "codex",
+      "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "historicalTrial": 5,
+      "versionAttempt": 3,
+      "gradingRevision": "coverage-v2",
+      "analysisDocument": "reports/screening/fourth-five/18-recurring-calendar-repair.md",
+      "profile": {
+        "schemaVersion": 1,
+        "target": "codex",
+        "requested": {
+          "provider": "openai",
+          "model": "openai/gpt-5.6-sol",
+          "effort": "xhigh",
+          "scaffold": "codex"
+        },
+        "provenance": {
+          "revision": "83c7a6172d629c6575b785ab12c8db787bb2e323",
+          "source": ".github/harbor-run-defaults.yml@83c7a6172d629c6575b785ab12c8db787bb2e323"
+        },
+        "adapter": {
+          "id": "foundry-subscription-cli",
+          "version": "2",
+          "scaffoldVersion": "0.153.2"
+        },
+        "authoring": {
+          "image": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+          "network": "bridge",
+          "tools": [
+            "node",
+            "shell",
+            "codex"
+          ],
+          "credentials": "broker"
+        },
+        "gradingRoute": "professional-multifile/authority-process@1",
+        "context": {
+          "handling": "scaffold-default-unobserved",
+          "outputTokens": null
+        },
+        "limits": {
+          "wallMs": 10800000,
+          "outputBytes": 33554432,
+          "artifactBytes": 8388608,
+          "memoryMiB": 2048,
+          "cpus": 2,
+          "pids": 256
+        }
+      }
+    },
+    {
+      "id": "workflow-authority-repair",
+      "target": "codex",
+      "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "historicalTrial": 5,
+      "versionAttempt": 3,
+      "gradingRevision": "coverage-v2",
+      "analysisDocument": "reports/screening/fourth-five/20-workflow-authority-repair.md",
+      "profile": {
+        "schemaVersion": 1,
+        "target": "codex",
+        "requested": {
+          "provider": "openai",
+          "model": "openai/gpt-5.6-sol",
+          "effort": "xhigh",
+          "scaffold": "codex"
+        },
+        "provenance": {
+          "revision": "83c7a6172d629c6575b785ab12c8db787bb2e323",
+          "source": ".github/harbor-run-defaults.yml@83c7a6172d629c6575b785ab12c8db787bb2e323"
+        },
+        "adapter": {
+          "id": "foundry-subscription-cli",
+          "version": "2",
+          "scaffoldVersion": "0.153.2"
+        },
+        "authoring": {
+          "image": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+          "network": "bridge",
+          "tools": [
+            "node",
+            "shell",
+            "codex"
+          ],
+          "credentials": "broker"
+        },
+        "gradingRoute": "professional-multifile/authority-process@1",
+        "context": {
+          "handling": "scaffold-default-unobserved",
+          "outputTokens": null
+        },
+        "limits": {
+          "wallMs": 10800000,
+          "outputBytes": 33554432,
+          "artifactBytes": 8388608,
+          "memoryMiB": 2048,
+          "cpus": 2,
+          "pids": 256
+        }
+      }
+    },
+    {
+      "id": "delegated-budget-repair",
+      "target": "codex",
+      "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "historicalTrial": 5,
+      "versionAttempt": 3,
+      "gradingRevision": "coverage-v2",
+      "analysisDocument": "reports/screening/original-five/04-delegated-budget-repair.md",
+      "profile": {
+        "schemaVersion": 1,
+        "target": "codex",
+        "requested": {
+          "provider": "openai",
+          "model": "openai/gpt-5.6-sol",
+          "effort": "xhigh",
+          "scaffold": "codex"
+        },
+        "provenance": {
+          "revision": "83c7a6172d629c6575b785ab12c8db787bb2e323",
+          "source": ".github/harbor-run-defaults.yml@83c7a6172d629c6575b785ab12c8db787bb2e323"
+        },
+        "adapter": {
+          "id": "foundry-subscription-cli",
+          "version": "2",
+          "scaffoldVersion": "0.153.2"
+        },
+        "authoring": {
+          "image": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+          "network": "bridge",
+          "tools": [
+            "node",
+            "shell",
+            "codex"
+          ],
+          "credentials": "broker"
+        },
+        "gradingRoute": "professional-multifile/authority-process@1",
+        "context": {
+          "handling": "scaffold-default-unobserved",
+          "outputTokens": null
+        },
+        "limits": {
+          "wallMs": 10800000,
+          "outputBytes": 33554432,
+          "artifactBytes": 8388608,
+          "memoryMiB": 2048,
+          "cpus": 2,
+          "pids": 256
+        }
+      }
+    }
+  ],
+  "priorRecords": [
+    {
+      "id": "route-policy-repair",
+      "completion": {
+        "path": ".local/hardened-next-five-trial-two-2026-09-11/real-campaign-frozen/jobs/real-provider/records/route-policy-repair-attempt-1/completion.json",
+        "sha256": "e30cd67128ab1985247da5c2ab6db43d8e11a8237e3b55239f27c40c14cd837a"
+      },
+      "files": 984,
+      "gradeSummaryPresent": false
+    },
+    {
+      "id": "browser-replay-repair",
+      "completion": {
+        "path": ".local/hardened-next-five-trial-two-2026-09-11/real-campaign-frozen/jobs/real-provider/records/browser-replay-repair-attempt-1/completion.json",
+        "sha256": "c832ea154780be2c39357828f0d929532b5b2cd125a2fa9e624edc2db4bd1bf6"
+      },
+      "files": 1387,
+      "gradeSummaryPresent": false
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "completion": {
+        "path": ".local/hardened-next-five-trial-two-2026-09-11/real-campaign-frozen/jobs/real-provider/records/recurring-calendar-repair-attempt-1/completion.json",
+        "sha256": "c256a18763fb2aa9c6928c2706d5933b1044ce847712e0da49d3b0148c56e4a2"
+      },
+      "files": 977,
+      "gradeSummaryPresent": false
+    },
+    {
+      "id": "workflow-authority-repair",
+      "completion": {
+        "path": ".local/hardened-next-five-trial-two-2026-09-11/real-campaign-frozen/jobs/real-provider/records/workflow-authority-repair-attempt-1/completion.json",
+        "sha256": "072d7295f3a2ad690e841f279c05dc17eaaf1f342fe928c44604393b1228f1e0"
+      },
+      "files": 897,
+      "gradeSummaryPresent": true
+    },
+    {
+      "id": "delegated-budget-repair",
+      "completion": {
+        "path": ".local/hardened-next-five-trial-two-2026-09-11/real-campaign-frozen/jobs/real-provider/records/delegated-budget-repair-attempt-1/completion.json",
+        "sha256": "fa527299e1806dbce5da9a0145f7535489cee8b56cc84ba177258a7b34dc0dbb"
+      },
+      "files": 1312,
+      "gradeSummaryPresent": false
+    }
+  ],
+  "providerCallsMade": 0
+}

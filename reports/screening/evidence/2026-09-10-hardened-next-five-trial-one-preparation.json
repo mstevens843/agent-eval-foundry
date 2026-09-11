@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-10",
+  "purpose": "One first trial per hardened 3.0.0 task; historical Trial 3",
+  "concurrency": 5,
+  "maxProviderCalls": 5,
+  "automaticRetries": false,
+  "billingMode": "subscription-only",
+  "wallMsPerTask": 10800000,
+  "runRoot": ".local/hardened-next-five-trial-one-2026-09-10/real-campaign-frozen",
+  "files": {
+    "controller": {
+      "path": ".local/hardened-next-five-trial-one-2026-09-10/campaign.mjs",
+      "sha256": "d0842ea48cd3799327b3fd6a6b78950013e75255e2a8174ada11fbd87ac56beb"
+    },
+    "ready": {
+      "path": ".local/hardened-next-five-trial-one-2026-09-10/real-campaign-frozen/READY.json",
+      "sha256": "ed52c07618fb3a5e7796bdd733bd5b896777c3b27b94b4c2c83a1fd17ad08776"
+    },
+    "runtimeVerification": {
+      "path": ".local/hardened-next-five-trial-one-2026-09-10/runtime-verification.json",
+      "sha256": "8e3ec8a9d45c7410e8c26b64cedb49bc6bd130c0300121ba82da5aa584917d00"
+    },
+    "dependencies": {
+      "path": ".local/hardened-next-five-trial-one-2026-09-10/dependencies.json",
+      "sha256": "62b0ae52b307dd70d27faa0ecd0bb90c3fb4e584e44e15fde4242cf3c0358f08"
+    },
+    "provenance": {
+      "path": ".local/hardened-next-five-trial-one-2026-09-10/provenance.json",
+      "sha256": "0ebfdf19277efaee4749cb42a94fe78add414934bcaf346fcb62b0258bd29ef1"
+    },
+    "controllerDiff": {
+      "path": ".local/hardened-next-five-trial-one-2026-09-10/controller.diff",
+      "sha256": "bb22ec51dc0c729a82d32c396d1e24ebef57c0b5433024883be066e6a70deb12"
+    },
+    "previousController": {
+      "path": ".local/hardened-next-five-trial-one-2026-09-10/previous-controller.mjs",
+      "sha256": "75585c4036a3f8ea5cd616c4c504ea844c09ca36dddddc837a7d6fe91294cdc0"
+    },
+    "hardeningEvidence": {
+      "path": ".local/hardened-next-five-trial-one-2026-09-10/evidence.json",
+      "sha256": "f43392bfa20806430cdf0fa2929eb3f98444eeb5597a416ed8f3051c5dba3932"
+    }
+  },
+  "runtime": {
+    "directory": ".local/hardened-next-five-trial-one-2026-09-10/frozen-source",
+    "sourceDigest": "153bdf9d0675e7d4ca59a7fe9b21430e887d24e889db7bbfb134e5dc4d7fa41d",
+    "bundleSha256": "195d2b0bfddbc9beb30b53be18bf4243b674b55709be4803d47ced0518446f44"
+  },
+  "packages": [
+    {
+      "id": "route-policy-repair",
+      "target": "claude",
+      "packageDigest": "c3ff40c39c331627595b3a5aa0a74f03d6777a26e9c34b5b27c042474fe0fd63",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "historicalTrial": 3,
+      "versionAttempt": 1,
+      "analysisDocument": "reports/screening/third-five/14-route-policy-repair.md",
+      "requested": {
+        "provider": "anthropic",
+        "model": "anthropic/claude-opus-5",
+        "effort": "max",
+        "scaffold": "claude-code"
+      },
+      "limits": {
+        "wallMs": 10800000,
+        "outputBytes": 33554432,
+        "artifactBytes": 8388608,
+        "memoryMiB": 2048,
+        "cpus": 2,
+        "pids": 256
+      }
+    },
+    {
+      "id": "browser-replay-repair",
+      "target": "claude",
+      "packageDigest": "7511a91b15231268c3fe86e12e67b644805efc35e546edd83a5629eba2508ace",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "historicalTrial": 3,
+      "versionAttempt": 1,
+      "analysisDocument": "reports/screening/original-five/03-browser-replay-repair.md",
+      "requested": {
+        "provider": "anthropic",
+        "model": "anthropic/claude-opus-5",
+        "effort": "max",
+        "scaffold": "claude-code"
+      },
+      "limits": {
+        "wallMs": 10800000,
+        "outputBytes": 33554432,
+        "artifactBytes": 8388608,
+        "memoryMiB": 2048,
+        "cpus": 2,
+        "pids": 256
+      }
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "target": "codex",
+      "packageDigest": "8f438cc74fc23c4357caa4c2a6ce64edd068eb899b5c335bdecd81884444fde3",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "historicalTrial": 3,
+      "versionAttempt": 1,
+      "analysisDocument": "reports/screening/fourth-five/18-recurring-calendar-repair.md",
+      "requested": {
+        "provider": "openai",
+        "model": "openai/gpt-5.6-sol",
+        "effort": "xhigh",
+        "scaffold": "codex"
+      },
+      "limits": {
+        "wallMs": 10800000,
+        "outputBytes": 33554432,
+        "artifactBytes": 8388608,
+        "memoryMiB": 2048,
+        "cpus": 2,
+        "pids": 256
+      }
+    },
+    {
+      "id": "workflow-authority-repair",
+      "target": "codex",
+      "packageDigest": "f7e8ebedfb12bad0fa67e7841e213d78991620e5266cc115a01f98b79bf8cdd0",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "historicalTrial": 3,
+      "versionAttempt": 1,
+      "analysisDocument": "reports/screening/fourth-five/20-workflow-authority-repair.md",
+      "requested": {
+        "provider": "openai",
+        "model": "openai/gpt-5.6-sol",
+        "effort": "xhigh",
+        "scaffold": "codex"
+      },
+      "limits": {
+        "wallMs": 10800000,
+        "outputBytes": 33554432,
+        "artifactBytes": 8388608,
+        "memoryMiB": 2048,
+        "cpus": 2,
+        "pids": 256
+      }
+    },
+    {
+      "id": "delegated-budget-repair",
+      "target": "codex",
+      "packageDigest": "db688724f5b932b9e0ee619e1202da3de81a636a37ef90976490702fb24c5f66",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "historicalTrial": 3,
+      "versionAttempt": 1,
+      "analysisDocument": "reports/screening/original-five/04-delegated-budget-repair.md",
+      "requested": {
+        "provider": "openai",
+        "model": "openai/gpt-5.6-sol",
+        "effort": "xhigh",
+        "scaffold": "codex"
+      },
+      "limits": {
+        "wallMs": 10800000,
+        "outputBytes": 33554432,
+        "artifactBytes": 8388608,
+        "memoryMiB": 2048,
+        "cpus": 2,
+        "pids": 256
+      }
+    }
+  ],
+  "hostObservation": {
+    "dockerCpus": 10,
+    "dockerMemoryBytes": 16748032000,
+    "hostMemoryFreePercent": 54,
+    "activeProviderContainers": 0,
+    "diskAvailableGiB": 26,
+    "claudeTokenPresent": true,
+    "codexCredentialFilePresent": true,
+    "note": "Observed at preparation only; launch rechecks current resources. Authentication validity is established by actual provider dispatch, not by this no-spend presence check."
+  },
+  "providerCallsMade": 0,
+  "dispatchClaimCreated": false
+}

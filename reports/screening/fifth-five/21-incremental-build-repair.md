@@ -1,6 +1,6 @@
 # 21 — Incremental build repair
 
-> **Final counted result: 6/6 reward=0 — meets the reported ≥5/6 target.** Three Codex and three Claude trials; no slots pending. [Final results and counting method](../final-results-2026-09-09.md). The dated analysis below preserves the complete trial and grading history.
+> **Final counted result: 6/6 reward=0 — meets the reported ≥5/6 target.** Three Codex and three Claude trials; no slots pending. [Final results and counting method](../final-results-2026-09-11.md). The dated analysis below preserves the complete trial and grading history.
 
 ## Outcome
 

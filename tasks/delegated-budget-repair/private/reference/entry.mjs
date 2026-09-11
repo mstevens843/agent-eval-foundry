@@ -1,2 +1,2 @@
-import { dispatch } from "./src/dispatcher.mjs";
-export const subject = { run: dispatch };
+import { run } from "./src/dispatcher.mjs";
+export const subject = { run };

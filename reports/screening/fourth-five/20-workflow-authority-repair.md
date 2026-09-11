@@ -1,5 +1,7 @@
 # 20 — Workflow authority repair
 
+**Final 3.0.0 screening result (September 11): 6/6 counted trials returned reward=0, with three Codex and three Claude trials.** This task is one of the [nine qualifying tasks](../final-results-2026-09-11.md). Full historical trials, audits and excluded attempts remain below.
+
 ## Outcome
 
 Claude, requested Opus 5 / max, completed in **18 minutes 13 seconds**. Its service
@@ -265,3 +267,188 @@ packages with an unresolved genuine capability gap.
 Reward **1**; service **30/30**; checker **14/14**. All **879** completion-manifest files matched their recorded sizes and hashes.
 
 [Campaign results](../round-two-next-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-next-five.json). Trial 1 is preserved.
+
+
+## September 10, 2026 — successor 3.0.0 engineering (no new model trial)
+
+This is a new task version, not a regrade of the successful Trial 2 package. The
+original trial evidence and interpretation above are retained verbatim. At the
+start of this work all 171 maintained files matched the frozen Trial 2 exports.
+
+### New business requirements and prior simplifying strategy
+
+Authorization admission, external dispatch commitment and delivery completion are separate. Authority must hold at every accepted authorized admission and at dispatch. Conditional dispatch fences both admitted and current revisions; durable terminal outcomes survive later revocation and duplicate delivery. Committed receipts may be temporarily pending.
+
+The saved Codex service could use one atomic decision/effect call and receipt lookup. It must now reconcile stale pending authorizations, externally committed but temporarily unobservable receipts and independently completed deliveries without a prescribed local journal.
+
+### Additional coverage and implementation evidence
+
+Root provenance through depth-six ancestry, varied resources/actions, multiple independent grant paths, revocation of only one path, staleness after inspection and admission, and interruption after admission/dispatch/outcome/finish.
+
+A reverse-order valid-path search with harmless invalid-dispatch recovery passes. Admission-only completion, pending-as-complete, intermediate-principal origin, wrong payload, empty path and deny-all controls fail semantically.
+
+Complete private service and checker references, authority/schema updates, legal
+alternatives, controls and reproducible Foundry/native Harbor exports are included.
+Public core entry points remain empty. The new service reference and alternative
+pass 36/36 scenarios; the reference checker passes 10/10 candidate traces.
+Untouched starters fail semantically and lack the required checker. These are local
+engineering validations, **not provider/model trial results or hardness evidence**.
+
+No new defect in the earlier successful submitted code is asserted: its former
+contract differs. Historical defect claims, where present above, retain their
+original evidence and scope. The five separate successful finalists and their
+standings remain unchanged; this successor adds zero to that count.
+
+See the [consolidated implementation report](../next-five-successor-implementation-2026-09-10.md)
+and [machine-readable evidence](../evidence/2026-09-10-next-five-successors.json)
+for exact commands, native oracle/nop and integrity outcomes, full export digests,
+resolved development failures and the subsequent grading-review handoff.
+
+
+## Pretrial hardening of successor 3.0.0 — September 10, 2026
+
+Added invalid superseded admissions (path, origin and payload) and wrong delivery/decision association. Correct repeated admissions, dispatch retries and alternate valid path traversal pass.
+
+Reference service: **36/36**. Both complete correct alternatives pass. Required checker: **15/15** classifications over the full scenario population, with diagnostic-only reasons. Native oracle returns 1; untouched nop returns 0 without an infrastructure error. All nine native integrity controls pass.
+
+Foundry export: `.local/next-five-hardening-2026-09-10/release-four/workflow-authority-repair/export`. Digest: `f7e8ebedfb12bad0fa67e7841e213d78991620e5266cc115a01f98b79bf8cdd0`. Native export: `.local/next-five-hardening-2026-09-10/harbor-frozen-v2/workflow-authority-repair`. Digest: `09350245104dbac12c6675b328cd38a8c063854daffa720ae89c15ea7450d19b`.
+
+The [hardening report](../next-five-hardening-2026-09-10.md), [obligation map](../next-five-hardening-coverage-2026-09-10.md) and [evidence](../evidence/2026-09-10-next-five-hardening.json) record the added cases, mutation audit, protections and frozen artifacts. These are engineering checks before model trials, not another scored trial or a historical regrade. Prior trial results above are unchanged.
+
+## Trial 3 — hardened successor 3.0.0, attempt 1 — September 10–11, 2026
+
+First model trial on the hardened 3.0.0 package, dispatched concurrently with the
+other four hardened-next-five-trial-one packages at 2026-09-11T01:13:37.119Z
+against the frozen `hardened-next-five-trial-one-2026-09-10` runtime (source digest
+`153bdf9d0675e7d4ca59a7fe9b21430e887d24e889db7bbfb134e5dc4d7fa41d`). Requested
+profile: `openai/gpt-5.6-sol`, effort `xhigh`, via Codex (`profileDigest`
+`a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641`). Package
+digest `f7e8ebedfb12bad0fa67e7841e213d78991620e5266cc115a01f98b79bf8cdd0`, matching
+the hardened export above.
+
+Reward **0**. Service **36/36** (`semantic-pass`) — the submitted repair itself
+is correct. Checker **13/15** (2 false positives, 0 missed, deterministic): the
+submitted checker incorrectly rejects `alternative` (the known-good alternative
+reference solution) and `variant-replacement-and-retry` (a genuinely correct
+positive variant), both as false positives. A checker that rejects known-correct
+implementations does not discriminate the contract's real obligations, so the
+required-checker failure is a legitimate reward-zero outcome under the task
+contract, not a grading artifact. 14m7s of authoring (job completed
+2026-09-11T01:28:05.764Z), 735,794 input tokens (673,408 cached) and 31,023
+output tokens (Codex CLI usage; no price reported). No infrastructure
+interruption on this attempt. Job id `workflow-authority-repair-attempt-1`,
+published to
+`real-campaign-frozen/jobs/real-provider/records/workflow-authority-repair-attempt-1`
+with a verified 868-file completion manifest.
+
+This is the first scored trial on the hardened 3.0.0 revision. It stands
+independently of the Trial 2 (successor) pass recorded above; the earlier
+package's contract, checker and scenario population all differ. See
+[the campaign summary](../hardened-next-five-trial-one-2026-09-10.md) and
+[sanitized evidence](../evidence/2026-09-10-hardened-next-five-trial-one.json)
+for the other four packages' results and the publication-recovery incident
+affecting two of them (not this one). Notably, the same "checker rejects the
+correct reference/alternative" failure mode recurs on the other two Codex
+attempts in this trial —
+[04-delegated-budget-repair.md](../original-five/04-delegated-budget-repair.md) and
+[18-recurring-calendar-repair.md](../fourth-five/18-recurring-calendar-repair.md) —
+which also hit the publication incident described there.
+
+
+## Independent post-trial audit — September 11, 2026
+
+The recorded reward remains **0**, but the earlier claim that its original rejection was free of grading artifacts is corrected here. The rejected positive candidates were `alternative` and `variant-replacement-and-retry`; `reference` was accepted. In `case-027`, the host returns PENDING for an unknown dispatch token after a denied job. The public contract requires a request error and associates PENDING with committed external work. Restoring that documented host response and recapturing the two affected cells makes the saved checker classify the original bank **15/15**.
+
+A separate genuine checker defect was also reproduced: a complete reference variant repeats an executed dispatch after its terminal receipt, without an extra effect. Both original and corrected hosts produce service passes; the saved checker incorrectly rejects this legal idempotent retry as `commits a terminal job` and regresses its reconstructed delivery state. The reference checker accepts it. Thus the checker still has a demonstrated defect, but the new counterexample does not erase the original host bug. Integrate the host correction and this positive retry control, then revalidate before further trials. Original grades and counting disposition were not silently changed.
+
+See the [full independent audit](../../hardened-next-five-pass-audit-2026-09-11.md) and [hashed evidence](../../evidence/2026-09-11-hardened-next-five-pass-audit.json). This audit made zero provider calls and preserved the original trial records.
+
+
+## Coverage-v2 integrated and next trial prepared — September 11, 2026
+
+The host now rejects unknown dispatch tokens after denial, and a legal terminal dispatch-retry positive candidate is integrated. The saved service passes 36/36. Its checker accepts the original 15 candidates under the corrected host and rejects only the new legal retry (15/16). This confirms the independent checker defect while preserving the original host-bug attribution.
+
+Public 3.0.0 instructions, interfaces and starters are byte-identical to Trial 3. The corrected private Foundry package is `2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2`. Reference validation passes **36/36 service scenarios and 16/16 checker candidates**. Native oracle/nop and integrity checks pass. These are replays and engineering checks, not new model attempts; the historical reward remains recorded.
+
+The next authorized run is **Trial 4**, one fresh **Codex** attempt alongside the other four packages. It has been prepared but not dispatched. See the [integrated coverage report](../next-five-coverage-v2-2026-09-11.md), [exact evidence](../evidence/2026-09-11-next-five-coverage-v2.json) and [operator handoff](../../../docs/hardened-next-five-trial-two-handoff.md).
+
+
+## Trial 4 — 3.0.0 / coverage-v2 — September 11, 2026
+
+Second model attempt on the unchanged public 3.0.0 contract, first on the corrected private grading revision coverage-v2. Campaign: `.local/hardened-next-five-trial-two-2026-09-11/`, frozen runtime source digest `b9c99108fbd1d23f1b8c8c92ff059b1f6d9dcdfe5fe245f9565d5923f90bbfe8`. Job id `workflow-authority-repair-attempt-1`, package digest `2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2`, profile digest `a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641` (requested `openai/gpt-5.6-sol`, effort `xhigh`, via Codex). Dispatched 2026-09-11T03:55:41.365Z, completed 2026-09-11T04:12:00.570Z (16m20s wall; 957,291ms / 15m57s authoring per `capture.json`). Usage: 998,047 input tokens (942,336 cached), 38,558 output tokens (Codex CLI usage; no price reported). Published to `.local/hardened-next-five-trial-two-2026-09-11/real-campaign-frozen/jobs/real-provider/records/workflow-authority-repair-attempt-1/`, independently re-verified via `verifyEvidence`: 897 files, all hashes match, no infrastructure error.
+
+Reward **0**. Service **semantic-pass, 36/36** scenarios (`grade.json`'s `evaluation`: expected/observed ids match exactly, no missing/unexpected ids or problems) — the submitted repair itself is correct.
+
+Coverage-v2 replaced descriptive checker-grade candidate names with opaque per-run tokens for every candidate. `grading/checker-grade/cases/cases.json` lists 16 tokens for this package: `__proto__`, `constructor`, `toString`, an empty string, `"0"`, `"01"`, `"token/λ"`, and `candidate-H` through `candidate-O`. Unlike three other packages dispatched in this same trial (route-policy-repair, browser-replay-repair, recurring-calendar-repair), this submitted checker's verdicts object correctly includes all 16 tokens, including `"__proto__"`: `grading/submission/checker.mjs` (lines 517-526) builds its result via `Object.defineProperty(verdicts, token, {...})` rather than plain bracket assignment (`verdicts[token] = ...`), which correctly creates an own property for any key name, avoiding the `Object.prototype.__proto__` accessor collision that broke the other three checkers' output shape. Because the output has the correct shape, `completeVerdicts()` passes and the harness computed a real, complete per-token score rather than falling back to a synthetic zero result: `grading/checker-grade/grade-summary.json` reports `total:16, correct:12, falsePositives:4, missed:0, deterministic:true`. The 4 false-positive candidateIds (mapped from opaque tokens back to human-readable labels in `details`) are `alternative`, `variant-terminal-dispatch-retry`, `variant-replacement-and-retry`, and `reference` itself.
+
+This is worse than the engineering prediction two sections above ("rejects only the new legal retry, 15/16"): the live submitted checker also incorrectly rejects `reference` (the canonical known-good baseline) and `alternative` (the other known-good implementation) as false positives, not just the new legal dispatch-retry candidates. That prediction was reference-checker validation against the corrected host, not a forecast of what a fresh model-submitted checker would produce — the two are different artifacts and this result does not contradict the earlier reference-checker figures, but it is a materially worse outcome than "reject only the new candidate." This is a genuine content-level misjudgment (not a shape/structural crash like the other three packages in this trial), and it is why service passed but the required checker deliverable failed — a legitimate reward-zero outcome under the task contract.
+
+No infrastructure interruption. No additional model calls were made beyond this one authorized attempt. This trial's evidence and interpretation are independent of the Trial 1/2 sections above, which used a different task version or grading revision.
+
+
+## Third 3.0.0 attempt prepared — historical Trial 5
+
+September 11, 2026 UTC: one fresh **Codex** attempt is prepared, concurrently with the other four tasks, using the exact package, profile and frozen runtime from Trial 4. This is attempt **3** on the public 3.0.0 task and is labeled **Trial 5** in this document's full history. No new model call has been launched by preparation. The provider remains the same for this round; any opposite-provider block comes later under a separate handoff. Previous results and replay accounting are unchanged.
+
+See the [prepared execution handoff](../../../docs/hardened-next-five-trial-three-handoff.md) and [verification manifest](../evidence/2026-09-11-hardened-next-five-trial-three-preparation.json).
+
+## Trial 5 — 3.0.0 / coverage-v2, attempt 3 — September 11, 2026
+
+Third model attempt on the unchanged public 3.0.0 contract, byte-identical package/grading/runtime to Trial 4 (frozen source digest `b9c99108fbd1d23f1b8c8c92ff059b1f6d9dcdfe5fe245f9565d5923f90bbfe8`). The solver is blind to all previous submissions, grades, reference solutions and analysis docs — this is an independent fresh attempt, not informed by Trial 4's specific defect. Campaign: `.local/hardened-next-five-trial-three-2026-09-11/`. Job id `workflow-authority-repair-attempt-1`, package digest `2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2`, profile digest `a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641` (requested `openai/gpt-5.6-sol`, effort `xhigh`, via Codex, same profile as Trial 4). Dispatched 2026-09-11T05:07:22.516Z, completed 2026-09-11T05:23:46.447Z (16m24s wall; 959,906ms / 16m00s authoring per `capture.json`). Usage: 2,039,072 input tokens (1,973,504 cached), 46,910 output tokens (Codex CLI usage; no price reported). Published to `.local/hardened-next-five-trial-three-2026-09-11/real-campaign-frozen/jobs/real-provider/records/workflow-authority-repair-attempt-1/`, independently re-verified via `verifyEvidence`: 896 files, all hashes match, no infrastructure error.
+
+Reward **0**. Service **semantic-pass, 36/36** scenarios (`grade.json`'s `evaluation`: expected/observed ids match exactly, no missing/unexpected ids or problems) — the submitted repair itself is correct.
+
+This fresh checker fails in a different and more fundamental way than this package's Trial 4 attempt (which reached full per-candidate scoring with a genuine content-level false-positive defect on 4 of 16 candidates). This time no `grading/checker-grade/grade-summary.json` is written at all. Read directly: `grading/submission/checker.mjs`'s exported `run({cases})` (lines 584–596) does `return cases.map((candidate) => { ...; return { token, accept }; })` — a flat **array** of `{token, accept}` objects, not the `{verdicts: {token: {ok, reasons}}}` object shape that `completeVerdicts()`/`gradeChecker()` (`src/packages/checker-contract.ts`, `src/packages/portfolio.ts`) require. Confirmed against the raw `grading/checker-grade/checker-process.log`: `parsed.first`/`parsed.second` are literally JSON arrays of 16 `{"token":"...","accept":false}` entries each, and every single one of the 16 opaque tokens (including `__proto__`, `constructor`, `toString`, the empty string, `"0"`, `"01"`, `"token/λ"`, and `candidate-H` through `candidate-O`) reads `accept:false` — 0 of 16 accepted.
+
+The 100% rejection is not incidental to the shape bug — it is independently caused by a second, distinct defect in `validateCell` (checker.mjs line 422 on). Line 424 checks `!Array.isArray(cell.original)` and line 434 assigns `const deliveries = cell.original;`, but the actual cell objects in `grading/checker-grade/cases/cases.json` have no `original` field at all — the real field is named `deliveries` (confirmed directly: each cell's `deliveries` is an array of records like `{"id":"delivery-0","jobId":"root-0","worker":"admin"}`; `cell.original` is `undefined`). Since `Array.isArray(undefined)` is `false`, `validateCell`'s very first check fails unconditionally for every cell in every candidate, before any real workflow-authority logic ever runs — so even if `run()` returned the correct `{verdicts: {...}}` shape, this checker would still reject 100% of candidates on a field-name mismatch alone. Two independent, stacked defects: the checker never attempts the required output contract (array of `{token,accept}` instead of a `verdicts` map with `ok`/`reasons`), and even its own internal acceptance logic can never return `true` because it reads the wrong property name for delivery records.
+
+This is a distinct, new failure mode from Trial 4's attempt on this same package — not a recurrence of that defect (which was a genuine accuracy problem on a checker with a working, correctly-shaped output) — and arguably a more severe regression, since this submission never engages with the real grading contract or the real task data at all. Service passed; the required checker deliverable failed — a legitimate reward-zero outcome under the task contract.
+
+No infrastructure interruption. No additional model calls were made beyond this one authorized attempt. This trial's evidence and interpretation are independent of the Trial 1/2/3/4 sections above, which used earlier task versions or grading revisions; do not alter or reinterpret those earlier sections.
+
+
+## Trial 6 preparation — fourth 3.0.0 attempt, provider switch
+
+Prepared September 11, 2026 UTC. The next attempt uses **Claude**, switching from the previous provider, with 2 GiB of authoring memory. It is one of five concurrent attempts in the [new handoff](../../../docs/hardened-next-five-trial-four-handoff.md). Public version 3.0.0, the coverage-v2 grader, package digest and solver instruction remain unchanged. No model call occurred during preparation and this section records no new trial result.
+
+The [infrastructure report](../browser-runtime-reliability-2026-09-11.md) documents the independent runtime build, bounded resource diagnostics, core-dump prevention, local regression checks and recovered disk headroom. The [preparation manifest](../evidence/2026-09-11-hardened-next-five-trial-four-preparation.json) binds the exact next profile and all unchanged package bytes. All Trial 5 completion manifests were reverified. Prior trial outcomes remain intact.
+
+## Trial 6 — fourth 3.0.0 attempt / coverage-v2 / provider switch — September 11, 2026
+
+Fourth model attempt on the unchanged public 3.0.0 contract, with all five providers switched from Trial 5 (this package moves from Codex to Claude). Task and coverage-v2 grader packages are byte-identical to Trials 4/5; the frozen runtime was rebuilt only to add browser-authoring memory mitigation and resource diagnostics for a different package (source digest `597df061330dad6fc300dc1bf12fdbc12d29817b1e6d58c80732fc4dea71accc`), which does not affect this package's grading. The solver is blind to all previous submissions, grades, reference solutions and analysis docs. Campaign: `.local/hardened-next-five-trial-four-2026-09-11/`. Job id `workflow-authority-repair-attempt-1`, package digest `2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2` (unchanged from Trials 4/5), profile digest `d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794` (requested `anthropic/claude-opus-5`, effort `max`, via Claude Code — switched from Codex). Dispatched 2026-09-11T06:41:21.895Z, completed 2026-09-11T07:02:47.951Z (21m26s wall; 1,264,607ms / 21m05s authoring per `capture.json`). Usage: 3,391,524 input tokens (3,260,297 cached), 109,725 output tokens, $5.6863085 (subscription billing). Published to `.local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/workflow-authority-repair-attempt-1/`, independently re-verified via `verifyEvidence` this session: 929 files, all hashes match, no infrastructure error.
+
+Reward **0**. Service **semantic-pass, 36/36** scenarios (`grade.json`'s `evaluation`: expected/observed ids match exactly, no missing/unexpected ids or problems) — the submitted repair itself is correct.
+
+This package's checker has now failed three different ways across three trials: Trial 4's genuine content-level false positives (12/16 correct, real scoring); Trial 5's flat-array output shape plus a `cell.original`/`cell.deliveries` field-name mismatch (0/16, never engaged the real contract); and now, for the first time, the `"__proto__"` shape-gate collision that has separately affected route-policy-repair, browser-replay-repair, recurring-calendar-repair and delegated-budget-repair at various points in Trials 4/5. Confirmed directly against this attempt's submitted `grading/submission/checker.mjs`: line 22 declares `const verdicts = {};` and line 41 assigns via bracket notation, `verdicts[token] = reasons.length === 0 ? { ok: true } : { ok: false, reasons };`. Because `Object.prototype.__proto__` is an inherited accessor, assigning to the literal key `"__proto__"` on a plain object does not create an enumerable own property. `grading/checker-grade/cases/cases.json` lists 16 opaque tokens for this attempt (`__proto__`, `constructor`, `toString`, an empty string, `"0"`, `"01"`, `"token/λ"`, and `candidate-H` through `candidate-P`); the raw `grading/checker-grade/checker-process.log` output has exactly 15 keys, missing only `"__proto__"`. `completeVerdicts()`'s exact-key-count shape check fails on that single missing key, so `gradeChecker()` falls through to its synthetic all-failed fallback rather than a real per-candidate score — no `grade-summary.json` was written, and the checker's true judgment on the other 15 tokens was never actually scored.
+
+Three consecutive, structurally distinct defects on one package is strong evidence that each fresh, independently-authored submission is genuinely different code, not a repeated pattern specific to this task. Separately, all three Claude attempts dispatched in this Trial 6 campaign (this package, recurring-calendar-repair, delegated-budget-repair) independently hit this identical `"__proto__"` shape-gate bug, while both Codex attempts (route-policy-repair, browser-replay-repair) reached clean checker passes — a striking provider-correlated split this round, worth watching across future trials rather than treating as proven from one campaign.
+
+No infrastructure interruption. No additional model calls were made beyond this one authorized attempt. This trial's evidence and interpretation are independent of the Trial 1/2/3/4/5 sections above, which used earlier task versions, grading revisions, or providers; do not alter or reinterpret those earlier sections.
+
+
+## Round 5 preparation — historical Trial 7 (September 11, 2026)
+
+The preceding Round 4 / historical Trial 6 reward 0 remains counted. This package’s export is byte-identical to the last trial.
+
+The next attempt is prepared on **Claude**, the same provider as Round 4, using **coverage-v2**. All five tasks launch concurrently into fresh blind workspaces. Round 5 is the fifth campaign on public 3.0.0 and historical Trial 7 in this document. Preparation itself makes no model call and contributes no outcome.
+
+[Coverage and counting report](../browser-coverage-v3-2026-09-11.md) · [Counting disposition](../evidence/2026-09-11-browser-round-four-disposition.json) · [Round 5 handoff](../../../docs/hardened-next-five-trial-five-handoff.md).
+
+
+## Conditional continuation after Round 5 — prepared September 11, 2026
+
+The user authorized continuing after new reward-zero results, stopping this task on its next pass or at six counted trials with three Codex and three Claude. The already-running Round 5 is unchanged and must finish before the continuation starts. The [explicit counting ledger](../evidence/2026-09-11-hardened-six-counting-ledger.json) records the previously documented first-round regrades and retains excluded attempts separately; preparation adds no trial result. See the [remaining-slot plan](../hardened-six-continuation-preparation-2026-09-11.md) and [operator handoff](../../../docs/hardened-six-continuation-handoff.md).
+
+## Round 5 and continuation — historical Trials 7-8 — 3.0.0 — September 11, 2026
+
+Both solvers were blind to all previous submissions, grades, reference solutions, analysis docs, and to each other's attempt. Private coverage-v2, unchanged from Round 4. Package digest `2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2` (unchanged), profile digest `d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794` (requested `anthropic/claude-opus-5`, effort `max`, via Claude Code, same provider as Round 4) for both attempts. Runtime: byte-identical copy of the completed Round 4 frozen runtime (source digest `597df061330dad6fc300dc1bf12fdbc12d29817b1e6d58c80732fc4dea71accc`), not rebuilt.
+
+**T7 — historical Trial 7 (Round 5).** Job id `workflow-authority-repair-attempt-1`, campaign `.local/hardened-next-five-trial-five-2026-09-11/`. Dispatched 2026-09-11T08:20:45.072Z, completed 2026-09-11T08:47:12.843Z (26m28s wall; 1,566,159ms / 26m06s authoring). Usage: 4,916,771 input tokens (4,754,167 cached), 135,202 output tokens, $7.383879 (subscription billing). Reward **0**. Service semantic-pass, 36/36. Checker: shape-gate failure. `grading/checker-grade/cases/cases.json` lists 16 opaque tokens including the literal `"__proto__"`; the actual `checker-process.log` output has only 15 of those 16 keys, missing `"__proto__"`. The submitted `checker.mjs` builds `const verdicts = {}` (line 432) and assigns per candidate via bracket notation, `verdicts[token] = evaluateCase(entry)` (line 437) — a plain object cannot hold an own `"__proto__"` property through bracket assignment, so that candidate's verdict silently vanishes from the output and the harness's exact-key-count shape gate rejects the whole result. This package's checker has shown this same bug class before, in its own Round 4/Trial 6 attempt, alongside two other genuinely distinct defects in earlier rounds — a recurring risk for this package, not a deterministic one.
+
+**T8 — historical Trial 8 (Round 6 continuation), user-authorized follow-up since T7 failed.** Job id `workflow-authority-repair-attempt-1`, campaign `.local/hardened-six-continuation-2026-09-11/slots/workflow-authority-repair/trial-8/`. Same provider/profile as T7. Dispatched immediately on T7's failure, completed 2026-09-11T09:17:45.912Z (1,599,954ms / 26m40s authoring). Usage: 8,460,406 input tokens (8,282,972 cached), 134,780 output tokens, $9.285746 (subscription billing). Reward **0**. Service semantic-pass, 36/36. Checker: the same shape-gate bug class, independently confirmed — 16 expected tokens, 15 actual, missing `"__proto__"`. This is a distinct implementation from T7's: `const verdicts = {}` (line 573) and `verdicts[key] = ...` (line 604) — different variable name, different line numbers, same underlying plain-object-as-opaque-token-dictionary mistake.
+
+Both completion manifests independently re-verified via `verifyEvidence` this session: T7 921 files, T8 945 files, all hashes match, no infrastructure error.
+
+**Final disposition.** With T8's failure, this task reached the six-counted-trial stop condition automatically (per the user's explicit continuation rule: continue after clean reward-zero results until six counted trials with three Codex and three Claude): final tally **6 scored, 6 failures, providers 3 Codex + 3 Claude**, `stopReason: "six-counted"`, 0 unused slots. This is a complete, balanced six-trial record meeting the ≥5/6 target with room to spare.
+
+No infrastructure interruption on either attempt. This trial's evidence and interpretation are independent of the earlier Trial 1-6/audit sections above, which used earlier task versions, grading revisions, or occurred before these specific attempts; do not alter or reinterpret those earlier sections.

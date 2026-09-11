@@ -18,6 +18,7 @@ import { localProcess } from "../packages/local-process.js";
 import { type PackagePolicyInput, assertPackageStage } from "../packages/policy.js";
 import { refreshSnapshot, resolvePackage, sha256 } from "../packages/record.js";
 import { copyArtifactTree, regularTree, writeEvidence } from "./artifacts.js";
+import { startAuthoringDiagnostics } from "./authoring-diagnostics.js";
 import { type CaptureResult, captureProcess } from "./capture.js";
 import { driveReservedJob, executionSourceIdentity } from "./execute.js";
 import { type ExecutionPackage, gradeExecutionPackage, prepareExecutionPackage } from "./package-route.js";
@@ -196,6 +197,7 @@ export async function runRealProviderAuthor(
     "--user=1000:1000",
     "--cap-drop=ALL",
     "--security-opt=no-new-privileges",
+    "--ulimit=core=0",
     "--env-file=/dev/null",
     "--tmpfs",
     "/tmp:rw,exec,size=512m,mode=1777",
@@ -238,45 +240,55 @@ export async function runRealProviderAuthor(
     status: "unobservable",
   };
   const events: Record<string, unknown>[] = [];
-  const capture = await captureProcess("docker", args, {
-    directory: join(options.directory, "capture"),
-    timeoutMs: profile.limits.wallMs,
-    maxBytes: profile.limits.outputBytes,
-    env: {
-      PATH: process.env.PATH ?? "",
-      HOME: process.env.HOME ?? "",
-      ...(options.target === "claude" && claudeCredential
-        ? { CLAUDE_CODE_OAUTH_TOKEN: claudeCredential.oauthTokenEnvValue }
-        : {}),
-    },
-    jsonEvents: true,
-    ...(options.signal ? { signal: options.signal } : {}),
-    cleanup: async () => {
-      try {
-        const inspected = await localProcess(
-          "docker",
-          ["inspect", "--format", '{"state":{{json .State}},"image":{{json .Image}}}', name],
-          { timeoutMs: 15000, limitBytes: 65536 },
-        );
-        writeEvidence(join(options.directory, "authoring-runtime.json"), JSON.parse(inspected.stdout));
-      } finally {
-        await localProcess("docker", ["rm", "-f", name], { timeoutMs: 15000 });
-      }
-    },
-    onEvent: (event) => {
-      if (events.length < 4096) events.push(event);
-      const model =
-        (event as { model?: unknown }).model ??
-        (event as { message?: { model?: unknown } }).message?.model ??
-        (event as { session?: { model?: unknown } }).session?.model;
-      if (typeof model === "string" && model.trim())
-        observedModel = {
-          value: model,
-          source: `runtime event type=${String(event.type)}`,
-          status: "observed",
-        };
-    },
-  });
+  const diagnostics = startAuthoringDiagnostics(name, join(options.directory, "authoring-resources.jsonl"));
+  let capture: CaptureResult;
+  try {
+    capture = await captureProcess("docker", args, {
+      directory: join(options.directory, "capture"),
+      timeoutMs: profile.limits.wallMs,
+      maxBytes: profile.limits.outputBytes,
+      env: {
+        PATH: process.env.PATH ?? "",
+        HOME: process.env.HOME ?? "",
+        ...(options.target === "claude" && claudeCredential
+          ? { CLAUDE_CODE_OAUTH_TOKEN: claudeCredential.oauthTokenEnvValue }
+          : {}),
+      },
+      jsonEvents: true,
+      ...(options.signal ? { signal: options.signal } : {}),
+      cleanup: async () => {
+        const resourceDiagnostics = await diagnostics.stop();
+        try {
+          const inspected = await localProcess(
+            "docker",
+            ["inspect", "--format", '{"state":{{json .State}},"image":{{json .Image}}}', name],
+            { timeoutMs: 15000, limitBytes: 65536 },
+          );
+          writeEvidence(join(options.directory, "authoring-runtime.json"), {
+            ...JSON.parse(inspected.stdout),
+            resourceDiagnostics,
+          });
+        } finally {
+          await localProcess("docker", ["rm", "-f", name], { timeoutMs: 15000 });
+        }
+      },
+      onEvent: (event) => {
+        if (events.length < 4096) events.push(event);
+        const model =
+          (event as { model?: unknown }).model ??
+          (event as { message?: { model?: unknown } }).message?.model ??
+          (event as { session?: { model?: unknown } }).session?.model;
+        if (typeof model === "string" && model.trim())
+          observedModel = {
+            value: model,
+            source: `runtime event type=${String(event.type)}`,
+            status: "observed",
+          };
+      },
+    });
+  } finally {
+    await diagnostics.stop();
+  }
   writeEvidence(join(options.directory, "observed-events-sample.json"), events.slice(0, 64));
   writeEvidence(join(options.directory, "observation.json"), {
     model: observedModel,

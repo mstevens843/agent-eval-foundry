@@ -1,4 +1,13 @@
-import { session, checks, equal, canonical } from "./adapter.mjs";
+import { session as rawSession, checks, equal, canonical } from "./adapter.mjs";
+import { deliver } from "./restart.mjs";
+import { publicationShape } from "./publication-shape.mjs";
+// The scenario returns the complete observations once. Repeating its cumulative
+// history in every process result needlessly multiplies the collector payload.
+function session(...args) {
+  const adapter = rawSession(...args);
+  adapter.result = () => ({ channels: {}, report: { captured: true } });
+  return adapter;
+}
 const min = (s) => Date.parse(s + "Z") / 60000,
   str = (n) => new Date(n * 60000).toISOString().slice(0, 16);
 function resolve(wall, z) {
@@ -93,46 +102,142 @@ function normalize(rows) {
 export async function runScenario(s, execute, storage) {
   const observations = [],
     reports = [],
-    commits = [];
-  await execute(
-    session(
-      { ...s.view, storage },
-      {
-        commit: ({ events, bookings }) => {
-          if (
-            !Array.isArray(events) ||
-            !Array.isArray(bookings) ||
-            events.length > 500 ||
-            bookings.length > 600
-          )
-            return { error: "shape" };
-          commits.push({ events, bookings });
-          return { stored: true };
-        },
-      },
-      (r) => reports.push(r),
-      observations,
-    ),
-  );
-  const want = expected(s.view),
-    actual = commits.at(-1) ?? { events: [], bookings: [] },
-    lookup = (e) => actual.events.find((a) => key(a) === key(e));
+    publications = [],
+    prefixes = [],
+    acks = [],
+    interruptions = [];
+  let state = {
+    generation: 0,
+    records: [],
+    events: [],
+    bookings: structuredClone(s.externalBookings),
+    externalBookings: structuredClone(s.externalBookings),
+  };
+  let active = null,
+    raced = false,
+    sourceRecords = [];
+  const flags = {
+    completion: true,
+    occurrence_identity: true,
+    civil_time: true,
+    history: true,
+    bookings: true,
+    preservation: true,
+    source_revisions: true,
+  };
+  const recordKey = (r) => JSON.stringify([r.kind, r.id]);
+  const latest = (records, updates) => {
+    const result = structuredClone(records);
+    for (const r of updates) {
+      const at = result.findIndex((p) => recordKey(p) === recordKey(r));
+      if (at < 0) result.push(r);
+      else if (r.revision > result[at].revision) result[at] = r;
+    }
+    return result;
+  };
+  const sorted = (xs) => [...xs].sort((a, b) => canonical(a).localeCompare(canonical(b)));
+  function wanted(records) {
+    const live = records.filter((r) => r.value !== null),
+      get = (k) => live.filter((r) => r.kind === k).map((r) => r.value);
+    const window = get("window")[0];
+    const v = {
+      series: get("series"),
+      zones: get("zone"),
+      changes: get("changes").flat(),
+      externalBookings: state.externalBookings,
+    };
+    const all = expected(v),
+      events = all.events.filter((e) => e.rid >= window.from && e.rid <= window.through),
+      keys = new Set(events.map(key)),
+      external = new Set(state.externalBookings.map((b) => b.key));
+    return { events, bookings: all.bookings.filter((b) => external.has(b.key) || keys.has(b.key)) };
+  }
+  const operations = {
+    read: () => structuredClone(state),
+    publish: (r) => {
+      if (!publicationShape(r)) return { error: "shape" };
+      if (!raced && active.concurrentBooking) {
+        raced = true;
+        state.generation++;
+        state.externalBookings.push(active.concurrentBooking);
+        state.bookings.push(active.concurrentBooking);
+      }
+      if (r.baseGeneration !== state.generation) return { stale: true };
+      const records = sourceRecords,
+        want = wanted(records);
+      flags.source_revisions &&= equal(sorted(r.records), sorted(records));
+      flags.occurrence_identity &&= equal(r.events.map(key).sort(), want.events.map(key).sort());
+      flags.civil_time &&= want.events.every((e) => {
+        const a = r.events.find((a) => key(a) === key(e));
+        return a && ["startLocal", "zone", "startUTC", "endUTC"].every((k) => a[k] === e[k]);
+      });
+      flags.history &&= want.events.every(
+        (e) => r.events.find((a) => key(a) === key(e))?.status === e.status,
+      );
+      flags.bookings &&= equal(sorted(r.bookings), sorted(want.bookings));
+      flags.preservation &&= equal(normalize(r.events), normalize(want.events));
+      state = {
+        ...state,
+        generation: state.generation + 1,
+        records: r.records,
+        events: r.events,
+        bookings: r.bookings,
+      };
+      publications.push({ deliveryId: active.id, ...structuredClone(state) });
+      return { stored: true, generation: state.generation };
+    },
+    ack: ({ deliveryId, generation }) => {
+      if (deliveryId !== active.id || generation !== state.generation) return { error: "request" };
+      // A redelivered process may legally publish a new, equivalent generation.
+      // Keep the latest successful acknowledgement, including a lost-response retry.
+      const previous = acks.find((a) => a.deliveryId === deliveryId);
+      if (previous) previous.generation = generation;
+      else acks.push({ deliveryId, generation });
+      return { stored: true };
+    },
+  };
+  for (const d of s.deliveries) {
+    active = d;
+    raced = false;
+    const target = (sourceRecords = latest(sourceRecords, d.updates));
+    await deliver(
+      execute,
+      () =>
+        session(
+          { deliveryId: d.id, updates: d.updates, storage },
+          operations,
+          (r) => reports.push(r),
+          observations,
+        ),
+      d.interrupt ? { ...d.interrupt, observations } : null,
+      interruptions,
+      { deliveryId: d.id },
+    );
+    flags.completion &&= acks.some((a) => a.deliveryId === d.id && a.generation === state.generation);
+    flags.source_revisions &&= equal(sorted(state.records), sorted(target));
+    if (target.length) {
+      const want = wanted(target);
+      flags.preservation &&= equal(normalize(state.events), normalize(want.events));
+      flags.bookings &&= equal(sorted(state.bookings), sorted(want.bookings));
+    }
+    prefixes.push({ deliveryId: d.id, ...structuredClone(state) });
+  }
   return {
-    ...checks({
-      completion: commits.length === 1,
-      occurrence_identity: equal(actual.events.map(key).sort(), want.events.map(key).sort()),
-      civil_time: want.events.every((e) => {
-        const a = lookup(e);
-        return !!a && ["startLocal", "zone", "startUTC", "endUTC"].every((k) => a[k] === e[k]);
-      }),
-      history: want.events.every((e) => lookup(e)?.status === e.status),
-      bookings: equal(order(actual.bookings), order(want.bookings)),
-      preservation: equal(normalize(actual.events), normalize(want.events)),
-    }),
-    actual,
-    expected: want,
+    ...checks(flags),
+    input: {
+      externalBookings: s.externalBookings,
+      deliveries: s.deliveries.map(({ id, updates, concurrentBooking }) => ({
+        id,
+        updates,
+        ...(concurrentBooking ? { concurrentBooking } : {}),
+      })),
+    },
+    actual: state,
+    publications,
+    prefixes,
+    acks,
     observations,
     reports,
-    view: s.view,
+    interruptions,
   };
 }

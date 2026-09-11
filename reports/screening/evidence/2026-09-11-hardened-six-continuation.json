@@ -1,0 +1,488 @@
+{
+  "schemaVersion": 1,
+  "campaign": "2026-09-11-hardened-six-continuation",
+  "evidenceClass": "real-provider-screening",
+  "label": "Round 5 (historical Trial 7) plus conditional continuation to six counted trials",
+  "limitations": [
+    "Round 5 (historical Trial 7) launched five fresh concurrent attempts, one per package, same providers as Round 4. The continuation then conditionally launched further single attempts per task -- only after that task's most recent counted result was reward-zero -- up to six counted trials with three Codex and three Claude, stopping any task immediately on a reward-one result.",
+    "Route policy stopped after Round 5's pass (historicalTrial 7): 5 scored, 3 failures, 2 Codex + 3 Claude, 1 authorized slot deliberately unused. This is the user's explicit stop-on-pass rule, not a resource limit or a claim the task cannot reach a higher count.",
+    "Browser replay uses coverage-v3 starting this round (adds a permitted existing-dialog recovery case coverage-v2 omitted). Its own Round 4/historical-Trial-6 Codex attempt is excluded from counting (original reward 1, diagnostic regrade 0, counted reward null); this round's four fresh attempts (T7-T10) are new, separately-counted results that fill that void and also resolve the package's previously-missing counted Claude slot (left by an earlier, still-separately-unscored Round 3/Trial 5 Claude infrastructure interruption).",
+    "The __proto__ opaque-token shape-gate bug (checkers building a plain object as a token-keyed dictionary, which cannot represent the literal key \"__proto__\" as an own property) recurred in the large majority of this round's Claude attempts and in one of browser replay's Claude attempts, while Codex attempts more often produced genuine (if imperfect) per-candidate scoring. This is an observed pattern across this round, not a proven general provider tendency.",
+    "Raw captures and submissions remain private; this publication retains allowlisted fields and artifact hashes."
+  ],
+  "sourceDigestRound5": "597df061330dad6fc300dc1bf12fdbc12d29817b1e6d58c80732fc4dea71accc",
+  "authorImage": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+  "round5Dispatch": {
+    "firstLaunch": "2026-09-11T08:20:44.884Z",
+    "lastLaunch": "2026-09-11T08:20:45.134Z",
+    "spreadMs": 250,
+    "packageIds": [
+      "route-policy-repair",
+      "browser-replay-repair",
+      "recurring-calendar-repair",
+      "workflow-authority-repair",
+      "delegated-budget-repair"
+    ]
+  },
+  "continuation": {
+    "maxNewProviderCalls": 7,
+    "newSlotLaunches": 6,
+    "automaticRetries": 0,
+    "adoptedRound5Attempts": 5
+  },
+  "counts": {
+    "tasksCompletedSixCounted": 4,
+    "tasksStoppedOnPass": 1,
+    "totalNewModelCallsThisSession": 11,
+    "infrastructureInterruptedAttempts": 0,
+    "roundFiveAttempts": 5,
+    "continuationAttempts": 6,
+    "unusedAuthorizedSlots": 1,
+    "zeroRewards": 10,
+    "oneRewards": 1
+  },
+  "packages": {
+    "route-policy-repair": {
+      "analysis": "reports/screening/third-five/14-route-policy-repair.md",
+      "trials": [
+        {
+          "historicalTrial": 7,
+          "versionRound": 5,
+          "target": "codex",
+          "adoptedFromRound5": true,
+          "dispatchedAt": "2026-09-11T08:20:44.884Z",
+          "completedAt": "2026-09-11T08:50:00.892Z",
+          "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "outcome": "semantic-pass",
+          "reward": 1,
+          "serviceOutcome": "semantic-pass",
+          "serviceScenarios": 33,
+          "checkerPassed": true,
+          "checkerExpectedTokenCount": 13,
+          "checkerSummary": {
+            "total": 13,
+            "correct": 13,
+            "falsePositives": 0,
+            "missed": 0,
+            "deterministic": true,
+            "falsePositiveCandidates": []
+          },
+          "authoringMilliseconds": 1732599,
+          "usage": {
+            "cachedInputTokens": 2103040,
+            "costUsd": null,
+            "inputTokens": 2220267,
+            "outputTokens": 49356,
+            "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+          },
+          "manifestFilesVerified": 906,
+          "manifestBytesVerified": 28987201,
+          "completionSha256": "13f7b87e41faff8fc827ea2c6cb92ff8cbd1f77b9376a845f94266bf6104d90f",
+          "resultSha256": "5051c354b77cdd31645c9195c84c58fb13088e4ca0967231b5560f5212250f87"
+        }
+      ],
+      "finalTally": {
+        "scored": 5,
+        "failures": 3,
+        "providers": {
+          "codex": 2,
+          "claude": 3
+        },
+        "stopReason": "solver-pass",
+        "unusedSlots": 1
+      }
+    },
+    "browser-replay-repair": {
+      "analysis": "reports/screening/original-five/03-browser-replay-repair.md",
+      "coverageRevision": "coverage-v3",
+      "round4Trial6Disposition": {
+        "originalReward": 1,
+        "diagnosticRegrade": 0,
+        "countedReward": null,
+        "reason": "checker rejected a valid existing-dialog completion the original coverage-v2 bank omitted"
+      },
+      "trials": [
+        {
+          "historicalTrial": 7,
+          "versionRound": 5,
+          "target": "codex",
+          "adoptedFromRound5": true,
+          "dispatchedAt": "2026-09-11T08:20:44.946Z",
+          "completedAt": "2026-09-11T08:35:14.481Z",
+          "packageDigest": "3968e17e770da1476aec1ec0a5f742f6d31e248fc295ad55d33ad8bce0f9b644",
+          "profileDigest": "552855d36d4339bb73a354a610053478e653297b2db17d5bcd85739318a0bfc3",
+          "outcome": "semantic-fail",
+          "reward": 0,
+          "serviceOutcome": "semantic-pass",
+          "serviceScenarios": 22,
+          "checkerPassed": false,
+          "checkerExpectedTokenCount": 14,
+          "checkerSummary": {
+            "total": 14,
+            "correct": 11,
+            "falsePositives": 3,
+            "missed": 0,
+            "deterministic": true,
+            "falsePositiveCandidates": [
+              "variant-repeat-committed-operation",
+              "reference",
+              "alternative"
+            ]
+          },
+          "authoringMilliseconds": 708140,
+          "usage": {
+            "cachedInputTokens": 378624,
+            "costUsd": null,
+            "inputTokens": 427780,
+            "outputTokens": 21453,
+            "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+          },
+          "manifestFilesVerified": 1476,
+          "manifestBytesVerified": 66276817,
+          "completionSha256": "a26a86ae3e5f2fe60f094e582451fb896ca3522ff19746fa79e9c710539f279e",
+          "resultSha256": "98ad8f36f09176bf7b30daa12db500b1ec1f48931a7cdce39478a4f3ccdc1d7c"
+        },
+        {
+          "historicalTrial": 8,
+          "versionRound": 6,
+          "target": "codex",
+          "adoptedFromRound5": false,
+          "packageDigest": "3968e17e770da1476aec1ec0a5f742f6d31e248fc295ad55d33ad8bce0f9b644",
+          "profileDigest": "552855d36d4339bb73a354a610053478e653297b2db17d5bcd85739318a0bfc3",
+          "outcome": "semantic-fail",
+          "reward": 0,
+          "serviceOutcome": "semantic-pass",
+          "serviceScenarios": 22,
+          "checkerPassed": false,
+          "checkerExpectedTokenCount": 14,
+          "checkerSummary": {
+            "total": 14,
+            "correct": 12,
+            "falsePositives": 2,
+            "missed": 0,
+            "deterministic": true,
+            "falsePositiveCandidates": [
+              "reference",
+              "alternative"
+            ]
+          },
+          "authoringMilliseconds": 383483,
+          "usage": {
+            "cachedInputTokens": 285696,
+            "costUsd": null,
+            "inputTokens": 322555,
+            "outputTokens": 19114,
+            "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+          },
+          "manifestFilesVerified": 1476,
+          "manifestBytesVerified": 66293710,
+          "completionSha256": "50cd1214a02901020be3aea55e13b288bb976f98bfae7f898d3f93f43cf3042c",
+          "resultSha256": "c0d38e197a77b7aed5ff9faf41585fb1846c211b37e684b47b7c1825a102a2e7"
+        },
+        {
+          "historicalTrial": 9,
+          "versionRound": 7,
+          "target": "codex",
+          "adoptedFromRound5": false,
+          "packageDigest": "3968e17e770da1476aec1ec0a5f742f6d31e248fc295ad55d33ad8bce0f9b644",
+          "profileDigest": "552855d36d4339bb73a354a610053478e653297b2db17d5bcd85739318a0bfc3",
+          "outcome": "semantic-fail",
+          "reward": 0,
+          "serviceOutcome": "semantic-pass",
+          "serviceScenarios": 22,
+          "checkerPassed": false,
+          "checkerExpectedTokenCount": 14,
+          "checkerSummary": {
+            "total": 14,
+            "correct": 12,
+            "falsePositives": 2,
+            "missed": 0,
+            "deterministic": true,
+            "falsePositiveCandidates": [
+              "reference",
+              "alternative"
+            ]
+          },
+          "authoringMilliseconds": 488638,
+          "usage": {
+            "cachedInputTokens": 448256,
+            "costUsd": null,
+            "inputTokens": 501976,
+            "outputTokens": 23156,
+            "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+          },
+          "manifestFilesVerified": 1476,
+          "manifestBytesVerified": 65930562,
+          "completionSha256": "81213800b4691d58290ee8d21fc60b68dacaa831ebd2a07adafcac613d8de2c7",
+          "resultSha256": "e38af0b598f4c9372402fc52e5305e5f3b8d3d5be94d3c54c3779e638e4302b3"
+        },
+        {
+          "historicalTrial": 10,
+          "versionRound": 8,
+          "target": "claude",
+          "adoptedFromRound5": false,
+          "note": "fills the previously-missing counted Claude slot; final authorized Browser slot",
+          "packageDigest": "3968e17e770da1476aec1ec0a5f742f6d31e248fc295ad55d33ad8bce0f9b644",
+          "profileDigest": "d71ffd4cecad05cd941f30bb8b3ba2dc377537b2a188b650f27ca233b0a01cfd",
+          "outcome": "semantic-fail",
+          "reward": 0,
+          "serviceOutcome": "semantic-pass",
+          "serviceScenarios": 22,
+          "checkerPassed": false,
+          "checkerExpectedTokenCount": 14,
+          "checkerSummary": {
+            "note": "shape-gate fallback; no per-candidate score"
+          },
+          "authoringMilliseconds": 3209089,
+          "usage": {
+            "cachedInputTokens": 14531644,
+            "costUsd": 13.196718,
+            "inputTokens": 14743482,
+            "outputTokens": 152495,
+            "source": "claude `result` event `usage` and `total_cost_usd`"
+          },
+          "manifestFilesVerified": 1519,
+          "manifestBytesVerified": 68539123,
+          "completionSha256": "f398a38ed1fee8e70209e4da458d6df657e72b00697635ad0f4665b5c85e3f7e",
+          "resultSha256": "561d528a4d9a9777441920e4d4a5e609dbff368092781a6395fc91992ce01580"
+        }
+      ],
+      "finalTally": {
+        "scored": 6,
+        "failures": 6,
+        "providers": {
+          "codex": 3,
+          "claude": 3
+        },
+        "stopReason": "six-counted",
+        "unusedSlots": 0
+      }
+    },
+    "recurring-calendar-repair": {
+      "analysis": "reports/screening/fourth-five/18-recurring-calendar-repair.md",
+      "trials": [
+        {
+          "historicalTrial": 7,
+          "versionRound": 5,
+          "target": "claude",
+          "adoptedFromRound5": true,
+          "dispatchedAt": "2026-09-11T08:20:45.008Z",
+          "completedAt": "2026-09-11T08:49:47.768Z",
+          "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "outcome": "semantic-fail",
+          "reward": 0,
+          "serviceOutcome": "semantic-pass",
+          "serviceScenarios": 37,
+          "checkerPassed": false,
+          "checkerExpectedTokenCount": 16,
+          "checkerSummary": {
+            "note": "shape-gate fallback; no per-candidate score"
+          },
+          "authoringMilliseconds": 1658441,
+          "usage": {
+            "cachedInputTokens": 4942342,
+            "costUsd": 7.1987559999999995,
+            "inputTokens": 5093128,
+            "outputTokens": 128764,
+            "source": "claude `result` event `usage` and `total_cost_usd`"
+          },
+          "manifestFilesVerified": 1022,
+          "manifestBytesVerified": 121036854,
+          "completionSha256": "8d7cb2bfec48f588b94f69d7ce870f70929a96765093170a918376e984540074",
+          "resultSha256": "3f7a9e22edd623c93a01dd3e93bc18eb1495d310324524e92ff83e93ec0eb3f8"
+        },
+        {
+          "historicalTrial": 8,
+          "versionRound": 6,
+          "target": "claude",
+          "adoptedFromRound5": false,
+          "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "outcome": "semantic-fail",
+          "reward": 0,
+          "serviceOutcome": "semantic-pass",
+          "serviceScenarios": 37,
+          "checkerPassed": false,
+          "checkerExpectedTokenCount": 16,
+          "checkerSummary": {
+            "note": "shape-gate fallback; no per-candidate score"
+          },
+          "authoringMilliseconds": 1544177,
+          "usage": {
+            "cachedInputTokens": 5448655,
+            "costUsd": 7.702032499999999,
+            "inputTokens": 5615833,
+            "outputTokens": 132210,
+            "source": "claude `result` event `usage` and `total_cost_usd`"
+          },
+          "manifestFilesVerified": 1010,
+          "manifestBytesVerified": 120992191,
+          "completionSha256": "30a398fe981e04cfad5af68b53e74996f271114199219ac63961fefa67f82b85",
+          "resultSha256": "9149d0ef956363b59a3160b5aae2178e630db1803a5c23ad1c59289b242d2624"
+        }
+      ],
+      "finalTally": {
+        "scored": 6,
+        "failures": 6,
+        "providers": {
+          "codex": 3,
+          "claude": 3
+        },
+        "stopReason": "six-counted",
+        "unusedSlots": 0
+      }
+    },
+    "workflow-authority-repair": {
+      "analysis": "reports/screening/fourth-five/20-workflow-authority-repair.md",
+      "trials": [
+        {
+          "historicalTrial": 7,
+          "versionRound": 5,
+          "target": "claude",
+          "adoptedFromRound5": true,
+          "dispatchedAt": "2026-09-11T08:20:45.072Z",
+          "completedAt": "2026-09-11T08:47:12.843Z",
+          "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "outcome": "semantic-fail",
+          "reward": 0,
+          "serviceOutcome": "semantic-pass",
+          "serviceScenarios": 36,
+          "checkerPassed": false,
+          "checkerExpectedTokenCount": 16,
+          "checkerSummary": {
+            "note": "shape-gate fallback; no per-candidate score"
+          },
+          "authoringMilliseconds": 1566159,
+          "usage": {
+            "cachedInputTokens": 4754167,
+            "costUsd": 7.3838785,
+            "inputTokens": 4916771,
+            "outputTokens": 135202,
+            "source": "claude `result` event `usage` and `total_cost_usd`"
+          },
+          "manifestFilesVerified": 921,
+          "manifestBytesVerified": 61451292,
+          "completionSha256": "b8c12981fb4c362453def08284eb919ebe9edaf86e78c02b0a774e55a236d30b",
+          "resultSha256": "4f558c97cad35793822d1d827ed2cc6f53f031b62e4baa917741b863fff56633"
+        },
+        {
+          "historicalTrial": 8,
+          "versionRound": 6,
+          "target": "claude",
+          "adoptedFromRound5": false,
+          "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "outcome": "semantic-fail",
+          "reward": 0,
+          "serviceOutcome": "semantic-pass",
+          "serviceScenarios": 36,
+          "checkerPassed": false,
+          "checkerExpectedTokenCount": 16,
+          "checkerSummary": {
+            "note": "shape-gate fallback; no per-candidate score"
+          },
+          "authoringMilliseconds": 1599954,
+          "usage": {
+            "cachedInputTokens": 8282972,
+            "costUsd": 9.285746000000003,
+            "inputTokens": 8460406,
+            "outputTokens": 134780,
+            "source": "claude `result` event `usage` and `total_cost_usd`"
+          },
+          "manifestFilesVerified": 945,
+          "manifestBytesVerified": 62869072,
+          "completionSha256": "36ff0b4028acab97604174e8f154c65e3d7b1ed264362c4015d6e5a557dc7b9a",
+          "resultSha256": "5596e7f31ebf1daf29d5f7d6646f7ff474be10ee94b88baaa5e4b30b2edb7ac3"
+        }
+      ],
+      "finalTally": {
+        "scored": 6,
+        "failures": 6,
+        "providers": {
+          "codex": 3,
+          "claude": 3
+        },
+        "stopReason": "six-counted",
+        "unusedSlots": 0
+      }
+    },
+    "delegated-budget-repair": {
+      "analysis": "reports/screening/original-five/04-delegated-budget-repair.md",
+      "trials": [
+        {
+          "historicalTrial": 7,
+          "versionRound": 5,
+          "target": "claude",
+          "adoptedFromRound5": true,
+          "dispatchedAt": "2026-09-11T08:20:45.134Z",
+          "completedAt": "2026-09-11T08:49:20.921Z",
+          "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "outcome": "semantic-fail",
+          "reward": 0,
+          "serviceOutcome": "semantic-pass",
+          "serviceScenarios": 21,
+          "checkerPassed": false,
+          "checkerExpectedTokenCount": 17,
+          "checkerSummary": {
+            "note": "shape-gate fallback; no per-candidate score"
+          },
+          "authoringMilliseconds": 1673323,
+          "usage": {
+            "cachedInputTokens": 7874236,
+            "costUsd": 9.427485999999996,
+            "inputTokens": 8069674,
+            "outputTokens": 141419,
+            "source": "claude `result` event `usage` and `total_cost_usd`"
+          },
+          "manifestFilesVerified": 1313,
+          "manifestBytesVerified": 176410944,
+          "completionSha256": "967a401ecb0e432b61ab27896d3560b1c67f537854ebfa130386f2bc7b06f28e",
+          "resultSha256": "bde0203f84cb134525486309921b2e9fe48a8972440a0afa1e562b4d0eec0973"
+        },
+        {
+          "historicalTrial": 8,
+          "versionRound": 6,
+          "target": "claude",
+          "adoptedFromRound5": false,
+          "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "outcome": "semantic-fail",
+          "reward": 0,
+          "serviceOutcome": "semantic-pass",
+          "serviceScenarios": 21,
+          "checkerPassed": false,
+          "checkerExpectedTokenCount": 17,
+          "checkerSummary": {
+            "note": "shape-gate fallback; no per-candidate score"
+          },
+          "authoringMilliseconds": 2219984,
+          "usage": {
+            "cachedInputTokens": 13937043,
+            "costUsd": 13.9228445,
+            "inputTokens": 14171787,
+            "outputTokens": 184266,
+            "source": "claude `result` event `usage` and `total_cost_usd`"
+          },
+          "manifestFilesVerified": 1313,
+          "manifestBytesVerified": 176391316,
+          "completionSha256": "e5af7e1878129d10c2e22b0a1d03fad7d5d1374adea4603f159da0815fc03c40",
+          "resultSha256": "0457e95cc41028d3230148b202c9f895c17a4d89342f4d0d1742cfadde6039b2"
+        }
+      ],
+      "finalTally": {
+        "scored": 6,
+        "failures": 6,
+        "providers": {
+          "codex": 3,
+          "claude": 3
+        },
+        "stopReason": "six-counted",
+        "unusedSlots": 0
+      }
+    }
+  }
+}

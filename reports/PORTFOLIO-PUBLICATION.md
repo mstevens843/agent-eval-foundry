@@ -1,10 +1,10 @@
 # Maintained portfolio and screening publication
 
-**Five task packages meet the reported ≥5/6 target: three at 6/6 reward=0 and two at 5/6.** Each has three counted Codex and three counted Claude trials, for 28 reward=0 outcomes across 30 finalist trials.
+**Nine task packages meet the ≥5/6 target: seven at 6/6 reward=0 and two at 5/6.** Each has three counted Codex and three counted Claude trials, for 52 reward=0 outcomes across 54 finalist trials. Browser replay, Recurring calendar, Workflow authority and Delegated budget are the four newly completed 6/6 tasks.
 
-All 25 successor packages have been implemented and screened. The successor program contains 54 attempts, of which 50 count; three grading voids and one infrastructure interruption remain documented separately. All finalist sets are complete.
+All 25 successor packages have been implemented and screened. Earlier campaigns, grading corrections and excluded attempts remain documented alongside the nine completed finalist sets.
 
-[Final results and evidence](screening/final-results-2026-09-09.md) · [Current portfolio](../docs/project-status.md) · [Latest campaign](screening/three-replacements-2026-09-09.md).
+[Final results and evidence](screening/final-results-2026-09-11.md) · [Current portfolio](../docs/project-status.md) · [Latest campaign](screening/hardened-six-continuation-2026-09-11.md).
 
 ## Publication history
 

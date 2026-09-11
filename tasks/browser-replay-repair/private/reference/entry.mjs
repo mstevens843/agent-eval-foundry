@@ -1,2 +1,2 @@
-import { replay } from "./src/replay.mjs";
-export const subject = { run: replay };
+import { run } from "./src/replay.mjs";
+export const subject = { run };

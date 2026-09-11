@@ -1,6 +1,6 @@
 # 10 — Temporal capacity repair
 
-> **Final counted result: 5/6 reward=0 — meets the reported ≥5/6 target.** Three Codex and three Claude trials; no slots pending. [Final results and counting method](../final-results-2026-09-09.md). The dated analysis below preserves the complete trial and grading history.
+> **Final counted result: 5/6 reward=0 — meets the reported ≥5/6 target.** Three Codex and three Claude trials; no slots pending. [Final results and counting method](../final-results-2026-09-11.md). The dated analysis below preserves the complete trial and grading history.
 
 Completed one Claude attempt, requested Opus 5 / max. Reward **1**. Authoring **11m 27s**; service **33/33** scenarios; checker **12/12** candidates, including all ten required negative-control labels.
 

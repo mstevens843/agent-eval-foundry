@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-11",
+  "purpose": "User-authorized counting disposition after the Round 4 pass audit",
+  "audit": {
+    "path": "reports/screening/evidence/2026-09-11-hardened-round-four-pass-audit.json",
+    "sha256": "7cc991efcc66f021ad1b2e818cac63ac918586e31b963f4e332d85e333d0df84"
+  },
+  "rows": [
+    {
+      "id": "route-policy-repair",
+      "provider": "codex",
+      "historicalTrial": 6,
+      "versionRound": 4,
+      "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+      "recordedReward": 1,
+      "countedReward": 1,
+      "disposition": "retained",
+      "originalCompletion": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/route-policy-repair-attempt-1/completion.json",
+        "sha256": "f529ec062e584f9fce0c96bd07dfbd8afb01235babe9cc6a4ede7a051bac9438"
+      },
+      "originalGrade": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/route-policy-repair-attempt-1/grade.json",
+        "sha256": "b031742640ef5be5d51bfb02c58d808bfa4ea7377e57bd58885b1e604fe10fb7"
+      }
+    },
+    {
+      "id": "browser-replay-repair",
+      "provider": "codex",
+      "historicalTrial": 6,
+      "versionRound": 4,
+      "packageDigest": "712f97575821006724eef7f3b3161c97512019897af62e46ab32b9c32dcddf31",
+      "recordedReward": 1,
+      "countedReward": null,
+      "disposition": "grading-void",
+      "originalCompletion": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/browser-replay-repair-attempt-1/completion.json",
+        "sha256": "f22831aeb72abe95fb3efc43ee896001bdbd4b54ff6c6227505be3435f686fba"
+      },
+      "originalGrade": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/browser-replay-repair-attempt-1/grade.json",
+        "sha256": "a8d25d300d94e57b4961114dcfd6e02a7fd105809d880c6f36f9a24b5bc768d5"
+      },
+      "diagnosticReward": 0,
+      "reason": "Incomplete positive grading coverage: checker rejects a permitted existing-dialog confirmation without a redundant form submission.",
+      "replacementHistoricalTrial": 7,
+      "replacementVersionRound": 5,
+      "replacementProvider": "codex",
+      "userAuthorizedVoid": true
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "provider": "claude",
+      "historicalTrial": 6,
+      "versionRound": 4,
+      "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+      "recordedReward": 0,
+      "countedReward": 0,
+      "disposition": "retained",
+      "originalCompletion": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/recurring-calendar-repair-attempt-1/completion.json",
+        "sha256": "b8b494040ea147088107cfe25a2ee4c66661a0042d9054f9be50934b902ce815"
+      },
+      "originalGrade": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/recurring-calendar-repair-attempt-1/grade.json",
+        "sha256": "db5e9fb702345e8bcc7873d591b87b1709caf60309ff6fa6553a4a5b8052649d"
+      }
+    },
+    {
+      "id": "workflow-authority-repair",
+      "provider": "claude",
+      "historicalTrial": 6,
+      "versionRound": 4,
+      "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+      "recordedReward": 0,
+      "countedReward": 0,
+      "disposition": "retained",
+      "originalCompletion": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/workflow-authority-repair-attempt-1/completion.json",
+        "sha256": "bdc08536d55fae8c1dc2b9f53f460218ea2ddb96f24c8f369b80bf8f79ba49f1"
+      },
+      "originalGrade": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/workflow-authority-repair-attempt-1/grade.json",
+        "sha256": "4405f13427ba67d7667ada47bdc39bfed2ba96fb6c5a629406ee7f4f048b16ab"
+      }
+    },
+    {
+      "id": "delegated-budget-repair",
+      "provider": "claude",
+      "historicalTrial": 6,
+      "versionRound": 4,
+      "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+      "recordedReward": 0,
+      "countedReward": 0,
+      "disposition": "retained",
+      "originalCompletion": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/delegated-budget-repair-attempt-1/completion.json",
+        "sha256": "7435c5e182d55e4e239044160d8e3e63250fad5f9f2c1ca8e37d3b81a6bea5d3"
+      },
+      "originalGrade": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/delegated-budget-repair-attempt-1/grade.json",
+        "sha256": "ced3898c39f675942c006d89c8e77221332e9f2038d611392d4cc60b7cfc469b"
+      }
+    }
+  ],
+  "newModelAttempts": 0,
+  "providerCallsMade": 0,
+  "originalEvidenceModified": false,
+  "separateUnscoredInterruption": {
+    "id": "browser-replay-repair",
+    "historicalTrial": 5,
+    "versionRound": 3,
+    "provider": "claude",
+    "countedReward": null,
+    "reason": "CLI process aborted with exit 134 before a scored completion",
+    "missingClaudeSlotStillPending": true
+  },
+  "nextRound": {
+    "versionRound": 5,
+    "historicalTrial": 7,
+    "maxProviderCalls": 5,
+    "concurrency": 5,
+    "assignments": [
+      {
+        "id": "route-policy-repair",
+        "provider": "codex"
+      },
+      {
+        "id": "browser-replay-repair",
+        "provider": "codex"
+      },
+      {
+        "id": "recurring-calendar-repair",
+        "provider": "claude"
+      },
+      {
+        "id": "workflow-authority-repair",
+        "provider": "claude"
+      },
+      {
+        "id": "delegated-budget-repair",
+        "provider": "claude"
+      }
+    ]
+  }
+}

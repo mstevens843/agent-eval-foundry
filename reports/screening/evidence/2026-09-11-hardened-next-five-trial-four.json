@@ -1,0 +1,491 @@
+{
+  "schemaVersion": 1,
+  "campaign": "2026-09-11-hardened-next-five-trial-four",
+  "evidenceClass": "real-provider-screening",
+  "label": "Trial 6",
+  "limitations": [
+    "One exploratory attempt per package under coverage-v2 (fourth attempt on the public 3.0.0 contract, first with all providers switched); not a replicated failure rate or final qualification.",
+    "Requested model/effort are separate from observed CLI metadata; observed model/effort/scaffold were not exposed by either CLI's event stream this run.",
+    "Both Codex attempts (route-policy-repair, browser-replay-repair) achieved clean checker passes; all three Claude attempts (recurring-calendar-repair, workflow-authority-repair, delegated-budget-repair) independently hit the same opaque-token \"__proto__\" shape-gate bug this round. A striking provider-correlated split from this one trial -- not established as a general provider tendency from a single data point.",
+    "browser-replay-repair's authoring memory was raised from 2 GiB to 4 GiB (a precautionary mitigation after Trial 5's unconfirmed-cause infrastructure interruption); this attempt completed cleanly with no infrastructure issue, but that is consistent with -- not proof of -- the memory-pressure hypothesis. It does not fill browser-replay-repair's still-missing Claude slot from Trial 5's interruption.",
+    "Raw captures and submissions remain private; this publication retains allowlisted fields and artifact hashes."
+  ],
+  "sourceDigest": "597df061330dad6fc300dc1bf12fdbc12d29817b1e6d58c80732fc4dea71accc",
+  "authorImage": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+  "actualScheduling": "Five dispatch events within a 265ms spread (2026-09-11T06:41:21.692Z-06:41:21.957Z); the trial operator observed concurrent solver containers for all five packages.",
+  "concurrencyRequestFulfilled": true,
+  "concurrencyObservation": {
+    "count": 5,
+    "packageIds": [
+      "route-policy-repair",
+      "browser-replay-repair",
+      "recurring-calendar-repair",
+      "workflow-authority-repair",
+      "delegated-budget-repair"
+    ],
+    "firstLaunch": "2026-09-11T06:41:21.692Z",
+    "lastLaunch": "2026-09-11T06:41:21.957Z",
+    "launchSpreadMs": 265,
+    "containerObservationSource": "trial operator docker ps observation during the run"
+  },
+  "automaticRetries": 0,
+  "extraModelCallsBeyondFive": 0,
+  "counts": {
+    "attemptsLaunched": 5,
+    "completedScoredAttempts": 5,
+    "infrastructureInterruptedAttempts": 0,
+    "recordedZeroRewards": 3,
+    "solverPasses": 2,
+    "servicePassesWithFailedChecker": 3,
+    "checkerShapeGateFailures": 3,
+    "checkerCleanPasses": 2
+  },
+  "browserMissingClaudeSlot": {
+    "status": "still pending",
+    "note": "This trial's browser-replay-repair attempt ran on Codex and passed cleanly, but Trial 5's Claude attempt on the same package remains infrastructure-interrupted and unscored. A separately-authorized single Claude retry (.local/hardened-next-five-trial-three-browser-retry-2026-09-11/) remains prepared and verified but deliberately deferred, not launched as part of this campaign."
+  },
+  "packages": [
+    {
+      "id": "route-policy-repair",
+      "target": "codex",
+      "runId": "route-policy-repair-attempt-1",
+      "analysis": "reports/screening/third-five/14-route-policy-repair.md",
+      "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "authoringMemoryMiB": 2048,
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "serviceOutcome": "semantic-pass",
+      "reward": 1,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1229290,
+      "dispatchedAt": "2026-09-11T06:41:21.692Z",
+      "service": {
+        "scenarios": 33,
+        "failedScenarios": 0,
+        "invalidScenarios": 0
+      },
+      "checker": {
+        "checkerRequired": true,
+        "checkerPassed": true,
+        "expectedTokenCount": 13,
+        "opaqueTokensUsed": [
+          "__proto__",
+          "constructor",
+          "toString",
+          "",
+          "0",
+          "01",
+          "token/λ",
+          "candidate-H",
+          "candidate-I",
+          "candidate-J",
+          "candidate-K",
+          "candidate-L",
+          "candidate-M"
+        ],
+        "summary": {
+          "reasonPolicy": "diagnostic-only",
+          "deterministic": true,
+          "total": 13,
+          "correct": 13,
+          "falsePositives": 0,
+          "missed": 0,
+          "pass": true,
+          "falsePositiveCandidates": [],
+          "gradeSummarySha256": "5fed11858a0b4d7a294ae075f5f8f4fdfa1aefecc7b08521d8e9844dcc45c8a9"
+        },
+        "finding": "clean-pass",
+        "findingDetail": "Checker reaches full, valid per-candidate scoring with no false positives or missed classifications."
+      },
+      "usage": {
+        "cachedInputTokens": 1745408,
+        "costUsd": null,
+        "inputTokens": 1816366,
+        "outputTokens": 46793,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "f529ec062e584f9fce0c96bd07dfbd8afb01235babe9cc6a4ede7a051bac9438",
+      "resultSha256": "098c44948b733cb29dea4cab05aa4478350e55ef3f430a6338d10e9c87ee6f11",
+      "manifestFilesVerified": 910,
+      "manifestBytesVerified": 28891183,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "clean-solver-pass"
+    },
+    {
+      "id": "browser-replay-repair",
+      "target": "codex",
+      "runId": "browser-replay-repair-attempt-1",
+      "analysis": "reports/screening/original-five/03-browser-replay-repair.md",
+      "packageDigest": "712f97575821006724eef7f3b3161c97512019897af62e46ab32b9c32dcddf31",
+      "profileDigest": "552855d36d4339bb73a354a610053478e653297b2db17d5bcd85739318a0bfc3",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "authoringMemoryMiB": 4096,
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "serviceOutcome": "semantic-pass",
+      "reward": 1,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 385718,
+      "dispatchedAt": "2026-09-11T06:41:21.762Z",
+      "service": {
+        "scenarios": 19,
+        "failedScenarios": 0,
+        "invalidScenarios": 0
+      },
+      "checker": {
+        "checkerRequired": true,
+        "checkerPassed": true,
+        "expectedTokenCount": 14,
+        "opaqueTokensUsed": [
+          "__proto__",
+          "constructor",
+          "toString",
+          "",
+          "0",
+          "01",
+          "token/λ",
+          "candidate-H",
+          "candidate-I",
+          "candidate-J",
+          "candidate-K",
+          "candidate-L",
+          "candidate-M",
+          "candidate-N"
+        ],
+        "summary": {
+          "reasonPolicy": "diagnostic-only",
+          "deterministic": true,
+          "total": 14,
+          "correct": 14,
+          "falsePositives": 0,
+          "missed": 0,
+          "pass": true,
+          "falsePositiveCandidates": [],
+          "gradeSummarySha256": "0a8f784e77a5b8b0b7ec22e8b1d2c8003f4af39a097b114b63de9aeb962618ae"
+        },
+        "finding": "clean-pass",
+        "findingDetail": "Checker reaches full, valid per-candidate scoring with no false positives or missed classifications."
+      },
+      "usage": {
+        "cachedInputTokens": 270336,
+        "costUsd": null,
+        "inputTokens": 319483,
+        "outputTokens": 18798,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "f22831aeb72abe95fb3efc43ee896001bdbd4b54ff6c6227505be3435f686fba",
+      "resultSha256": "75d1d546d6b590ec44be64b1ebf1ccd117d3ca52f3f2131edd6a73b21527862e",
+      "manifestFilesVerified": 1389,
+      "manifestBytesVerified": 58178860,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "clean-solver-pass"
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "target": "claude",
+      "runId": "recurring-calendar-repair-attempt-1",
+      "analysis": "reports/screening/fourth-five/18-recurring-calendar-repair.md",
+      "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "authoringMemoryMiB": 2048,
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "serviceOutcome": "semantic-pass",
+      "reward": 0,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1770153,
+      "dispatchedAt": "2026-09-11T06:41:21.832Z",
+      "service": {
+        "scenarios": 37,
+        "failedScenarios": 0,
+        "invalidScenarios": 0
+      },
+      "checker": {
+        "checkerRequired": true,
+        "checkerPassed": false,
+        "expectedTokenCount": 16,
+        "opaqueTokensUsed": [
+          "__proto__",
+          "constructor",
+          "toString",
+          "",
+          "0",
+          "01",
+          "token/λ",
+          "candidate-H",
+          "candidate-I",
+          "candidate-J",
+          "candidate-K",
+          "candidate-L",
+          "candidate-M",
+          "candidate-N",
+          "candidate-O",
+          "candidate-P"
+        ],
+        "summary": {
+          "note": "gradeChecker() did not produce a valid per-candidate score; see finding/findingDetail."
+        },
+        "finding": "shape-gate-failure",
+        "findingDetail": "Submitted checker builds its verdicts object as a plain {} keyed by opaque per-run tokens via bracket assignment (verdicts[token] = ...). Assigning to the literal key \"__proto__\" on a plain object does not create an enumerable own property (hits Object.prototype's inherited accessor instead), so the checker's own JSON output is missing that one key, failing completeVerdicts()'s exact-key-count shape check and falling through to gradeChecker()'s synthetic all-failed fallback."
+      },
+      "usage": {
+        "cachedInputTokens": 11099151,
+        "costUsd": 11.225855500000003,
+        "inputTokens": 11291840,
+        "outputTokens": 149964,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "b8b494040ea147088107cfe25a2ee4c66661a0042d9054f9be50934b902ce815",
+      "resultSha256": "0ae94a268cd4194c21279c3a7ef929ca17bccfe87a9d2d40266020dfcebe61fc",
+      "manifestFilesVerified": 1026,
+      "manifestBytesVerified": 121715386,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "required-checker-failed"
+    },
+    {
+      "id": "workflow-authority-repair",
+      "target": "claude",
+      "runId": "workflow-authority-repair-attempt-1",
+      "analysis": "reports/screening/fourth-five/20-workflow-authority-repair.md",
+      "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "authoringMemoryMiB": 2048,
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "serviceOutcome": "semantic-pass",
+      "reward": 0,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1264607,
+      "dispatchedAt": "2026-09-11T06:41:21.895Z",
+      "service": {
+        "scenarios": 36,
+        "failedScenarios": 0,
+        "invalidScenarios": 0
+      },
+      "checker": {
+        "checkerRequired": true,
+        "checkerPassed": false,
+        "expectedTokenCount": 16,
+        "opaqueTokensUsed": [
+          "__proto__",
+          "constructor",
+          "toString",
+          "",
+          "0",
+          "01",
+          "token/λ",
+          "candidate-H",
+          "candidate-I",
+          "candidate-J",
+          "candidate-K",
+          "candidate-L",
+          "candidate-M",
+          "candidate-N",
+          "candidate-O",
+          "candidate-P"
+        ],
+        "summary": {
+          "note": "gradeChecker() did not produce a valid per-candidate score; see finding/findingDetail."
+        },
+        "finding": "shape-gate-failure",
+        "findingDetail": "Submitted checker builds its verdicts object as a plain {} keyed by opaque per-run tokens via bracket assignment (verdicts[token] = ...). Assigning to the literal key \"__proto__\" on a plain object does not create an enumerable own property (hits Object.prototype's inherited accessor instead), so the checker's own JSON output is missing that one key, failing completeVerdicts()'s exact-key-count shape check and falling through to gradeChecker()'s synthetic all-failed fallback."
+      },
+      "usage": {
+        "cachedInputTokens": 3260297,
+        "costUsd": 5.6863085,
+        "inputTokens": 3391524,
+        "outputTokens": 109725,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "bdc08536d55fae8c1dc2b9f53f460218ea2ddb96f24c8f369b80bf8f79ba49f1",
+      "resultSha256": "36784c811f074383a58fe95da0ddd7e05ecf67bbf919a162627f3545fdaccf75",
+      "manifestFilesVerified": 929,
+      "manifestBytesVerified": 61220000,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "required-checker-failed"
+    },
+    {
+      "id": "delegated-budget-repair",
+      "target": "claude",
+      "runId": "delegated-budget-repair-attempt-1",
+      "analysis": "reports/screening/original-five/04-delegated-budget-repair.md",
+      "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "authoringMemoryMiB": 2048,
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "serviceOutcome": "semantic-pass",
+      "reward": 0,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1563295,
+      "dispatchedAt": "2026-09-11T06:41:21.957Z",
+      "service": {
+        "scenarios": 21,
+        "failedScenarios": 0,
+        "invalidScenarios": 0
+      },
+      "checker": {
+        "checkerRequired": true,
+        "checkerPassed": false,
+        "expectedTokenCount": 17,
+        "opaqueTokensUsed": [
+          "__proto__",
+          "constructor",
+          "toString",
+          "",
+          "0",
+          "01",
+          "token/λ",
+          "candidate-H",
+          "candidate-I",
+          "candidate-J",
+          "candidate-K",
+          "candidate-L",
+          "candidate-M",
+          "candidate-N",
+          "candidate-O",
+          "candidate-P",
+          "candidate-Q"
+        ],
+        "summary": {
+          "note": "gradeChecker() did not produce a valid per-candidate score; see finding/findingDetail."
+        },
+        "finding": "shape-gate-failure",
+        "findingDetail": "Submitted checker builds its verdicts object as a plain {} keyed by opaque per-run tokens via bracket assignment (verdicts[token] = ...). Assigning to the literal key \"__proto__\" on a plain object does not create an enumerable own property (hits Object.prototype's inherited accessor instead), so the checker's own JSON output is missing that one key, failing completeVerdicts()'s exact-key-count shape check and falling through to gradeChecker()'s synthetic all-failed fallback."
+      },
+      "usage": {
+        "cachedInputTokens": 5532594,
+        "costUsd": 7.836224999999999,
+        "inputTokens": 5705840,
+        "outputTokens": 133473,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "7435c5e182d55e4e239044160d8e3e63250fad5f9f2c1ca8e37d3b81a6bea5d3",
+      "resultSha256": "5989e2114e969a2cbe20bb592c5a4bc9a914daf36e254027e0f1a4a6bc93501d",
+      "manifestFilesVerified": 1353,
+      "manifestBytesVerified": 175566375,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "required-checker-failed"
+    }
+  ]
+}

@@ -1,0 +1,485 @@
+{
+  "schemaVersion": 1,
+  "campaign": "2026-09-11-hardened-next-five-trial-two",
+  "evidenceClass": "real-provider-screening",
+  "label": "Trial 4",
+  "limitations": [
+    "One exploratory attempt per package under coverage-v2; not a replicated failure rate or final qualification.",
+    "Requested model/effort are separate from observed CLI metadata; observed model/effort/scaffold were not exposed by either CLI's event stream this run.",
+    "coverage-v2 introduced opaque per-run candidate tokens (including the literal string \"__proto__\") for every checker-grade candidate across all five packages, specifically to test whether submitted checkers handle arbitrary/pathological string keys safely; three of five checkers failed this shape test outright (see per-package checker.finding/findingDetail below), which is why their reported checker score is a harness-level shape-gate fallback (0 correct) rather than a real per-candidate score.",
+    "Raw captures and submissions remain private; this publication retains allowlisted fields and artifact hashes."
+  ],
+  "sourceDigest": "b9c99108fbd1d23f1b8c8c92ff059b1f6d9dcdfe5fe245f9565d5923f90bbfe8",
+  "authorImage": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+  "actualScheduling": "Five dispatch events within a 277ms spread (2026-09-11T03:55:41.162Z-03:55:41.439Z); the trial operator observed concurrent solver containers for all five packages.",
+  "concurrencyRequestFulfilled": true,
+  "concurrencyObservation": {
+    "count": 5,
+    "packageIds": [
+      "route-policy-repair",
+      "browser-replay-repair",
+      "recurring-calendar-repair",
+      "workflow-authority-repair",
+      "delegated-budget-repair"
+    ],
+    "firstLaunch": "2026-09-11T03:55:41.162Z",
+    "lastLaunch": "2026-09-11T03:55:41.439Z",
+    "launchSpreadMs": 277,
+    "containerObservationSource": "trial operator docker ps observation during the run"
+  },
+  "automaticRetries": 0,
+  "extraModelCallsBeyondFive": 0,
+  "counts": {
+    "attemptsLaunched": 5,
+    "completedScoredAttempts": 5,
+    "recordedZeroRewards": 5,
+    "solverPasses": 0,
+    "infrastructureInterruptedAttempts": 0,
+    "servicePassesWithFailedChecker": 5,
+    "checkerShapeGateFailures": 3,
+    "checkerContentLevelFailures": 1,
+    "checkerStackedDefects": 1
+  },
+  "publicationInfrastructureNote": "The 512 MiB EVIDENCE_PUBLICATION_BUDGET_BYTES budget and gzip process.log compression fix (added after the Trial 3 EVIDENCE_BYTE_LIMIT incident) held cleanly for all five attempts in this campaign -- no publication infrastructure errors occurred, and every completion manifest was independently re-verified via verifyEvidence() during analysis.",
+  "packages": [
+    {
+      "id": "route-policy-repair",
+      "target": "claude",
+      "runId": "route-policy-repair-attempt-1",
+      "analysis": "reports/screening/third-five/14-route-policy-repair.md",
+      "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "serviceOutcome": "semantic-pass",
+      "reward": 0,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 2832035,
+      "dispatchedAt": "2026-09-11T03:55:41.162Z",
+      "service": {
+        "scenarios": 33,
+        "failedScenarios": 0,
+        "invalidScenarios": 0
+      },
+      "checker": {
+        "checkerRequired": true,
+        "checkerPassed": false,
+        "expectedTokenCount": 13,
+        "opaqueTokensUsed": [
+          "__proto__",
+          "constructor",
+          "toString",
+          "",
+          "0",
+          "01",
+          "token/λ",
+          "candidate-H",
+          "candidate-I",
+          "candidate-J",
+          "candidate-K",
+          "candidate-L",
+          "candidate-M"
+        ],
+        "summary": {
+          "note": "gradeChecker() hit its synthetic shape-failure fallback; no grade-summary.json was written."
+        },
+        "finding": "shape-gate-failure",
+        "findingDetail": "Submitted checker builds its verdicts object as a plain {} keyed by opaque per-run tokens via bracket assignment (verdicts[token] = ...). Assigning to the literal key \"__proto__\" on a plain object does not create an enumerable own property (it hits Object.prototype's inherited __proto__ accessor instead), so the checker's own JSON output is missing that one key. The harness's completeVerdicts() shape check requires an exact key-count match against every expected token, so this single missing key causes gradeChecker() to fall through to its synthetic all-failed fallback (deterministic:false, correct:0, missed:total, pass:false) rather than a real per-candidate score. The checker's true judgment on the other tokens was never actually scored."
+      },
+      "usage": {
+        "cachedInputTokens": 8951490,
+        "costUsd": 11.721785,
+        "inputTokens": 9179420,
+        "outputTokens": 198648,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "e30cd67128ab1985247da5c2ab6db43d8e11a8237e3b55239f27c40c14cd837a",
+      "resultSha256": "dfc48429b815389a003cb58f55e7189d44ab0fda378fcd734d765a14b9d22d94",
+      "gradeSha256": "b3c3089a848fc05d28637f965e1273ba1a999da4e6a47f54277142e1a92dde02",
+      "manifestFilesVerified": 984,
+      "manifestBytesVerified": 31260123,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "required-checker-failed"
+    },
+    {
+      "id": "browser-replay-repair",
+      "target": "claude",
+      "runId": "browser-replay-repair-attempt-1",
+      "analysis": "reports/screening/original-five/03-browser-replay-repair.md",
+      "packageDigest": "712f97575821006724eef7f3b3161c97512019897af62e46ab32b9c32dcddf31",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "serviceOutcome": "semantic-pass",
+      "reward": 0,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1928450,
+      "dispatchedAt": "2026-09-11T03:55:41.235Z",
+      "service": {
+        "scenarios": 19,
+        "failedScenarios": 0,
+        "invalidScenarios": 0
+      },
+      "checker": {
+        "checkerRequired": true,
+        "checkerPassed": false,
+        "expectedTokenCount": 14,
+        "opaqueTokensUsed": [
+          "__proto__",
+          "constructor",
+          "toString",
+          "",
+          "0",
+          "01",
+          "token/λ",
+          "candidate-H",
+          "candidate-I",
+          "candidate-J",
+          "candidate-K",
+          "candidate-L",
+          "candidate-M",
+          "candidate-N"
+        ],
+        "summary": {
+          "note": "gradeChecker() hit its synthetic shape-failure fallback; no grade-summary.json was written."
+        },
+        "finding": "shape-gate-failure",
+        "findingDetail": "Submitted checker builds its verdicts object as a plain {} keyed by opaque per-run tokens via bracket assignment (verdicts[token] = ...). Assigning to the literal key \"__proto__\" on a plain object does not create an enumerable own property (it hits Object.prototype's inherited __proto__ accessor instead), so the checker's own JSON output is missing that one key. The harness's completeVerdicts() shape check requires an exact key-count match against every expected token, so this single missing key causes gradeChecker() to fall through to its synthetic all-failed fallback (deterministic:false, correct:0, missed:total, pass:false) rather than a real per-candidate score. The checker's true judgment on the other tokens was never actually scored."
+      },
+      "usage": {
+        "cachedInputTokens": 6660317,
+        "costUsd": 7.912739499999999,
+        "inputTokens": 6827118,
+        "outputTokens": 116562,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "c832ea154780be2c39357828f0d929532b5b2cd125a2fa9e624edc2db4bd1bf6",
+      "resultSha256": "f6aa55a2d683f086930aa474bb90cff8899c0732c407fab09339f59358399baf",
+      "gradeSha256": "b21e706e5293f0ca12c0e04e2ddf0fbb6d5f19e29867fac229c2cce78104edcb",
+      "manifestFilesVerified": 1387,
+      "manifestBytesVerified": 59717081,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "required-checker-failed"
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "target": "codex",
+      "runId": "recurring-calendar-repair-attempt-1",
+      "analysis": "reports/screening/fourth-five/18-recurring-calendar-repair.md",
+      "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "serviceOutcome": "semantic-pass",
+      "reward": 0,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 738363,
+      "dispatchedAt": "2026-09-11T03:55:41.302Z",
+      "service": {
+        "scenarios": 37,
+        "failedScenarios": 0,
+        "invalidScenarios": 0
+      },
+      "checker": {
+        "checkerRequired": true,
+        "checkerPassed": false,
+        "expectedTokenCount": 16,
+        "opaqueTokensUsed": [
+          "__proto__",
+          "constructor",
+          "toString",
+          "",
+          "0",
+          "01",
+          "token/λ",
+          "candidate-H",
+          "candidate-I",
+          "candidate-J",
+          "candidate-K",
+          "candidate-L",
+          "candidate-M",
+          "candidate-N",
+          "candidate-O",
+          "candidate-P"
+        ],
+        "summary": {
+          "note": "gradeChecker() hit its synthetic shape-failure fallback; no grade-summary.json was written."
+        },
+        "finding": "shape-gate-failure",
+        "findingDetail": "Submitted checker builds its verdicts object as a plain {} keyed by opaque per-run tokens via bracket assignment (verdicts[token] = ...). Assigning to the literal key \"__proto__\" on a plain object does not create an enumerable own property (it hits Object.prototype's inherited __proto__ accessor instead), so the checker's own JSON output is missing that one key. The harness's completeVerdicts() shape check requires an exact key-count match against every expected token, so this single missing key causes gradeChecker() to fall through to its synthetic all-failed fallback (deterministic:false, correct:0, missed:total, pass:false) rather than a real per-candidate score. The checker's true judgment on the other tokens was never actually scored."
+      },
+      "usage": {
+        "cachedInputTokens": 976768,
+        "costUsd": null,
+        "inputTokens": 1024574,
+        "outputTokens": 35922,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "c256a18763fb2aa9c6928c2706d5933b1044ce847712e0da49d3b0148c56e4a2",
+      "resultSha256": "6509c5eeac9a1e8de3ec33344c000e7a826226dfa4c18265703da27d31fde4cc",
+      "gradeSha256": "db5e9fb702345e8bcc7873d591b87b1709caf60309ff6fa6553a4a5b8052649d",
+      "manifestFilesVerified": 977,
+      "manifestBytesVerified": 118497755,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "required-checker-failed"
+    },
+    {
+      "id": "workflow-authority-repair",
+      "target": "codex",
+      "runId": "workflow-authority-repair-attempt-1",
+      "analysis": "reports/screening/fourth-five/20-workflow-authority-repair.md",
+      "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "serviceOutcome": "semantic-pass",
+      "reward": 0,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 957291,
+      "dispatchedAt": "2026-09-11T03:55:41.365Z",
+      "service": {
+        "scenarios": 36,
+        "failedScenarios": 0,
+        "invalidScenarios": 0
+      },
+      "checker": {
+        "checkerRequired": true,
+        "checkerPassed": false,
+        "expectedTokenCount": 16,
+        "opaqueTokensUsed": [
+          "__proto__",
+          "constructor",
+          "toString",
+          "",
+          "0",
+          "01",
+          "token/λ",
+          "candidate-H",
+          "candidate-I",
+          "candidate-J",
+          "candidate-K",
+          "candidate-L",
+          "candidate-M",
+          "candidate-N",
+          "candidate-O",
+          "candidate-P"
+        ],
+        "summary": {
+          "reasonPolicy": "diagnostic-only",
+          "deterministic": true,
+          "total": 16,
+          "correct": 12,
+          "falsePositives": 4,
+          "missed": 0,
+          "pass": false,
+          "falsePositiveCandidates": [
+            "alternative",
+            "variant-terminal-dispatch-retry",
+            "variant-replacement-and-retry",
+            "reference"
+          ],
+          "gradeSummarySha256": "29e677e586fa5cd277464ce177854da3ccaa9cf3c2d033a08366a31624a4f9ad"
+        },
+        "finding": "content-level-false-positives",
+        "findingDetail": "Submitted checker uses Object.defineProperty to build its verdicts object, which correctly creates an own property for every opaque token including \"__proto__\", so completeVerdicts() passes and the harness computed a real, complete per-token score. It genuinely misjudges 4 of 16 opaque-token candidates as false positives, mapping back to reference, alternative, variant-terminal-dispatch-retry and variant-replacement-and-retry -- a real content-level defect, not a shape-gate artifact."
+      },
+      "usage": {
+        "cachedInputTokens": 942336,
+        "costUsd": null,
+        "inputTokens": 998047,
+        "outputTokens": 38558,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "072d7295f3a2ad690e841f279c05dc17eaaf1f342fe928c44604393b1228f1e0",
+      "resultSha256": "461bba436aad0f7de7b52971722848baaf41e24c5cf4c1fa28256f832d48facb",
+      "gradeSha256": "4405f13427ba67d7667ada47bdc39bfed2ba96fb6c5a629406ee7f4f048b16ab",
+      "manifestFilesVerified": 897,
+      "manifestBytesVerified": 59865577,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "required-checker-failed"
+    },
+    {
+      "id": "delegated-budget-repair",
+      "target": "codex",
+      "runId": "delegated-budget-repair-attempt-1",
+      "analysis": "reports/screening/original-five/04-delegated-budget-repair.md",
+      "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "serviceOutcome": "semantic-pass",
+      "reward": 0,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 970965,
+      "dispatchedAt": "2026-09-11T03:55:41.439Z",
+      "service": {
+        "scenarios": 21,
+        "failedScenarios": 0,
+        "invalidScenarios": 0
+      },
+      "checker": {
+        "checkerRequired": true,
+        "checkerPassed": false,
+        "expectedTokenCount": 17,
+        "opaqueTokensUsed": [
+          "__proto__",
+          "constructor",
+          "toString",
+          "",
+          "0",
+          "01",
+          "token/λ",
+          "candidate-H",
+          "candidate-I",
+          "candidate-J",
+          "candidate-K",
+          "candidate-L",
+          "candidate-M",
+          "candidate-N",
+          "candidate-O",
+          "candidate-P",
+          "candidate-Q"
+        ],
+        "summary": {
+          "note": "gradeChecker() hit its synthetic shape-failure fallback; no grade-summary.json was written."
+        },
+        "finding": "shape-gate-failure-plus-cell-shape-bug",
+        "findingDetail": "Same __proto__-into-plain-object shape-gate failure as route-policy-repair/browser-replay-repair/recurring-calendar-repair (see that note), stacked with a second, independent, more severe bug: run({cases}) passes each outer case object (shaped {token, cells: [...]}) directly to validateCell(), which reads cell.input directly -- but .input only exists one level down, on each entry of cell.cells. cell.input is therefore always undefined, so validateCell's first shape check fails unconditionally, returning [\"malformed checker cell input\"] for every single candidate regardless of whether the underlying scenario data is valid. This checker never actually inspects real scenario data."
+      },
+      "usage": {
+        "cachedInputTokens": 2483200,
+        "costUsd": null,
+        "inputTokens": 2555092,
+        "outputTokens": 46891,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "fa527299e1806dbce5da9a0145f7535489cee8b56cc84ba177258a7b34dc0dbb",
+      "resultSha256": "eced87bc89dff2689dfdf3d64c49bc754bc51058c8639400e447442e4cae4b5a",
+      "gradeSha256": "ced3898c39f675942c006d89c8e77221332e9f2038d611392d4cc60b7cfc469b",
+      "manifestFilesVerified": 1312,
+      "manifestBytesVerified": 173640439,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "required-checker-failed"
+    }
+  ]
+}

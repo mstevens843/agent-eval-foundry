@@ -65,6 +65,12 @@ Historical queries do not perform new grading: `phase13 report`, `phase13 result
 
 CI treats required Docker/native/browser failures as failures, not informational green skips. Destination rubric/model runs and the required human-authored reviewer README remain separate final qualification requirements. A separately measured human solve is optional and does not block exploratory trials. See [selected-package validation](top-five-implementation.md).
 
+## CI jobs and portable source evidence
+
+The workflow runs fast quality checks first, then runs the maintained test suite, full package integration, and report/recipient reproduction in separate required matrix jobs. They retain the same checks and no longer share a single two-hour job budget. Integration removes unused SDKs from its disposable GitHub-hosted runner before assembling archives; its storage preflight still enforces the full 56 GiB requirement. Each runtime job uploads its own diagnostics on failure.
+
+Phase 15's frozen corpus originally named two Outbox documents in the author's sibling repository. Exact copies now live in `data/phase-15-source-snapshots/`, verified against the original corpus hashes. A fresh checkout audits those copies without accessing the author's filesystem. Missing and modified snapshots still fail; the historical preregistration and source corpus remain unchanged.
+
 ## Retained service audit
 
 The service-replay regression always verifies the published scenario coverage and results in a clean checkout. An additional Docker replay uses private retained submissions and frozen runtime archives; enable it explicitly on the authoring machine:

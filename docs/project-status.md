@@ -1,50 +1,38 @@
 # Project status
 
-September 9, 2026. **Five qualifying finalists: three at 6/6 reward=0 and two at 5/6.**
+September 11, 2026. **Nine qualifying tasks: seven at 6/6 reward=0 and two at 5/6.** Browser replay, Recurring calendar, Workflow authority and Delegated budget are the four new completed 6/6 results.
 
 ## Completed screening results
 
-| Package and trial history | Reward=0 / counted trials | Provider balance |
-| --- | ---: | --- |
-| [21 — Incremental build](../reports/screening/fifth-five/21-incremental-build-repair.md) | **6/6** | 3 Codex + 3 Claude |
-| [25 — Issued report](../reports/screening/fifth-five/25-issued-report-repair.md) | **6/6** | 3 Codex + 3 Claude |
-| [19 — Variant cache](../reports/screening/fourth-five/19-variant-cache-repair.md) | **6/6** | 3 Codex + 3 Claude |
-| [11 — Snapshot recovery](../reports/screening/third-five/11-snapshot-recovery-repair.md) | **5/6** | 3 Codex + 3 Claude |
-| [10 — Temporal capacity](../reports/screening/next-five/10-temporal-capacity-repair.md) | **5/6** | 3 Codex + 3 Claude |
+| Task and full trial history | Reward=0 / counted trials | Codex reward=0 | Claude reward=0 |
+| --- | ---: | ---: | ---: |
+| [03 — Browser replay](../reports/screening/original-five/03-browser-replay-repair.md) | **6/6** | 3/3 | 3/3 |
+| [04 — Delegated budget](../reports/screening/original-five/04-delegated-budget-repair.md) | **6/6** | 3/3 | 3/3 |
+| [18 — Recurring calendar](../reports/screening/fourth-five/18-recurring-calendar-repair.md) | **6/6** | 3/3 | 3/3 |
+| [19 — Variant cache](../reports/screening/fourth-five/19-variant-cache-repair.md) | **6/6** | 3/3 | 3/3 |
+| [20 — Workflow authority](../reports/screening/fourth-five/20-workflow-authority-repair.md) | **6/6** | 3/3 | 3/3 |
+| [21 — Incremental build](../reports/screening/fifth-five/21-incremental-build-repair.md) | **6/6** | 3/3 | 3/3 |
+| [25 — Issued report](../reports/screening/fifth-five/25-issued-report-repair.md) | **6/6** | 3/3 | 3/3 |
+| [10 — Temporal capacity](../reports/screening/next-five/10-temporal-capacity-repair.md) | **5/6** | 2/3 | 3/3 |
+| [11 — Snapshot recovery](../reports/screening/third-five/11-snapshot-recovery-repair.md) | **5/6** | 3/3 | 2/3 |
 
-**30 counted finalist trials: 28 reward=0, two reward=1.** All five sets are complete. The broader successor program contains 54 attempts across 25 packages: 50 counted trials, three grading voids, and one infrastructure interruption.
+**54 counted finalist trials: 52 reward=0, two reward=1; 27 Codex and 27 Claude.** All nine sets are complete, with three trials per provider on each task.
 
-[Final results and counting method](../reports/screening/final-results-2026-09-09.md) · [Machine-readable results](../reports/screening/evidence/2026-09-09-final-results.json) · [Latest campaign](../reports/screening/three-replacements-2026-09-09.md).
+[Results and counting method](../reports/screening/final-results-2026-09-11.md) · [Machine-readable evidence](../reports/screening/evidence/2026-09-11-final-results.json) · [Latest campaign](../reports/screening/hardened-six-continuation-2026-09-11.md).
 
-Reward=0 denotes a failed required deliverable, including an incorrect submitted checker. Published counts incorporate documented grading corrections; original rewards and excluded records remain available. These are standard screening results against the reported ≥5/6 target.
+Reward=0 denotes a failed required deliverable, including an incorrect submitted checker. Original grades, documented corrections and excluded attempts remain in the task histories. The September 9 [five-finalist milestone](../reports/screening/final-results-2026-09-09.md) is preserved separately.
+
+Route policy stopped at **3/5 failures**, with two retained Codex passes and one unused slot. Its second pass survived an [additional audit](../reports/screening/route-trial-seven-pass-audit-2026-09-11.md) of 320 service configurations and 682 checker classifications. This version cannot reach 5/6.
 
 ## What is implemented
 
-Twenty-five professional task source trees are maintained in Git. All twenty-five
-successors replace mostly solved public starter modules with empty entry points and
-retain complete private service/checker references, valid alternatives, deliberately
-incorrect controls, scenario generators and regression tests. Public contracts and
-interfaces remain the authority for judging fair failures.
+Twenty-five professional task source trees are maintained in Git. All twenty-five successors have empty public entry points, complete private references, valid alternatives, deliberately incorrect controls, scenario generators and regression tests. Public requirements and interfaces determine correctness.
 
-The foundry assembles separate solver/verifier workspaces, validates local controls, retains exact versions, and records authorized attempts for read-only analysis. The registry contains twenty-four Node portfolio IDs plus native Go CAA. Twelve older generic families are calibration tools, not twelve additional professional packages.
+The Foundry assembles separate solver/verifier workspaces, validates local controls, freezes trial packages, and preserves authorized attempts for analysis. The registry contains twenty-four Node portfolio tasks plus native Go CAA. Twelve older generic families are calibration tools, outside this professional task count.
 
-The original 25 screenings all passed their service suites. Their recorded checker
-outcomes and historical grading concerns remain intact in the [trial index](../reports/screening/README.md).
-Fifty-four successor attempts now extend that history: 50 counted trials, three grading voids, and one infrastructure interruption. Original and successor versions remain separately documented.
+All five original successor groups completed local native oracle/nop validation. Their preparation and trial reports remain in the [screening index](../reports/screening/README.md). The later 3.0.0 group added browser recovery, calendar synchronization, workflow dispatch, budget reservations and route migration requirements before its new trial sets began.
 
-Engineering preparation covers [19/21/25/24/07](../reports/screening/top-five-implementation-plan-2026-09-09.md),
-[14/03/18/20/04](../reports/screening/next-five-implementation-plan-2026-09-09.md),
-[13/08/15/12/11](../reports/screening/third-ranked-five-implementation-plan-2026-09-09.md),
-[09/06/05/16/17](../reports/screening/fourth-ranked-five-implementation-plan-2026-09-09.md), and
-[23/02/10/01/22](../reports/screening/final-five-implementation-plan-2026-09-09.md).
-All five groups completed local native oracle/nop validation. The second group's
-browser integrity rerun passed all six controls. All five groups have now published
-Trial 2 campaign summaries, sanitized evidence and per-task analyses; the route-policy retry has its own separate campaign directory and evidence.
-Campaign results remain separate from local validation. The [final group](final-five-implementation.md)
-passed 90 assurance checks, 51 Node checker classifications, 110 static checks and all
-native oracle/nop runs. CAA retains its native Go service deliverable; the other four
-require service and checker. All 25 native exports reproduce. No candidates remain
-unimplemented. This preparation launched no model attempts.
+The latest group completed 31 physical attempts: 29 counted results, one Browser grading void and one Browser infrastructure interruption. Four tasks finished at 6/6 and Route at 3/5. Calendar and Budget's initial publication incidents occurred after grading; the completed evidence was recovered without another model call. Browser's excluded attempts remain excluded after fresh trials filled its missing provider slots. These distinctions are documented in the [combined results](../reports/screening/final-results-2026-09-11.md).
 
 ## The portfolio
 
@@ -88,4 +76,4 @@ These links are reviewer-facing and include private grading material. Solvers re
 
 ## Screening is complete
 
-All five finalist sets are complete and meet the reported ≥5/6 target. There are no pending standard screening slots. Destination-specific submission review and required adversarial qualification remain separate from these results.
+All nine finalist sets are complete and meet the reported ≥5/6 target. There are no pending standard screening slots. Destination-specific submission review and required adversarial qualification remain separate from these results.

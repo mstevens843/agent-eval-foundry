@@ -1,5 +1,7 @@
 # 18 — Recurring calendar repair
 
+**Final 3.0.0 screening result (September 11): 6/6 counted trials returned reward=0, with three Codex and three Claude trials.** This task is one of the [nine qualifying tasks](../final-results-2026-09-11.md). Full historical trials, audits and excluded attempts remain below.
+
 ## Outcome
 
 Claude, requested Opus 5 / max, completed in **27 minutes 16 seconds**. The service
@@ -277,3 +279,220 @@ this task currently discriminates model capability at this difficulty level.
 Reward **1**; service **31/31**; checker **13/13**. All **770** completion-manifest files matched their recorded sizes and hashes.
 
 [Campaign results](../round-two-next-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-next-five.json). Trial 1 is preserved.
+
+
+## September 10, 2026 — successor 3.0.0 engineering (no new model trial)
+
+This is a new task version, not a regrade of the successful Trial 2 package. The
+original trial evidence and interpretation above are retained verbatim. At the
+start of this work all 171 maintained files matched the frozen Trial 2 exports.
+
+### New business requirements and prior simplifying strategy
+
+Versioned series/zone/changes/window records merge by greatest per-record revision, including tombstones. Each delivery must leave persistent source, materialized events and bookings in an atomic generation before acknowledgement. Windows select original recurrence coordinates; moves retain identity; unrelated bookings survive.
+
+The saved Codex solution could materialize one complete snapshot and commit once. Full recomputation is still valid, but it must now reconcile retained state across retroactive, duplicate and out-of-order changes, stale generation fences and response-loss recovery.
+
+### Additional coverage and implementation evidence
+
+Original weekly anchoring, exception/future-change precedence, cancellation, elapsed duration and explicit gap/fold rules remain. Added multi-delivery amendments, publication-window changes, source deletion, concurrent unrelated bookings and six-series/multiple-transition combinations.
+
+The independent interval-inversion alternative publishes rows in a different order and recovers from an invalid request. Arrival-order merge, append-only owned bookings, dropped foreign bookings and displayed-time window filtering are rejected. An implementation-stage collector duplication exceeded 16 MiB; removing redundant per-process history fixed it without raising limits.
+
+Complete private service and checker references, authority/schema updates, legal
+alternatives, controls and reproducible Foundry/native Harbor exports are included.
+Public core entry points remain empty. The new service reference and alternative
+pass 35/35 scenarios; the reference checker passes 11/11 candidate traces.
+Untouched starters fail semantically and lack the required checker. These are local
+engineering validations, **not provider/model trial results or hardness evidence**.
+
+No new defect in the earlier successful submitted code is asserted: its former
+contract differs. Historical defect claims, where present above, retain their
+original evidence and scope. The five separate successful finalists and their
+standings remain unchanged; this successor adds zero to that count.
+
+See the [consolidated implementation report](../next-five-successor-implementation-2026-09-10.md)
+and [machine-readable evidence](../evidence/2026-09-10-next-five-successors.json)
+for exact commands, native oracle/nop and integrity outcomes, full export digests,
+resolved development failures and the subsequent grading-review handoff.
+
+
+## Pretrial hardening of successor 3.0.0 — September 10, 2026
+
+Fixed latest-generation acknowledgement bookkeeping after legal recovery. Added lost-ack-response and tombstone-resurrection cases; temporary source/event/booking corruption and missing acknowledgements are covered. Correct republication, reordered attendees and malformed-call recovery pass.
+
+Reference service: **37/37**. Both complete correct alternatives pass. Required checker: **16/16** classifications over the full scenario population, with diagnostic-only reasons. Native oracle returns 1; untouched nop returns 0 without an infrastructure error. All nine native integrity controls pass.
+
+Foundry export: `.local/next-five-hardening-2026-09-10/release-calendar-shapes/recurring-calendar-repair/export`. Digest: `8f438cc74fc23c4357caa4c2a6ce64edd068eb899b5c335bdecd81884444fde3`. Native export: `.local/next-five-hardening-2026-09-10/harbor-frozen-v2/recurring-calendar-repair`. Digest: `409ca52a6f5086d4e31e604d7cf5466cfe8d00641830c9c6174b40eb9fb99dc2`.
+
+The [hardening report](../next-five-hardening-2026-09-10.md), [obligation map](../next-five-hardening-coverage-2026-09-10.md) and [evidence](../evidence/2026-09-10-next-five-hardening.json) record the added cases, mutation audit, protections and frozen artifacts. These are engineering checks before model trials, not another scored trial or a historical regrade. Prior trial results above are unchanged.
+
+The final shape audit also reproduced an unknown source-record kind being accepted as a publication. The authority now returns the documented recoverable shape error. Calendar's final export above includes that fix and the positive variant that verifies recovery; oracle/nop, checker, integrity and recipient checks were rerun on those exact bytes.
+
+## Trial 3 — hardened successor 3.0.0, attempt 1 — September 10–11, 2026
+
+First model trial on the hardened 3.0.0 package, dispatched concurrently with the
+other four hardened-next-five-trial-one packages at 2026-09-11T01:13:37.059Z
+against the frozen `hardened-next-five-trial-one-2026-09-10` runtime (source digest
+`153bdf9d0675e7d4ca59a7fe9b21430e887d24e889db7bbfb134e5dc4d7fa41d`). Requested
+profile: `openai/gpt-5.6-sol`, effort `xhigh`, via Codex (`profileDigest`
+`a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641`). Package
+digest `8f438cc74fc23c4357caa4c2a6ce64edd068eb899b5c335bdecd81884444fde3`, matching
+the hardened export above.
+
+Reward **0**. Service **37/37** (`semantic-pass`) — the submitted repair itself
+is correct. Checker **14/16** (2 false positives, 0 missed, deterministic): the
+submitted checker incorrectly rejects `reference` and `alternative` — two
+genuinely correct implementations — as false positives. A checker that rejects
+known-correct implementations does not discriminate the contract's real
+obligations, so the required-checker failure is a legitimate reward-zero outcome
+under the task contract, not a grading artifact. 10m19s of authoring (capture
+completed before the incident below), 665,003 input tokens (605,952 cached) and
+29,023 output tokens (Codex CLI usage; no price reported). Job id
+`recurring-calendar-repair-attempt-1`.
+
+**Publication incident and recovery.** This attempt's capture, grading and
+checker evaluation all completed normally, but the campaign's publish step then
+raised `EVIDENCE_BYTE_LIMIT`: `publishEvidence`/`verifyEvidence` walked the
+staged evidence tree (175 MiB — 37 checker-grade candidates, each contributing a
+several-megabyte `process.log`/`result.json` pair, versus roughly 14–15
+candidates pre-hardening) against a generic 128 MiB default that had never been
+given an explicit, evidence-publication-specific budget. The job was left
+"publishing" with its capture, grade and result already written to
+`.incomplete/recurring-calendar-repair-attempt-1/` — an infrastructure incident
+on publication, not a re-solve, a re-grade, or a change to the score above.
+
+The fix, applied to the live repository (not the frozen campaign runtime): an
+explicit `EVIDENCE_PUBLICATION_BUDGET_BYTES` constant (512 MiB) threaded only
+into `publishEvidence`/`verifyEvidence` (`src/execution/artifacts.ts`);
+`regularTree`'s own default and every solver-submission size limit
+(`copyArtifactTree`, `package-route.ts`, `real-provider.ts`) are unchanged. For
+future runs, the per-candidate `process.log` is now gzip-compressed at write
+time (`src/packages/local-process.ts`, opt-in `logCompression: "gzip"`),
+losslessly preserving stdout and stderr — including any diagnostic content not
+captured in `result.json` — while removing the near-total byte-for-byte
+duplication between `process.log` and `result.json` that drove the growth.
+Both changes are covered by new local tests (no provider calls):
+`test/execution-lifecycle.test.ts` (budget enforcement, tampering detection) and
+`test/package-production.test.ts` (lossless gzip capture).
+
+Because the frozen executor (source digest `153bdf9d...`) predates this fix and
+its own executor-version guard correctly refuses to resume a job under a
+different source identity, recovery did not resume the frozen campaign in
+place. A separate, explicitly non-executor recovery tool
+(`.local/hardened-next-five-trial-one-2026-09-10/publication-recovery-2026-09-11/recover.mjs`,
+sha256 `ff5d5b53cc812d6a0a68a0508021cf5a7d18560393a80b02ea572ce89f06c4a1`)
+independently re-verified the already-complete capture/grade/checker evidence
+(byte budget, package/profile/executor identity, checker false-positive detail)
+before publishing it, unchanged, with the live repository's corrected budget.
+The original identity was read verbatim from the stage's own `prepared.json`,
+never reconstructed. Published to
+`real-campaign-frozen/jobs/real-provider/publication-recovery/recurring-calendar-repair-attempt-1`
+(982 files, verified). A full incident/fix/recovery manifest, hash-linking the
+recovery tool separately from the original executor, is at
+`.local/hardened-next-five-trial-one-2026-09-10/publication-recovery-2026-09-11/manifest.json`,
+and the original `dispatch-errors/recurring-calendar-repair.json` record is
+preserved unchanged.
+
+This is the first scored trial on the hardened 3.0.0 revision. It stands
+independently of the Trial 2 (successor) pass recorded above; the earlier
+package's contract, checker and scenario population all differ. See
+[the campaign summary](../hardened-next-five-trial-one-2026-09-10.md) and
+[sanitized evidence](../evidence/2026-09-10-hardened-next-five-trial-one.json)
+for the other four packages' results.
+
+
+## Independent post-trial audit — September 11, 2026
+
+The recovered **reward 0** is confirmed. All 982 recovered files match their pre-recovery backup; no solve or grade was rerun during publication recovery. Separate offline invocations of the submitted checker reject the saved correct reference trace for `delivery old: no successful publication` and `delivery duplicate: no successful publication`, while the frozen reference checker accepts it. Those deliveries acknowledge an already current consistent generation; unchanged source does not require a fabricated fresh generation. The `-37` run-directory suffix denotes scenarios per candidate, not candidates; this bank contains 16 candidates. The original service pass and checker failure remain recorded.
+
+See the [full independent audit](../../hardened-next-five-pass-audit-2026-09-11.md) and [hashed evidence](../../evidence/2026-09-11-hardened-next-five-pass-audit.json). This audit made zero provider calls and preserved the original trial records.
+
+
+## Coverage-v2 integrated and next trial prepared — September 11, 2026
+
+Existing duplicate-update acknowledgement coverage is retained. The saved service passes 37/37; its checker again rejects the valid reference and alternative (14/16). The original completed reward-zero evidence remains in publication-recovery, without a model rerun.
+
+Public 3.0.0 instructions, interfaces and starters are byte-identical to Trial 3. The corrected private Foundry package is `e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467`. Reference validation passes **37/37 service scenarios and 16/16 checker candidates**. Native oracle/nop and integrity checks pass. These are replays and engineering checks, not new model attempts; the historical reward remains recorded.
+
+The next authorized run is **Trial 4**, one fresh **Codex** attempt alongside the other four packages. It has been prepared but not dispatched. See the [integrated coverage report](../next-five-coverage-v2-2026-09-11.md), [exact evidence](../evidence/2026-09-11-next-five-coverage-v2.json) and [operator handoff](../../../docs/hardened-next-five-trial-two-handoff.md).
+
+## Trial 4 — 3.0.0 / coverage-v2 — September 11, 2026
+
+The second model attempt on the unchanged public 3.0.0 contract, and the first fresh attempt graded under the corrected private grading revision coverage-v2. Campaign `.local/hardened-next-five-trial-two-2026-09-11/`, frozen runtime source digest `b9c99108fbd1d23f1b8c8c92ff059b1f6d9dcdfe5fe245f9565d5923f90bbfe8`. Job `recurring-calendar-repair-attempt-1`, package digest `e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467`, profile digest `a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641` (requested `openai/gpt-5.6-sol`, effort `xhigh`, via Codex). Dispatched 2026-09-11T03:55:41.302Z, completed 2026-09-11T04:09:25.819Z (13m45s wall; 738,363ms / 12m18s authoring per `capture.json`). Usage: 1,024,574 input tokens (976,768 cached), 35,922 output tokens (Codex CLI usage; no price reported). Published to `.local/hardened-next-five-trial-two-2026-09-11/real-campaign-frozen/jobs/real-provider/records/recurring-calendar-repair-attempt-1/`, independently re-verified this session (`verifyEvidence`): 977 files, all hashes match. No infrastructure error this time — `grading/process.log.gz` confirms the compressed-log fix and the 512 MiB publication budget both held.
+
+Result: reward **0**. Service **semantic-pass, 37/37** scenarios (`grade.json`'s `evaluation`: `expectedIds`/`observedIds` match exactly, no `missingIds`/`unexpectedIds`/`problems`) — the submitted repair itself is correct.
+
+The required checker failed, but not by making 16 individually wrong judgments. Coverage-v2 replaced the descriptive checker-grade candidate names used in Trial 3 (`reference`, `alternative`, …) with opaque per-run tokens for every candidate, specifically to test whether a submitted checker can safely use arbitrary key names — `grading/checker-grade/cases/cases.json` lists 16 such tokens for this package, one of which is literally the string `"__proto__"`. The submitted `checker.mjs` builds its verdicts as a plain object and assigns by bracket notation (`export function run({ cases }) { const verdicts = {}; ...; verdicts[token] = reasons.length === 0 ? { ok: true } : { ok: false, reasons: reasons.slice(0, 32) }; return { verdicts }; }`, lines 610–628). Because `Object.prototype.__proto__` is an inherited accessor, assigning to a plain object's `"__proto__"` key via bracket notation never creates an enumerable own property — it either reassigns the object's prototype or is a no-op. Directly inspecting `grading/checker-grade/checker-process.log` confirms this: the emitted verdicts object has exactly 15 of the 16 expected keys, missing only `"__proto__"`.
+
+The frozen grading harness's `completeVerdicts()` shape check (`src/packages/checker-contract.ts`) requires an exact key-count match against every expected token; one missing key sends `gradeChecker()` (`src/packages/portfolio.ts`) into its synthetic catch-branch fallback (`deterministic: false, correct: 0, missed: total, falsePositives: 0, pass: false`) instead of a real per-candidate score — which is why `grading/checker-grade/grade-summary.json` does not exist for this attempt. The reported "0 correct" is a harness-level shape-gate artifact triggered by one specific object-literal-as-dictionary bug, not a demonstrated finding that the checker misjudged all 15 other candidates. It is nonetheless a real, reproducible interface-coverage defect — a plain object is an unsafe dictionary for untrusted opaque string keys — and the required-checker failure it causes is a legitimate reward-zero outcome under the task contract. The identical `__proto__`-drop bug, from the identical bracket-assignment-on-a-plain-object pattern, independently occurred in this trial's route-policy-repair and browser-replay-repair attempts as well: a systemic pattern across three independently generated checkers, not three unrelated coincidences.
+
+No infrastructure interruption. No additional model calls were made. This evidence and interpretation are independent of the Trial 1/2/audit sections above, which used a different task version or grading revision; those sections are unchanged.
+
+
+## Third 3.0.0 attempt prepared — historical Trial 5
+
+September 11, 2026 UTC: one fresh **Codex** attempt is prepared, concurrently with the other four tasks, using the exact package, profile and frozen runtime from Trial 4. This is attempt **3** on the public 3.0.0 task and is labeled **Trial 5** in this document's full history. No new model call has been launched by preparation. The provider remains the same for this round; any opposite-provider block comes later under a separate handoff. Previous results and replay accounting are unchanged.
+
+See the [prepared execution handoff](../../../docs/hardened-next-five-trial-three-handoff.md) and [verification manifest](../evidence/2026-09-11-hardened-next-five-trial-three-preparation.json).
+
+## Trial 5 — 3.0.0 / coverage-v2, attempt 3 — September 11, 2026
+
+The third model attempt on the unchanged public 3.0.0 contract, byte-identical packages/grading/runtime to Trial 4 (source digest `b9c99108fbd1d23f1b8c8c92ff059b1f6d9dcdfe5fe245f9565d5923f90bbfe8`). The solver is blind to all previous submissions, grades, reference solutions and analysis docs — this is an independent fresh attempt, not a continuation. Campaign `.local/hardened-next-five-trial-three-2026-09-11/`. Job `recurring-calendar-repair-attempt-1`, package digest `e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467`, profile digest `a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641` (requested `openai/gpt-5.6-sol`, effort `xhigh`, via Codex, same profile as Trial 4). Dispatched 2026-09-11T05:07:22.454Z, completed 2026-09-11T05:28:54.919Z (21m32s wall; 1,211,819ms / 20m12s authoring per `capture.json`). Usage: 1,158,604 input tokens (1,089,664 cached), 39,977 output tokens (Codex CLI usage; no price reported). Published to `.local/hardened-next-five-trial-three-2026-09-11/real-campaign-frozen/jobs/real-provider/records/recurring-calendar-repair-attempt-1/`, independently re-verified this session (`verifyEvidence`): 978 files, all hashes match, no infrastructure error.
+
+Result: reward **0**. Service **semantic-pass, 37/37** scenarios (`grade.json`'s `evaluation`: `expectedIds`/`observedIds` match exactly, no `missingIds`/`unexpectedIds`/`problems`) — the submitted repair itself is correct.
+
+This attempt's checker does **not** repeat this package's own Trial 4 defect. Coverage-v2's opaque per-run tokens (including `"__proto__"`) are handled correctly this time — the checker reaches full, valid per-candidate scoring rather than tripping the harness's shape gate. `grading/checker-grade/grade-summary.json` reports `total:16, correct:13, falsePositives:3, missed:0, deterministic:true`. The 3 false positives are `reference`, `alternative`, and `variant-republish-and-reack` — the checker genuinely, incorrectly rejects both known-good baseline implementations plus one legitimate positive variant, a real content-level accuracy defect, not a shape/structural crash.
+
+The submitted `checker.mjs` re-derives an independent "expected" materialized state for each cell and does strict structural comparison against the actual submission's behavior (`auditCell`, starting line 300; comparisons via `sameRecords`/`sameEvents`/`sameBookings` against `expectedMaterialization(...)`, called around line 375). The re-derivation itself has a bug: `combineRecords` (lines 90–97) merges a delivery's updates into prior records using `table.get(key).revision < record.revision` (line 94) to decide whether an update should replace the stored record. This is a **strict** less-than comparison — when a legitimate republish or acknowledgment retry resends a record at the **same** revision it was already stored at (an idempotent redelivery, exactly what `"variant-republish-and-reack"` exercises), `revision < revision` is `false`, so the checker's internally recomputed "expected" state silently keeps the stale record instead of accepting the republished one. The submission's actual (correct) records then no longer match the checker's own miscomputed expectation, and `auditCell` logs `"publication ... has incorrect source records/events/bookings"` — a false failure caused by the checker's own state model, not the submission. This plausibly also explains `reference` and `alternative`: both are known-good implementations that legitimately exercise the same republish/idempotent-redelivery path the checker mis-models.
+
+This is a **different** failure mode from this package's Trial 4 attempt (the `__proto__` shape-gate collision, where the checker never reached real per-candidate scoring at all) — not a recurrence of that specific bug, and the two should not be conflated. Both are real, independent defects found in two independently-generated checkers for this same task.
+
+No infrastructure interruption. No additional model calls were made. This trial's evidence and interpretation are independent of the Trial 1/2/3/4/audit sections above, which used earlier task versions or grading revisions; those sections are unchanged.
+
+
+## Trial 6 preparation — fourth 3.0.0 attempt, provider switch
+
+Prepared September 11, 2026 UTC. The next attempt uses **Claude**, switching from the previous provider, with 2 GiB of authoring memory. It is one of five concurrent attempts in the [new handoff](../../../docs/hardened-next-five-trial-four-handoff.md). Public version 3.0.0, the coverage-v2 grader, package digest and solver instruction remain unchanged. No model call occurred during preparation and this section records no new trial result.
+
+The [infrastructure report](../browser-runtime-reliability-2026-09-11.md) documents the independent runtime build, bounded resource diagnostics, core-dump prevention, local regression checks and recovered disk headroom. The [preparation manifest](../evidence/2026-09-11-hardened-next-five-trial-four-preparation.json) binds the exact next profile and all unchanged package bytes. All Trial 5 completion manifests were reverified. Prior trial outcomes remain intact.
+
+## Trial 6 — fourth 3.0.0 attempt / coverage-v2 / provider switch — September 11, 2026
+
+This is the fourth model attempt on the unchanged public 3.0.0 contract, with all five providers switched from Trial 5 (this package moves from Codex to Claude). Task and coverage-v2 grader packages are byte-identical to Trials 4/5; the frozen runtime was rebuilt only to add browser-authoring memory mitigation and resource diagnostics for a different package (source digest `597df061330dad6fc300dc1bf12fdbc12d29817b1e6d58c80732fc4dea71accc`), which does not affect this package's grading. The solver is blind to all previous submissions, grades, reference solutions and analysis docs. Campaign: `.local/hardened-next-five-trial-four-2026-09-11/`. Job id `recurring-calendar-repair-attempt-1`, package digest `e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467` (unchanged from Trials 4/5), profile digest `d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794` (requested `anthropic/claude-opus-5`, effort `max`, via Claude Code — switched from Codex). Dispatched 2026-09-11T06:41:21.832Z, completed 2026-09-11T07:12:11.571Z (30m50s wall; 1,770,153ms / 29m30s authoring per `capture.json`). Usage: 11,291,840 input tokens (11,099,151 cached), 149,964 output tokens, $11.2258555 (subscription billing). Published to `.local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/recurring-calendar-repair-attempt-1/`, independently re-verified via `verifyEvidence` this session: 1,026 files, all hashes match, no infrastructure error.
+
+Result: reward **0**. Service **semantic-pass, 37/37** scenarios (`grade.json`'s `evaluation`: `expectedIds`/`observedIds` match exactly, no `missingIds`/`unexpectedIds`/`problems`) — the submitted repair itself is correct.
+
+Checker: this attempt hits the `"__proto__"` shape-gate defect class — the same class as this package's own Trial 4 attempt, though not its Trial 5 attempt, which had a different content-level defect (the `combineRecords` strict-inequality bug documented above). The submitted `checker.mjs` (`run({cases})`, lines 579–601) builds `const verdicts = {}` at line 580 and assigns each verdict via bracket notation at line 599 (`verdicts[token] = reasons.length ? {...} : {ok:true}`). `grading/checker-grade/cases/cases.json` lists 16 opaque tokens for this attempt, one of which is the literal string `"__proto__"`. Because `Object.prototype.__proto__` is an inherited accessor, assigning to that key on a plain object does not create an enumerable own property — confirmed directly against this attempt's `checker-process.log`: its output has exactly 15 of the 16 expected keys, missing only `"__proto__"`. The frozen harness's `completeVerdicts()` shape check requires an exact key-count match, so `gradeChecker()` falls through to its synthetic all-failed fallback (no `grade-summary.json` written) rather than a real per-candidate score — the checker's true judgment on the other 15 tokens was never scored.
+
+Worth noting precisely: all three Claude attempts in this Trial 6 campaign (recurring calendar, workflow authority, delegated budget) independently hit this identical `__proto__` shape-gate bug this round, while both Codex attempts (route policy, browser replay) achieved clean checker passes. That is a notable split from this one trial's five data points — not a proven general Claude-vs-Codex tendency, but worth watching in subsequent trials.
+
+No infrastructure interruption. No additional model calls were made. This trial's evidence and interpretation are independent of the Trial 1/2/3/4/5/audit sections above, which used earlier task versions, grading revisions, or providers; those sections are unchanged.
+
+
+## Round 5 preparation — historical Trial 7 (September 11, 2026)
+
+The preceding Round 4 / historical Trial 6 reward 0 remains counted. This package’s export is byte-identical to the last trial.
+
+The next attempt is prepared on **Claude**, the same provider as Round 4, using **coverage-v2**. All five tasks launch concurrently into fresh blind workspaces. Round 5 is the fifth campaign on public 3.0.0 and historical Trial 7 in this document. Preparation itself makes no model call and contributes no outcome.
+
+[Coverage and counting report](../browser-coverage-v3-2026-09-11.md) · [Counting disposition](../evidence/2026-09-11-browser-round-four-disposition.json) · [Round 5 handoff](../../../docs/hardened-next-five-trial-five-handoff.md).
+
+
+## Conditional continuation after Round 5 — prepared September 11, 2026
+
+The user authorized continuing after new reward-zero results, stopping this task on its next pass or at six counted trials with three Codex and three Claude. The already-running Round 5 is unchanged and must finish before the continuation starts. The [explicit counting ledger](../evidence/2026-09-11-hardened-six-counting-ledger.json) records the previously documented first-round regrades and retains excluded attempts separately; preparation adds no trial result. See the [remaining-slot plan](../hardened-six-continuation-preparation-2026-09-11.md) and [operator handoff](../../../docs/hardened-six-continuation-handoff.md).
+
+## Round 5 and continuation — historical Trials 7-8 — 3.0.0 — September 11, 2026
+
+Both solvers were blind to all previous submissions, grades, reference solutions, analysis docs, and to each other's attempt. Private coverage-v2, unchanged from Round 4. Package digest `e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467` (unchanged), profile digest `d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794` (requested `anthropic/claude-opus-5`, effort `max`, via Claude Code, same provider as Round 4) for both attempts. Runtime: byte-identical copy of the completed Round 4 frozen runtime (source digest `597df061330dad6fc300dc1bf12fdbc12d29817b1e6d58c80732fc4dea71accc`), not rebuilt.
+
+**T7 — historical Trial 7 (Round 5).** Job id `recurring-calendar-repair-attempt-1`, campaign `.local/hardened-next-five-trial-five-2026-09-11/`. Dispatched 2026-09-11T08:20:45.008Z, completed 2026-09-11T08:49:47.768Z (29m43s wall; 1,658,441ms / 27m38s authoring per `capture.json`). Usage: 5,093,128 input tokens (4,942,342 cached), 128,764 output tokens, $7.198756 (subscription billing). Reward **0**. Service semantic-pass, 37/37. Checker: shape-gate failure. `grading/checker-grade/cases/cases.json` lists 16 opaque tokens including the literal `"__proto__"`; the actual `checker-process.log` output has 15 of 16 keys, missing only `"__proto__"`. The submitted `checker.mjs` builds `const verdicts = {}` (line 32) and assigns via bracket notation, `verdicts[token] = reasons.length === 0 ? { ok: true } : { ok: false, reasons: reasons.slice(0, MAX_REASONS) }` (line 46) — a plain-object dictionary that cannot represent the literal key `"__proto__"` as an enumerable own property (it collides with `Object.prototype`'s inherited accessor instead), so `completeVerdicts()`'s exact-key-count shape gate fails and `gradeChecker()` falls through to its synthetic all-failed result rather than a real per-candidate score.
+
+**T8 — historical Trial 8 (Round 6 continuation), user-authorized follow-up since T7 failed.** Job id `recurring-calendar-repair-attempt-1`, campaign `.local/hardened-six-continuation-2026-09-11/slots/recurring-calendar-repair/trial-8/`. Same provider/profile as T7. Completed 2026-09-11T09:17:50.264Z (1,544,177ms / 25m44s authoring per `capture.json`). Usage: 5,615,833 input tokens (5,448,655 cached), 132,210 output tokens, $7.702032 (subscription billing). Reward **0**. Service semantic-pass, 37/37. Checker: the same defect *class* independently reproduced by genuinely different code — `cases.json` again lists 16 opaque tokens, and the actual output again has exactly 15 of 16 keys, missing `"__proto__"`. This submission's `checker.mjs` builds `const verdicts = {}` (line 407) and assigns via `verdicts[token] = reasons.length ? { ok: false, reasons } : { ok: true }` (line 418) — a distinct implementation from T7's (different line numbers, different surrounding structure) that happens to share the identical `__proto__`-into-plain-object pitfall.
+
+Both completion manifests independently re-verified via `verifyEvidence` this session: T7 1,022 files, T8 1,010 files, all hashes match, no infrastructure error.
+
+**Final disposition.** With T8's failure, this task reached the six-counted-trial stop condition automatically, per the user's explicit continuation rule (continue after clean reward-zero results until six counted trials with three Codex and three Claude): final tally **6 scored, 6 failures, providers 3 Codex + 3 Claude**, `stopReason: "six-counted"`, 0 unused slots. This is a complete, balanced six-trial record meeting the ≥5/6 target with room to spare.
+
+No infrastructure interruption on either attempt. This trial's evidence and interpretation are independent of the earlier Trial 1-6/audit sections above, which used earlier task versions, grading revisions, or occurred before these specific attempts; do not alter or reinterpret those earlier sections.

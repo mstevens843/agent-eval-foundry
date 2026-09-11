@@ -29,8 +29,16 @@ it("preserves frozen scenario bytes and declares the post-selection validation c
   };
   expect(ledger.generators).toHaveLength(5);
   expect(ledger.validationControls).toHaveLength(5);
-  for (const g of ledger.generators)
-    expect(sha256(readFileSync(`tasks/${g.id}/private/scenarios.mjs`))).toBe(g.generatorSha256);
+  const successors = JSON.parse(
+    readFileSync("reports/screening/evidence/2026-09-10-next-five-hardening-generators.json", "utf8"),
+  ) as { id: string; historicalGeneratorSha256: string; generatorSha256: string }[];
+  for (const g of ledger.generators) {
+    const successor = successors.find((s) => s.id === g.id);
+    if (successor) expect(successor.historicalGeneratorSha256).toBe(g.generatorSha256);
+    expect(sha256(readFileSync(`tasks/${g.id}/private/scenarios.mjs`))).toBe(
+      successor?.generatorSha256 ?? g.generatorSha256,
+    );
+  }
 });
 it("runs full author-side control activation with clean non-activation witnesses", () => {
   const output = join(scratch, "controls");

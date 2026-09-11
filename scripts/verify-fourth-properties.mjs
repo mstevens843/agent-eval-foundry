@@ -189,7 +189,7 @@ await test("64 generated reconciliation populations preserve exact units and rou
 await test("48 generated recurrence plans vary week filters duration and request scope", async () => {
   for (let i = 0; i < 48; i++) {
     const s = fixtures[ids[2]].generator.scenarios()[i % 24];
-    for (const series of s.view.series) {
+    for (const series of s.deliveries.flatMap(d=>d.updates).filter(r=>r.kind==="series"&&r.value).map(r=>r.value)) {
       series.duration = 1 + random(1440);
       series.rule.interval = 1 + random(4);
       if (i % 2) {
@@ -197,7 +197,15 @@ await test("48 generated recurrence plans vary week filters duration and request
         series.rule.weekdays = [random(7)];
       }
     }
-    for (const c of s.view.changes) if (c.action === "move") c.delta = random(181) - 90;
+    for (const d of s.deliveries) for (const r of d.updates) if(r.kind==="changes"&&r.value)
+      for(const c of r.value) if(c.action==="move")c.delta=random(181)-90;
+    // Duplicate revisions must stay byte-identical, even after varying source values.
+    const records=new Map();
+    for(const d of s.deliveries) d.updates=d.updates.map(r=>{
+      const key=JSON.stringify([r.kind,r.id,r.revision]);
+      if(!records.has(key))records.set(key,r);
+      return structuredClone(records.get(key));
+    });
     for (const v of ["reference", "alternative"]) clean(await run(ids[2], s, v));
   }
 });
@@ -215,7 +223,7 @@ await test("calendar event booking and attendee ordering have no grading prefere
   clean(
     await run(ids[2], fixtures[ids[2]].generator.scenarios()[0], "alternative", (api) => ({
       ...api,
-      commit: (r) => api.commit(reverseKeys(r)),
+      publish: (r) => api.publish(reverseKeys(r)),
     })),
   );
 });

@@ -1,34 +1,19 @@
 import { session, checks, equal } from "./adapter.mjs";
+import { deliver } from "./restart.mjs";
+
 function origin(job, jobs) {
-  const ancestors = [];
-  for (let j = job; j; j = jobs.find((x) => x.id === j.parent)) {
-    ancestors.push(j);
-    if (j.parent === null) break;
-  }
-  return ancestors.at(-1).principal;
+  while (job.parent !== null) job = jobs.find((j) => j.id === job.parent);
+  return job.principal;
 }
-function permitted(policy, job, principal) {
-  // Fixed point reachability, distinct from both reference path searches.
-  const reached = new Set([policy.owners[job.resource]]);
-  let progress = true;
-  while (progress) {
-    progress = false;
-    for (const g of policy.grants)
-      if (
-        g.active &&
-        g.resources.includes(job.resource) &&
-        g.actions.includes(job.action) &&
-        reached.has(g.from) &&
-        !reached.has(g.to)
-      ) {
+function permitted(p, j, principal) {
+  const reached = new Set([p.owners[j.resource]]);
+  for (let n = 0; n <= p.grants.length; n++)
+    for (const g of p.grants)
+      if (g.active && reached.has(g.from) && g.resources.includes(j.resource) && g.actions.includes(j.action))
         reached.add(g.to);
-        progress = true;
-      }
-  }
   return reached.has(principal);
 }
-function validPath(p, j, principal, path) {
-  if (!Array.isArray(path)) return false;
+function pathValid(p, j, principal, path) {
   let node = p.owners[j.resource];
   const seen = new Set([node]);
   for (const id of path) {
@@ -37,9 +22,9 @@ function validPath(p, j, principal, path) {
       !g ||
       !g.active ||
       g.from !== node ||
+      seen.has(g.to) ||
       !g.resources.includes(j.resource) ||
-      !g.actions.includes(j.action) ||
-      seen.has(g.to)
+      !g.actions.includes(j.action)
     )
       return false;
     node = g.to;
@@ -47,168 +32,175 @@ function validPath(p, j, principal, path) {
   }
   return node === principal;
 }
-// Sentinel distinguishing a deliberately-injected crash from a genuine subject/infrastructure
-// error. Thrown from inside the `finish` operation below, it propagates authority-side (through
-// adapter.mjs's `invoke`) exactly like any other operation error: authority-engine.mjs's `refuse`
-// kills the real child process for real, and the shared (unmodified) runner.mjs re-throws it back
-// out of `execute()`. Nothing about that path is special-cased anywhere outside this file — the
-// crash is real, not simulated by a flag the harness has to know about.
-const CRASH_MARKER = "workflow-authority-repair/simulated-crash";
-
 export async function runScenario(s, execute, storage) {
   const observations = [],
     reports = [],
+    authorizations = [],
     decisions = [],
     effects = [],
     finished = [],
-    expected = [];
+    boundaries = [],
+    interruptions = [];
   let index = 0,
     active = null,
     current = null,
-    raced = false,
-    identity = true,
-    policyCorrect = true,
+    readRaced = false,
+    dispatchRaced = false;
+  const pending = new Map(),
+    visibility = new Map();
+  let identity = true,
+    authority = true,
     positive = true,
     payload = true;
-  // `crashDeliveries` names delivery IDs whose FIRST `finish()` attempt must be interrupted —
-  // after `decide()` has already returned (and, for executed work, its effect already applied),
-  // but strictly before that delivery is durably closed. Each listed delivery is crashed at most
-  // once; a subsequent `finish()` for the same delivery (after resume) completes normally. Empty
-  // for every pre-existing scenario, so this is a no-op unless a scenario opts in.
-  const crashTargets = new Set(s.crashDeliveries ?? []);
-  const crashedOnce = new Set();
+  const drift = () => {
+    current = structuredClone(current);
+    current.revision++;
+    current.grants = current.grants.map((g) => (g.id === "a" ? { ...g, active: false } : g));
+  };
+  const inspect = (r, p, allowOutcome) => {
+    const j = s.jobs.find((j) => j.id === r.jobId),
+      principal = origin(j, s.jobs),
+      allowed = permitted(p, j, principal);
+    identity &&= r.principal === principal;
+    payload &&= r.resource === j.resource && r.action === j.action && equal(r.payload, j.payload);
+    if (allowOutcome) authority &&= allowed && pathValid(p, j, principal, r.path);
+    else positive &&= !allowed && r.path.length === 0;
+  };
   const operations = {
     take: () => {
-      if (active) return { error: "unfinished" };
+      if (active) return { delivery: active };
       if (index === s.deliveries.length) return { done: true };
       active = s.deliveries[index];
       current = structuredClone(s.policies[index]);
-      raced = false;
+      readRaced = false;
+      dispatchRaced = false;
       return { delivery: active };
     },
     policy: () => {
       if (!active) return { error: "request" };
-      const snapshot = structuredClone(current);
-      if (!raced && s.races.includes(index)) {
-        current.revision++;
-        current.grants = current.grants.map((g) => (g.id === "a" ? { ...g, active: false } : g));
-        raced = true;
+      const result = structuredClone(current);
+      if (!readRaced && s.races.includes(index)) {
+        readRaced = true;
+        drift();
       }
-      return snapshot;
+      return result;
     },
-    receipt: ({ jobId }) => ({ decision: decisions.find((d) => d.jobId === jobId) ?? null }),
-    decide: (r) => {
+    outcome: ({ jobId }) => {
+      const d = decisions.find((d) => d.jobId === jobId);
+      if (d) {
+        if ((visibility.get(jobId) ?? 0) > 0) {
+          visibility.set(jobId, visibility.get(jobId) - 1);
+          return { status: "PENDING" };
+        }
+        return { status: "TERMINAL", decision: d };
+      }
+      return { status: "NONE", authorization: pending.get(jobId) ?? null };
+    },
+    admit: (r) => {
       if (
         !active ||
         r.jobId !== active.jobId ||
-        !["executed", "denied"].includes(r.outcome) ||
+        !["authorized", "denied"].includes(r.outcome) ||
         !Array.isArray(r.path) ||
+        r.path.some(id => typeof id !== "string") ||
+        r.path.length > 24 ||
         typeof r.principal !== "string" ||
         typeof r.resource !== "string" ||
         typeof r.action !== "string" ||
         r.payload === undefined
       )
         return { error: "request" };
+      if (decisions.some((d) => d.jobId === r.jobId)) return { error: "terminal" };
       if (r.revision !== current.revision) return { stale: true };
-      const job = s.jobs.find((j) => j.id === active.jobId),
-        principal = origin(job, s.jobs),
-        allow = permitted(current, job, principal);
-      if (r.principal !== principal) identity = false;
-      if (r.outcome === "executed" && (!allow || !validPath(current, job, principal, r.path)))
-        policyCorrect = false;
-      if (r.outcome === "denied" && (allow || r.path.length)) positive = false;
-      if (r.resource !== job.resource || r.action !== job.action || !equal(r.payload, job.payload))
-        payload = false;
-      const d = { ...r, id: "decision-" + decisions.length };
-      decisions.push(d);
-      expected.push({
-        jobId: job.id,
-        principal,
-        permitted: allow,
+      inspect(r, current, r.outcome === "authorized");
+      const a = { ...r, id: "authorization-" + authorizations.length };
+      authorizations.push(a);
+      boundaries.push({ kind: "admission", id: a.id, policy: structuredClone(current) });
+      if (r.outcome === "denied") {
+        const decision = { ...a, id: "decision-" + decisions.length, authorizationId: a.id };
+        decisions.push(decision);
+        pending.delete(r.jobId);
+        return { decision };
+      }
+      pending.set(r.jobId, a);
+      if (!dispatchRaced && (s.dispatchRaces ?? []).includes(index)) {
+        dispatchRaced = true;
+        drift();
+      }
+      return { authorization: a };
+    },
+    dispatch: (request) => {
+      if (!request || typeof request !== "object" || typeof request.authorizationId !== "string" || !Number.isInteger(request.revision)) return { error: "request" };
+      const { authorizationId, revision } = request;
+      if (!active) return { error: "request" };
+      const prior = decisions.find((d) => d.jobId === active.jobId);
+      if (prior) {
+        if (prior.outcome !== "executed" || prior.authorizationId !== authorizationId) return { error: "request" };
+        return { status: "PENDING" };
+      }
+      const a = pending.get(active.jobId);
+      if (!a || a.id !== authorizationId) return { error: "request" };
+      if (revision !== current.revision || a.revision !== current.revision) return { stale: true };
+      inspect(a, current, true);
+      const decision = {
+        ...a,
+        id: "decision-" + decisions.length,
+        authorizationId: a.id,
+        outcome: "executed",
+      };
+      decisions.push(decision);
+      visibility.set(a.jobId, s.receiptLag ?? 2);
+      pending.delete(a.jobId);
+      effects.push({
+        jobId: a.jobId,
+        principal: a.principal,
+        resource: a.resource,
+        action: a.action,
+        payload: a.payload,
+        decisionId: decision.id,
+        authorizationId: a.id,
         revision: current.revision,
-        policy: structuredClone(current),
       });
-      if (r.outcome === "executed")
-        effects.push({
-          jobId: job.id,
-          principal: r.principal,
-          resource: r.resource,
-          action: r.action,
-          payload: r.payload,
-          decisionId: d.id,
-        });
-      return { decision: d };
+      boundaries.push({ kind: "dispatch", id: a.id, policy: structuredClone(current) });
+      return { status: "PENDING" };
     },
     finish: ({ deliveryId, decisionId }) => {
-      if (!active || deliveryId !== active.id || typeof decisionId !== "string")
-        return { error: "request" };
-      if (crashTargets.has(active.id) && !crashedOnce.has(active.id)) {
-        crashedOnce.add(active.id);
-        // The decision (and its effect, if executed) is already recorded above in `decisions`/
-        // `effects` — durable, per SEMANTICS.md's terminal_history contract. Only the durable
-        // close-out (`finished.push` / `active = null` / `index++` below) never happens: this
-        // throw kills the real subject process before any of that runs, exactly matching "crash
-        // between decide() returning and finish() durably closing it."
-        throw Error(`${CRASH_MARKER}:${active.id}`);
-      }
+      if (!active || active.id !== deliveryId || typeof decisionId !== "string") return { error: "request" };
       finished.push({ deliveryId, jobId: active.jobId, decisionId });
-      active = null;
       index++;
+      active = null;
       return { stored: true };
     },
   };
-  // Ordinarily one `execute()` per scenario. A crash-injected delivery makes the subject process
-  // die for real mid-flight; this loop gives a FRESH process (a new `execute()` call, same
-  // closure state: `decisions`/`effects`/`finished`/`observations` all persist across it) the
-  // chance to pick the abandoned delivery back up, standing in for whatever real process would
-  // eventually redeliver it. `active` is reset here — outside any operation — so the next `take()`
-  // redelivers the interrupted delivery rather than reporting "unfinished" forever.
-  for (;;) {
-    const crashCount = crashedOnce.size;
-    try {
-      await execute(session({ jobs: s.jobs, storage }, operations, (r) => reports.push(r), observations));
-      break;
-    } catch (err) {
-      const message = String(err?.message ?? err);
-      if (active && crashedOnce.size > crashCount && crashTargets.has(active.id) && message.includes(CRASH_MARKER)) {
-        active = null;
-        continue;
-      }
-      throw err;
-    }
-  }
-  const ids = s.deliveries.map((d) => d.jobId),
-    unique = [...new Set(ids)];
-  const complete =
-    index === s.deliveries.length &&
-    !active &&
-    finished.every((f) => decisions.some((d) => d.id === f.decisionId && d.jobId === f.jobId));
+  await deliver(
+    execute,
+    () => session({ jobs: s.jobs, storage }, operations, (r) => reports.push(r), observations),
+    s.interrupt ? { ...s.interrupt, observations } : null,
+    interruptions,
+    {},
+  );
+  const encountered = [...new Set(s.deliveries.map((d) => d.jobId))];
   return {
     ...checks({
-      completion: complete,
+      completion:
+        index === s.deliveries.length &&
+        finished.every((f) => decisions.some((d) => d.id === f.decisionId && d.jobId === f.jobId)),
       origin_identity: identity,
-      policy_at_effect: policyCorrect,
+      policy_at_effect: authority,
       positive_work: positive,
-      terminal_history:
-        decisions.length === unique.length &&
-        new Set(decisions.map((d) => d.jobId)).size === decisions.length &&
-        unique.every((id) => decisions.some((d) => d.jobId === id)) &&
-        finished.every((f) => decisions.find((d) => d.jobId === f.jobId)?.id === f.decisionId),
       effect_payload: payload,
+      terminal_history:
+        decisions.length === encountered.length &&
+        new Set(decisions.map((d) => d.jobId)).size === decisions.length &&
+        encountered.every((id) => decisions.some((d) => d.jobId === id)) &&
+        effects.length === decisions.filter((d) => d.outcome === "executed").length,
     }),
-    actual: { decisions, effects, finished },
+    view: { jobs: s.jobs },
     deliveries: s.deliveries,
-    // Raw policy snapshots at admitted effects, without the derived permitted verdict.
-    admissionPolicies: expected.map(({ jobId, revision, policy }) => ({ jobId, revision, policy })),
-    expected,
+    actual: { authorizations, decisions, effects, finished },
+    boundaries,
     observations,
     reports,
-    // Exactly the `jobs` half of the `view` every real candidate already receives at session
-    // begin (see the `session(...)` call above: `{ jobs: s.jobs, storage }`) — problem structure
-    // a candidate already has, not a computed answer. A checker needs the job/parent graph to
-    // independently recompute each decision's true root origin and to match effect resource/
-    // action/payload against each job's own fields; `observations` alone (the real policy()
-    // snapshots and decide()/finish() call log) already covers everything else a checker needs.
-    view: { jobs: s.jobs },
+    interruptions,
   };
 }

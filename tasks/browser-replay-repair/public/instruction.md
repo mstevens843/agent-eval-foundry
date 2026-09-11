@@ -2,6 +2,8 @@
 
 Build the service and its independent release validator in `/work/task`.
 Read `SEMANTICS.md` for the domain contract.
+The local application, Chromium bridge and debugging commands are in `app/`,
+`dev.mjs` and `replay.mjs`. They are available during authoring.
 
 `entry.mjs` must export `subject.run(view, api)`. The supplied entry point is empty;
 implement the required behavior using any correct design.

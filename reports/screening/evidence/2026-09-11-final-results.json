@@ -1,0 +1,728 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-11",
+  "evidenceClass": "real-provider-screening",
+  "target": {
+    "minimumFailures": 5,
+    "countedTrials": 6,
+    "codexTrials": 3,
+    "claudeTrials": 3
+  },
+  "sources": [
+    {
+      "path": "reports/screening/evidence/2026-09-09-final-results.json",
+      "sha256": "049b477151d34390499c04c247c0afc4f91f0e29367395716646ae0d1f2a6a05"
+    },
+    {
+      "path": "reports/screening/evidence/2026-09-11-hardened-six-counting-ledger.json",
+      "sha256": "b607b93fe01efdf5ca6e80acfd7f89c9b1797fd240e74af4e0767657cae7adc3"
+    },
+    {
+      "path": "reports/screening/evidence/2026-09-11-hardened-six-continuation.json",
+      "sha256": "6895dece8dde391474bfa6791c79f4eb15761cbd6e264b86a931c3acd88cb129"
+    }
+  ],
+  "summary": {
+    "packages": 9,
+    "sixOfSix": 7,
+    "fiveOfSix": 2,
+    "countedTrials": 54,
+    "zeroRewards": 52,
+    "oneRewards": 2,
+    "codexTrials": 27,
+    "claudeTrials": 27,
+    "newlyQualifiedPackages": 4,
+    "pendingFinalistTrials": 0
+  },
+  "packages": [
+    {
+      "id": "incremental-build-repair",
+      "number": 21,
+      "name": "Incremental build",
+      "analysis": "reports/screening/fifth-five/21-incremental-build-repair.md",
+      "packageDigest": "34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a",
+      "failures": 6,
+      "scored": 6,
+      "attemptsByProvider": {
+        "codex": 3,
+        "claude": 3
+      },
+      "countedAttempts": [
+        {
+          "trial": 2,
+          "provider": "codex",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 3,
+          "provider": "codex",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 4,
+          "provider": "codex",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 5,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 6,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 7,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        }
+      ],
+      "voidAttempts": []
+    },
+    {
+      "id": "issued-report-repair",
+      "number": 25,
+      "name": "Issued report",
+      "analysis": "reports/screening/fifth-five/25-issued-report-repair.md",
+      "packageDigest": "32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170",
+      "failures": 6,
+      "scored": 6,
+      "attemptsByProvider": {
+        "codex": 3,
+        "claude": 3
+      },
+      "countedAttempts": [
+        {
+          "trial": 2,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 3,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 4,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 5,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 6,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 7,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        }
+      ],
+      "voidAttempts": []
+    },
+    {
+      "id": "variant-cache-repair",
+      "number": 19,
+      "name": "Variant cache",
+      "analysis": "reports/screening/fourth-five/19-variant-cache-repair.md",
+      "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+      "failures": 6,
+      "scored": 6,
+      "attemptsByProvider": {
+        "codex": 3,
+        "claude": 3
+      },
+      "countedAttempts": [
+        {
+          "trial": 2,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 3,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 4,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 5,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 8,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0,
+          "replacesTrial": 6
+        },
+        {
+          "trial": 9,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0,
+          "replacesTrial": 7
+        }
+      ],
+      "voidAttempts": [
+        {
+          "trial": 6,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": null
+        },
+        {
+          "trial": 7,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": null
+        }
+      ]
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "number": 11,
+      "name": "Snapshot recovery",
+      "analysis": "reports/screening/third-five/11-snapshot-recovery-repair.md",
+      "packageDigest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+      "failures": 5,
+      "scored": 6,
+      "attemptsByProvider": {
+        "codex": 3,
+        "claude": 3
+      },
+      "countedAttempts": [
+        {
+          "trial": 2,
+          "provider": "codex",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 3,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 5,
+          "provider": "claude",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 6,
+          "provider": "claude",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 7,
+          "provider": "claude",
+          "recordedReward": 1,
+          "auditEffectiveReward": 1,
+          "countedReward": 1
+        },
+        {
+          "trial": 8,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0,
+          "replacesTrial": 4
+        }
+      ],
+      "voidAttempts": [
+        {
+          "trial": 4,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": null
+        }
+      ]
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "number": 10,
+      "name": "Temporal capacity",
+      "analysis": "reports/screening/next-five/10-temporal-capacity-repair.md",
+      "packageDigest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+      "failures": 5,
+      "scored": 6,
+      "attemptsByProvider": {
+        "codex": 3,
+        "claude": 3
+      },
+      "countedAttempts": [
+        {
+          "trial": 2,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 3,
+          "provider": "claude",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 4,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 5,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 6,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 7,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 1,
+          "countedReward": 1
+        }
+      ],
+      "voidAttempts": []
+    },
+    {
+      "id": "browser-replay-repair",
+      "number": 3,
+      "name": "Browser replay",
+      "analysis": "reports/screening/original-five/03-browser-replay-repair.md",
+      "failures": 6,
+      "scored": 6,
+      "attemptsByProvider": {
+        "codex": 3,
+        "claude": 3
+      },
+      "countedAttempts": [
+        {
+          "trial": 3,
+          "provider": "claude",
+          "recordedReward": 1,
+          "countedReward": 0,
+          "disposition": "counted-after-documented-regrade",
+          "packageDigest": "7511a91b15231268c3fe86e12e67b644805efc35e546edd83a5629eba2508ace",
+          "completionSha256": "c637ece78ff2c3f09cbf523cc5a99dd9297bd1ca4d1b79489c3a1b0848b3fa70"
+        },
+        {
+          "trial": 4,
+          "provider": "claude",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "712f97575821006724eef7f3b3161c97512019897af62e46ab32b9c32dcddf31",
+          "completionSha256": "c832ea154780be2c39357828f0d929532b5b2cd125a2fa9e624edc2db4bd1bf6"
+        },
+        {
+          "trial": 7,
+          "provider": "codex",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "3968e17e770da1476aec1ec0a5f742f6d31e248fc295ad55d33ad8bce0f9b644",
+          "completionSha256": "a26a86ae3e5f2fe60f094e582451fb896ca3522ff19746fa79e9c710539f279e"
+        },
+        {
+          "trial": 8,
+          "provider": "codex",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "3968e17e770da1476aec1ec0a5f742f6d31e248fc295ad55d33ad8bce0f9b644",
+          "completionSha256": "50cd1214a02901020be3aea55e13b288bb976f98bfae7f898d3f93f43cf3042c"
+        },
+        {
+          "trial": 9,
+          "provider": "codex",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "3968e17e770da1476aec1ec0a5f742f6d31e248fc295ad55d33ad8bce0f9b644",
+          "completionSha256": "81213800b4691d58290ee8d21fc60b68dacaa831ebd2a07adafcac613d8de2c7"
+        },
+        {
+          "trial": 10,
+          "provider": "claude",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "3968e17e770da1476aec1ec0a5f742f6d31e248fc295ad55d33ad8bce0f9b644",
+          "completionSha256": "f398a38ed1fee8e70209e4da458d6df657e72b00697635ad0f4665b5c85e3f7e"
+        }
+      ],
+      "excludedAttempts": [
+        {
+          "trial": 5,
+          "provider": "claude",
+          "recordedReward": null,
+          "countedReward": null,
+          "disposition": "infrastructure-interrupted",
+          "packageDigest": "712f97575821006724eef7f3b3161c97512019897af62e46ab32b9c32dcddf31",
+          "completionSha256": "faf6c620d1511b68d61ca33e19769488eeb3a5571925c3f3b88d1a8ea7228268"
+        },
+        {
+          "trial": 6,
+          "provider": "codex",
+          "recordedReward": 1,
+          "countedReward": null,
+          "disposition": "grading-void",
+          "packageDigest": "712f97575821006724eef7f3b3161c97512019897af62e46ab32b9c32dcddf31",
+          "completionSha256": "f22831aeb72abe95fb3efc43ee896001bdbd4b54ff6c6227505be3435f686fba"
+        }
+      ],
+      "stopReason": "six-counted"
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "number": 18,
+      "name": "Recurring calendar",
+      "analysis": "reports/screening/fourth-five/18-recurring-calendar-repair.md",
+      "failures": 6,
+      "scored": 6,
+      "attemptsByProvider": {
+        "codex": 3,
+        "claude": 3
+      },
+      "countedAttempts": [
+        {
+          "trial": 3,
+          "provider": "codex",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "counted-after-documented-regrade",
+          "packageDigest": "8f438cc74fc23c4357caa4c2a6ce64edd068eb899b5c335bdecd81884444fde3",
+          "completionSha256": "177125813859b1d49b355ca94b61467939421154e28a5784eee22e49c9344872"
+        },
+        {
+          "trial": 4,
+          "provider": "codex",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+          "completionSha256": "c256a18763fb2aa9c6928c2706d5933b1044ce847712e0da49d3b0148c56e4a2"
+        },
+        {
+          "trial": 5,
+          "provider": "codex",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+          "completionSha256": "d9e6d1a7e931ac71ac8dedbf04b62bb8ee201a0d12a9fb9360a1718cdda44677"
+        },
+        {
+          "trial": 6,
+          "provider": "claude",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+          "completionSha256": "b8b494040ea147088107cfe25a2ee4c66661a0042d9054f9be50934b902ce815"
+        },
+        {
+          "trial": 7,
+          "provider": "claude",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+          "completionSha256": "8d7cb2bfec48f588b94f69d7ce870f70929a96765093170a918376e984540074"
+        },
+        {
+          "trial": 8,
+          "provider": "claude",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+          "completionSha256": "30a398fe981e04cfad5af68b53e74996f271114199219ac63961fefa67f82b85"
+        }
+      ],
+      "excludedAttempts": [],
+      "stopReason": "six-counted"
+    },
+    {
+      "id": "workflow-authority-repair",
+      "number": 20,
+      "name": "Workflow authority",
+      "analysis": "reports/screening/fourth-five/20-workflow-authority-repair.md",
+      "failures": 6,
+      "scored": 6,
+      "attemptsByProvider": {
+        "codex": 3,
+        "claude": 3
+      },
+      "countedAttempts": [
+        {
+          "trial": 3,
+          "provider": "codex",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "counted-after-documented-regrade",
+          "packageDigest": "f7e8ebedfb12bad0fa67e7841e213d78991620e5266cc115a01f98b79bf8cdd0",
+          "completionSha256": "3fb9aa8ddc8ce97f44ab4f80795c4a3684ea9f6301baf7c724c2b1c127c3b130"
+        },
+        {
+          "trial": 4,
+          "provider": "codex",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+          "completionSha256": "072d7295f3a2ad690e841f279c05dc17eaaf1f342fe928c44604393b1228f1e0"
+        },
+        {
+          "trial": 5,
+          "provider": "codex",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+          "completionSha256": "417302d110d509079003ef438cfdff87c52968cf40a423fa86b11cd281eafadc"
+        },
+        {
+          "trial": 6,
+          "provider": "claude",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+          "completionSha256": "bdc08536d55fae8c1dc2b9f53f460218ea2ddb96f24c8f369b80bf8f79ba49f1"
+        },
+        {
+          "trial": 7,
+          "provider": "claude",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+          "completionSha256": "b8c12981fb4c362453def08284eb919ebe9edaf86e78c02b0a774e55a236d30b"
+        },
+        {
+          "trial": 8,
+          "provider": "claude",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+          "completionSha256": "36ff0b4028acab97604174e8f154c65e3d7b1ed264362c4015d6e5a557dc7b9a"
+        }
+      ],
+      "excludedAttempts": [],
+      "stopReason": "six-counted"
+    },
+    {
+      "id": "delegated-budget-repair",
+      "number": 4,
+      "name": "Delegated budget",
+      "analysis": "reports/screening/original-five/04-delegated-budget-repair.md",
+      "failures": 6,
+      "scored": 6,
+      "attemptsByProvider": {
+        "codex": 3,
+        "claude": 3
+      },
+      "countedAttempts": [
+        {
+          "trial": 3,
+          "provider": "codex",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "counted-after-documented-regrade",
+          "packageDigest": "db688724f5b932b9e0ee619e1202da3de81a636a37ef90976490702fb24c5f66",
+          "completionSha256": "ce82994a2ef11ead1688a54ed2b1ef584fc9ea921ee2b2067aef8900a06b2442"
+        },
+        {
+          "trial": 4,
+          "provider": "codex",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+          "completionSha256": "fa527299e1806dbce5da9a0145f7535489cee8b56cc84ba177258a7b34dc0dbb"
+        },
+        {
+          "trial": 5,
+          "provider": "codex",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+          "completionSha256": "0ad884b60c9d45c77600f3ac99c8120420d46024e603d020458bac6eddd6bc71"
+        },
+        {
+          "trial": 6,
+          "provider": "claude",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+          "completionSha256": "7435c5e182d55e4e239044160d8e3e63250fad5f9f2c1ca8e37d3b81a6bea5d3"
+        },
+        {
+          "trial": 7,
+          "provider": "claude",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+          "completionSha256": "967a401ecb0e432b61ab27896d3560b1c67f537854ebfa130386f2bc7b06f28e"
+        },
+        {
+          "trial": 8,
+          "provider": "claude",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+          "completionSha256": "e5af7e1878129d10c2e22b0a1d03fad7d5d1374adea4603f159da0815fc03c40"
+        }
+      ],
+      "excludedAttempts": [],
+      "stopReason": "six-counted"
+    }
+  ],
+  "stoppedPackages": [
+    {
+      "id": "route-policy-repair",
+      "number": 14,
+      "name": "Route policy",
+      "analysis": "reports/screening/third-five/14-route-policy-repair.md",
+      "failures": 3,
+      "scored": 5,
+      "attemptsByProvider": {
+        "codex": 2,
+        "claude": 3
+      },
+      "countedAttempts": [
+        {
+          "trial": 3,
+          "provider": "claude",
+          "recordedReward": 1,
+          "countedReward": 0,
+          "disposition": "counted-after-documented-regrade",
+          "packageDigest": "c3ff40c39c331627595b3a5aa0a74f03d6777a26e9c34b5b27c042474fe0fd63",
+          "completionSha256": "5d744f38632971583d5116a979337a9e219b0f8057246ff229932526235cdd06"
+        },
+        {
+          "trial": 4,
+          "provider": "claude",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+          "completionSha256": "e30cd67128ab1985247da5c2ab6db43d8e11a8237e3b55239f27c40c14cd837a"
+        },
+        {
+          "trial": 5,
+          "provider": "claude",
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+          "completionSha256": "3925a7db136230f4c285bab935877dd19969e2d994d2422c335d20bc555fac30"
+        },
+        {
+          "trial": 6,
+          "provider": "codex",
+          "recordedReward": 1,
+          "countedReward": 1,
+          "disposition": "retained",
+          "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+          "completionSha256": "f529ec062e584f9fce0c96bd07dfbd8afb01235babe9cc6a4ede7a051bac9438"
+        },
+        {
+          "trial": 7,
+          "provider": "codex",
+          "recordedReward": 1,
+          "countedReward": 1,
+          "disposition": "retained",
+          "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+          "completionSha256": "13f7b87e41faff8fc827ea2c6cb92ff8cbd1f77b9376a845f94266bf6104d90f"
+        }
+      ],
+      "excludedAttempts": [],
+      "stopReason": "solver-pass",
+      "maximumFailuresInSix": 4
+    }
+  ],
+  "latestCampaign": {
+    "roundFiveAttempts": 5,
+    "continuationAuthorizedSlots": 7,
+    "continuationAttempts": 6,
+    "totalAttempts": 11,
+    "zeroRewards": 10,
+    "oneRewards": 1,
+    "infrastructureInterruptions": 0,
+    "unusedAuthorizedSlots": 1
+  }
+}

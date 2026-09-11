@@ -1,9 +1,11 @@
 // Task-local fault injection: the authority completes and records the operation,
 // then kills the submitted process before its RPC response can be delivered.
 export async function deliver(execute, createAdapter, after, interruptions, identity) {
-  let completed = 0, injected = false;
+  let completed = 0,
+    injected = false;
   for (;;) {
-    const adapter = createAdapter(), invoke = adapter.invoke.bind(adapter);
+    const adapter = createAdapter(),
+      invoke = adapter.invoke.bind(adapter);
     let interruptedThisProcess = false;
     adapter.invoke = async (name, args) => {
       const value = await invoke(name, args);
@@ -16,8 +18,10 @@ export async function deliver(execute, createAdapter, after, interruptions, iden
       }
       return value;
     };
-    try { await execute(adapter); return; }
-    catch (error) {
+    try {
+      await execute(adapter);
+      return;
+    } catch (error) {
       if (!interruptedThisProcess || !String(error).includes("task-authority/lost-response")) throw error;
     }
   }

@@ -5,9 +5,10 @@ export const checkIds = [
   "history",
   "bookings",
   "preservation",
+  "source_revisions",
 ];
 const m = (s) => Date.parse(s + "Z") / 60000;
-export function scenarios() {
+function baseScenarios() {
   const rows = [];
   for (let seed = 0; seed < 24; seed++) {
     const fold = seed % 2 === 1,
@@ -246,4 +247,104 @@ export function scenarios() {
     },
   });
   return rows;
+}
+
+function versioned(s) {
+  const { series, zones, changes, externalBookings } = s.view;
+  const record = (kind, id, value, revision = 1) => ({ kind, id, revision, value });
+  const updates = [
+    ...zones.map((z) => record("zone", z.id, z)),
+    ...series.map((x) => record("series", x.uid, x)),
+    ...series.map((x) =>
+      record(
+        "changes",
+        x.uid,
+        changes.filter((c) => c.uid === x.uid),
+      ),
+    ),
+    record("window", "publication", { from: "2026-01-01T00:00", through: "2026-12-31T23:59" }),
+  ];
+  const deliveries = [{ id: "initial", updates }];
+  if (s.id !== "case-024" && series.length) {
+    const first = series[0],
+      replacement = {
+        ...structuredClone(first),
+        room: "amended-room",
+        exceptions: [
+          ...first.exceptions.filter((e) => e.rid !== first.start),
+          { rid: first.start, start: first.start, attendees: [{ id: "amended", response: "tentative" }] },
+        ],
+      };
+    const amendment = [
+      record("series", first.uid, replacement, 3),
+      record(
+        "changes",
+        first.uid,
+        [
+          {
+            uid: first.uid,
+            rid: first.start,
+            scope: "future",
+            action: "move",
+            delta: 1440,
+            room: "future-room",
+          },
+          { uid: first.uid, rid: first.start, scope: "single", action: "cancel" },
+        ],
+        2,
+      ),
+    ];
+    deliveries.push(
+      {
+        id: "amend",
+        updates: amendment,
+        concurrentBooking: { key: "concurrent", room: "external", startUTC: 4, endUTC: 5 },
+        interrupt: { method: "api.publish", count: 2 },
+      },
+      { id: "old", updates: [record("series", first.uid, { ...first, room: "obsolete" }, 2)] },
+      { id: "duplicate", updates: amendment },
+      {
+        id: "window",
+        updates: [record("window", "publication", { from: first.start, through: first.start }, 2)],
+      },
+      {
+        id: "remove",
+        updates: [
+          record("series", first.uid, null, 4),
+          record("changes", first.uid, null, 3),
+          record("window", "publication", { from: "2026-01-01T00:00", through: "2026-12-31T23:59" }, 3),
+        ],
+      },
+    );
+  }
+  return { id: s.id, externalBookings, deliveries };
+}
+export function scenarios() {
+  const rows = baseScenarios();
+  for (let n = 0; n < 4; n++) {
+    const view = structuredClone(rows[n].view),
+      first = view.series[0];
+    view.series = Array.from({ length: 6 }, (_, i) => ({
+      ...structuredClone(first),
+      uid: "series-" + i,
+      rule: { frequency: i % 2 ? "daily" : "weekly", interval: (i % 4) + 1, weekdays: [0, 2, 4] },
+      room: i % 3 ? "room-" + i : null,
+    }));
+    view.changes = view.series.flatMap((s) => [
+      { uid: s.uid, rid: s.start, scope: "future", action: "move", delta: 30 },
+      { uid: s.uid, rid: s.start, scope: "single", action: "move", delta: 60, zone: "UTC" },
+    ]);
+    const z = view.zones[0],
+      at = z.transitions[0].at;
+    z.transitions.push(
+      { at: at + 1440, offset: z.initialOffset },
+      { at: at + 2880, offset: z.transitions[0].offset },
+      { at: at + 4320, offset: z.initialOffset },
+    );
+    rows.push({ id: "combined-" + n, view });
+  }
+  const output=rows.map(versioned);
+  const ack=structuredClone(output[0]);ack.id='ack-response-loss';ack.deliveries=ack.deliveries.slice(0,1);ack.deliveries[0].interrupt={method:'api.ack',count:1};output.push(ack);
+  const reborn=structuredClone(output[0]);reborn.id='tombstone-resurrection';reborn.deliveries.push({id:'reborn',updates:reborn.deliveries[0].updates.map(r=>({...r,revision:10}))});output.push(reborn);
+  return output;
 }

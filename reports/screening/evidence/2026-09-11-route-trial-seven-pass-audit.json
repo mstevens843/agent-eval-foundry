@@ -1,0 +1,694 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-11",
+  "id": "route-policy-repair",
+  "historicalTrial": 7,
+  "versionRound": 5,
+  "provider": "codex",
+  "publicVersion": "3.0.0",
+  "gradingRevision": "coverage-v2",
+  "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+  "recordedReward": 1,
+  "countedReward": 1,
+  "disposition": "retain-pass",
+  "confirmedAdditionalDefects": 0,
+  "baseService": {
+    "passed": 33,
+    "total": 33
+  },
+  "baseChecker": {
+    "correct": 13,
+    "total": 13
+  },
+  "counting": {
+    "failures": 3,
+    "scored": 5,
+    "passes": 2,
+    "providers": {
+      "codex": 2,
+      "claude": 3
+    },
+    "unusedSlots": 1,
+    "maximumFailuresInSix": 4,
+    "canReachFiveOfSix": false,
+    "stopReason": "solver-pass"
+  },
+  "audit": {
+    "additionalServiceConfigurations": 320,
+    "checkerClassifications": 682,
+    "generated": {
+      "seed": 831991,
+      "generated": 300,
+      "validCases": 299,
+      "skippedCapacity": 1,
+      "serviceChecks": 299,
+      "checkerPositive": 299,
+      "checkerNegative": 299,
+      "failures": [],
+      "maxTargetRules": 84
+    },
+    "targeted": {
+      "serviceChecks": 21,
+      "checkerCases": 84,
+      "validCases": 43,
+      "invalidCases": 41,
+      "deterministic": true,
+      "inputUnchanged": true,
+      "failures": [],
+      "groups": {
+        "boundary-scenarios": 21,
+        "alternatives": 4,
+        "capacity": 4,
+        "recovery": 13,
+        "malformed-deployments": 11,
+        "ordering": 2,
+        "unsampled-behavior": 16,
+        "opaque-tokens": 13
+      },
+      "classifications": [
+        {
+          "token": "fallback-accept-0",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "fallback-accept-1000",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "fallback-reject-0",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "fallback-reject-1000",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "fallback-return-0",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "fallback-return-1000",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "fallback-continue-0",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "fallback-continue-1000",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "opaque-\"__proto__\"",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "opaque-\"constructor\"",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "opaque-\"toString\"",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "opaque-\"\"",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "opaque-\"\u03bb\\u0000suffix\"",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "prefix-boundary-0",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "prefix-boundary-1",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "prefix-boundary-8",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "prefix-boundary-31",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "prefix-boundary-32",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "five-deep-fallback-call",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "eight-calls-return-then-accept",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "twelve-registered-tags",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "reference-layout",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "implicit-reject-table",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "prefix-partition-plus-parent-prefix",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "unreachable-contradictory-rule",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "512-rules-valid",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "513-rules-invalid-then-valid",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "513-rules-without-correction",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "4096-predicate-atoms",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "4097-atoms-invalid-then-valid",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "4097-atoms-without-correction",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-recovery-0",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-unrepaired-0",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-recovery-1",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-unrepaired-1",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-recovery-2",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-unrepaired-2",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-recovery-3",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-unrepaired-3",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-recovery-4",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-unrepaired-4",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-recovery-5",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-unrepaired-5",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-recovery-6",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-unrepaired-6",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-recovery-7",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-unrepaired-7",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-recovery-8",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-unrepaired-8",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-recovery-9",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-unrepaired-9",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-recovery-10",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "invalid-proposal-unrepaired-10",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "publish-after-success-invalid",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "publish-after-success-valid",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "unsampled-host-0",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "unsampled-host-1",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "unsampled-host-2",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "unsampled-host-3",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "unsampled-host-4",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "unsampled-host-5",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "unsampled-host-6",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "unsampled-host-7",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "unsampled-host-8",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "unsampled-host-9",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "unsampled-host-10",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "unsampled-host-11",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "unsampled-host-12",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "unsampled-host-13",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "unsampled-host-14",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "unsampled-host-15",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "__proto__",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "constructor",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "toString",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "hasOwnProperty",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "0",
+          "expectedAccept": true,
+          "accepted": true,
+          "correct": true
+        },
+        {
+          "token": "",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "a\u0000b",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "\u03bb",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "__proto__8",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "constructor9",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "toString10",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "hasOwnProperty11",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        },
+        {
+          "token": "012",
+          "expectedAccept": false,
+          "accepted": false,
+          "correct": true
+        }
+      ],
+      "isolatedService": {
+        "total": 21,
+        "passed": 21
+      },
+      "isolatedChecker": {
+        "total": 84,
+        "correct": 84,
+        "shapeValid": true,
+        "deterministic": true,
+        "inputUnchanged": true
+      }
+    }
+  },
+  "authority": {
+    "runtimeDirectory": ".local/hardened-next-five-trial-five-2026-09-11/frozen-source",
+    "bundleSha256": "c0a422da75fbc5bac969fcd614a329458780205fc3dcd034cb9f287699fef8d8",
+    "image": "sha256:0d111d755a70b9f8a3e8fec4f7bc641b3211bcf6ebb03bfd6fbded7c776176ab"
+  },
+  "issuedContractsVerified": [
+    {
+      "component": "contract",
+      "path": "public/SEMANTICS.md",
+      "sha256": "490914b89c1c1ce94a89561002740ffa7479a33daaa26fa05266222cc5270392"
+    },
+    {
+      "component": "contract",
+      "path": "public/instruction.md",
+      "sha256": "3bc385cde816be4c2f1e8a85a5126a5c4171c1dce17b0481bb7acaf282dec521"
+    },
+    {
+      "component": "workspace",
+      "path": "public/CHECKER-INPUT.md",
+      "sha256": "508190e3f8921d06b73f52be7770085450a9fb6eac030bbb9d9bbe8b730653e5"
+    },
+    {
+      "component": "workspace",
+      "path": "public/api.d.ts",
+      "sha256": "61bcbdd1fdd9382f85340fa14755d20b02e03f38a7459544d2548447e0e96e26"
+    },
+    {
+      "component": "workspace",
+      "path": "public/target.mjs",
+      "sha256": "08c0730fe3d611ff91e74f75403204d4bd4ffeff397fb44d16b613c3d82334a6"
+    }
+  ],
+  "retainedFilesVerifiedBeforeAndAfter": 906,
+  "completion": {
+    "path": ".local/hardened-next-five-trial-five-2026-09-11/real-campaign-frozen/jobs/real-provider/records/route-policy-repair-attempt-1/completion.json",
+    "sha256": "13f7b87e41faff8fc827ea2c6cb92ff8cbd1f77b9376a845f94266bf6104d90f"
+  },
+  "grade": {
+    "path": ".local/hardened-next-five-trial-five-2026-09-11/real-campaign-frozen/jobs/real-provider/records/route-policy-repair-attempt-1/grade.json",
+    "sha256": "b031742640ef5be5d51bfb02c58d808bfa4ea7377e57bd58885b1e604fe10fb7"
+  },
+  "submission": [
+    {
+      "path": ".local/hardened-next-five-trial-five-2026-09-11/real-campaign-frozen/jobs/real-provider/records/route-policy-repair-attempt-1/submission/entry.mjs",
+      "sha256": "ece06ef5302ef451e1318f55a18545c7f114a9c15a2cf38e70a3e6670b853a40"
+    },
+    {
+      "path": ".local/hardened-next-five-trial-five-2026-09-11/real-campaign-frozen/jobs/real-provider/records/route-policy-repair-attempt-1/submission/checker.mjs",
+      "sha256": "639372e738f692002c16c2d253526c1631b8b87b1be79917fc9f051acaa773ec"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": ".local/route-t7-pass-audit-initial-2026-09-11/summary.json",
+      "sha256": "ab64c70b4af271d4c5280d118194ed308651b0fb6516caf9aee4957540a0df5a"
+    },
+    {
+      "path": ".local/route-t7-pass-audit-final-2026-09-11/summary.json",
+      "sha256": "c29706fc5687fdf31414fe8f39b1319e3c7b4bdbb96a29ffd06a9c5a32450983"
+    },
+    {
+      "path": ".local/route-t7-pass-audit-final-2026-09-11/targeted-fixtures.json",
+      "sha256": "6d2ef02d8aa7af7bb4037e0d325a67db4c128aabeb213f9655c346a17fffbfe6"
+    },
+    {
+      "path": ".local/route-t7-pass-audit-final-2026-09-11/route-policy-repair/isolated-service/result.json",
+      "sha256": "c533b841253c91d709ced85ff0e3b115a28ce184006ff6b7f967576e5d63371e"
+    },
+    {
+      "path": ".local/route-t7-pass-audit-final-2026-09-11/route-policy-repair/isolated-checker/result.json",
+      "sha256": "4fbbab28ae3d0f86065982877ec5bb3b92c6df39d11d7e7a9816fa54c72306d2"
+    },
+    {
+      "path": ".local/hardened-six-continuation-2026-09-11/outcomes/route-policy-repair.json",
+      "sha256": "f4b61f776270288a65d9f94e88a1187927dfcddb0929a5daf2d6a34c9c041029"
+    }
+  ],
+  "reproduction": {
+    "command": "node scripts/audit-route-trial-seven.mjs .local/route-t7-audit-new-run",
+    "scripts": [
+      {
+        "path": "scripts/audit-route-trial-seven.mjs",
+        "sha256": "81c610788dc08513390a5c2fe3c38229dea3f30f2b6eaa3530d9ea90dd37a3cb"
+      },
+      {
+        "path": "data/route-t7-pass-audit/targeted.mjs",
+        "sha256": "6e9bddbaa46fb3a453992451f99354d374df25036559da4c0356e305af2ce689"
+      },
+      {
+        "path": "data/hardened-round-four-pass-audit/route-fuzz.mjs",
+        "sha256": "114cd6a5e334fa475501a96c7ad3316133cc32a647c8f72efefc8500af98c4fd"
+      },
+      {
+        "path": "data/hardened-round-four-pass-audit/replay.mjs",
+        "sha256": "c2d7ceccd196a0be4bbf61d82252fe564b9a54bd96b0ab5023e43ed924e64dc1"
+      }
+    ]
+  },
+  "providerCallsMade": 0,
+  "originalRecordsChanged": false,
+  "taskOrGraderChanged": false,
+  "limitations": [
+    "Finite additional testing and code review do not prove correctness for every valid source configuration.",
+    "The generated audit excludes one configuration whose reference deployment exceeds capacity; it is not counted against the solver.",
+    "The 682 checker classifications include 13 original-bank cases with different opaque tokens.",
+    "Existing isolation controls were reviewed; this audit did not launch additional model cheat trials."
+  ]
+}

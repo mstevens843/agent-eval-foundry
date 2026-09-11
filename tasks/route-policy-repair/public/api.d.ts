@@ -13,6 +13,11 @@ export type View = {
   request: { egresses: string[]; match: Match; preference: number };
   storage: string;
 };
+export type Rule = {
+  when: { all: Match[]; none: Match[] };
+  action: { decision: "accept" | "reject"; preference?: number; add: string[]; remove: string[] };
+};
+export type Deployment = { format: "flat-v1"; egresses: Record<string, Rule[]> };
 export interface API {
-  publish(x: { config: Config }): Promise<{ ok: boolean; error?: string }>;
+  publish(x: { config: Deployment }): Promise<{ ok: boolean; error?: string }>;
 }

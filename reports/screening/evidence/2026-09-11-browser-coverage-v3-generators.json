@@ -1,0 +1,11 @@
+[
+  {
+    "id": "browser-replay-repair",
+    "historicalGeneratorSha256": "ae2b03cb33bc171622f3d7551482f8eacdbf7d9caa153a141e0a31a5e18e0953",
+    "predecessorGeneratorSha256": "c88033b80ecda4c49112a20716c8183177fe606dd609f6882f3bf72616aef797",
+    "generatorSha256": "d52c78e6356bf01e2a955191175910ef172db4566831afaf545e817b083a9214",
+    "preHardeningGeneratorSha256": "bfeac53045d0657e4ad0925eb21103f093cd8a58717d6da6b9414e1b579b362e",
+    "gradingRevision": "coverage-v3",
+    "publicRequirementsChanged": false
+  }
+]

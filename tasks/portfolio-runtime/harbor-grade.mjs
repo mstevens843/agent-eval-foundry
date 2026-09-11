@@ -38,6 +38,7 @@ function copyTree(source, destination, state = { count: 0, bytes: 0 }, depth = 0
 }
 const scenarioBank = scenarios();
 const controls = JSON.parse(readFileSync("/tests/control-manifest.json", "utf8"));
+const checkerConfig = JSON.parse(readFileSync("/tests/checker-required.json", "utf8"));
 async function execute(directory) {
   const cells = [];
   for (const scenario of scenarioBank) {
@@ -50,6 +51,9 @@ async function execute(directory) {
       if (result.error) throw Error(`invalid execution: ${result.error}; ${result.diagnostics?.stderrTail ?? ""}`);
       return result;
     }, storage);
+    // Candidate journals are private grading evidence, not checker inputs.
+    // Revoke the subject UID's access after all redeliveries of this scenario.
+    chownSync(storage, 0, 0); chmodSync(storage, 0o700);
     cells.push({ scenarioId: scenario.id, ...result, executions });
   }
   return cells;
@@ -69,14 +73,16 @@ function candidate(name, control) {
 function validOutput(output, tokens) {
   const v = output?.verdicts;
   return v && typeof v === "object" && !Array.isArray(v) && Object.keys(v).length === tokens.length
-    && tokens.every((t) => Object.hasOwn(v, t) && v[t] && typeof v[t].ok === "boolean"
+    && tokens.every((t) => Object.hasOwn(v, t) && v[t] && typeof v[t] === "object" && !Array.isArray(v[t]) && typeof v[t].ok === "boolean"
       && (v[t].reasons === undefined || Array.isArray(v[t].reasons) && v[t].reasons.every((s) => typeof s === "string")));
 }
 function reapSubmittedProcesses() {
+  for (let pass=0; pass<3; pass++) {
   for (const pid of readdirSync("/proc").filter((p) => /^\d+$/.test(p))) {
     try {
       if (Number(/^Uid:\s+(\d+)/m.exec(readFileSync(`/proc/${pid}/status`, "utf8"))?.[1]) === 1000) process.kill(Number(pid), "SIGKILL");
     } catch { /* Process already exited. */ }
+  }
   }
 }
 function checker(directory, cases) {
@@ -85,12 +91,14 @@ function checker(directory, cases) {
   const worker = join(root, `checker-${randomUUID()}.mjs`);
   writeFileSync(worker, `import {readFileSync} from 'node:fs';
 import {pathToFileURL} from 'node:url';
-const {cases}=JSON.parse(readFileSync(process.argv[2],'utf8'));
+const encode=JSON.stringify.bind(JSON),decode=JSON.parse.bind(JSON),freeze=Object.freeze,values=Object.values;
+function immutable(x){if(x&&typeof x==='object'){for(const v of values(x))immutable(v);freeze(x)}return x}
+const {cases}=decode(readFileSync(process.argv[2],'utf8'));immutable(cases);
+const before=encode(cases);
 const {run}=await import(pathToFileURL(process.argv[3]));
-const before=JSON.stringify(cases);
-const first=JSON.stringify(await run({cases}));
+const first=encode(await run({cases}));
 const second=await run({cases});
-process.stdout.write(JSON.stringify({first:JSON.parse(first),second,mutated:before!==JSON.stringify(cases)}));
+process.stdout.write(encode({first:decode(first),second,mutated:before!==encode(cases)}));
 `, { mode: 0o644 });
   const result = spawnSync(process.execPath, [worker, input, join(directory, "checker.mjs")], {
     uid: 1000, gid: 1000, timeout: 60000, maxBuffer: 8 * 1024 * 1024,
@@ -124,8 +132,10 @@ function integrityChecks(submission, cases, labels, candidateDirectories) {
     ["always-accept", "export const run=({cases})=>({verdicts:Object.fromEntries(cases.map(c=>[c.token,{ok:true}]))})"],
     ["always-reject", "export const run=({cases})=>({verdicts:Object.fromEntries(cases.map(c=>[c.token,{ok:false}]))})"],
     ["mutated-input", `import {run as oracle} from ${JSON.stringify(join(submission, "checker.mjs"))};export async function run({cases}){const r=await oracle({cases});cases[0].token+='changed';return r}`],
+    ["mutation-restored-before-return", `import {run as oracle} from ${JSON.stringify(join(submission,"checker.mjs"))};export async function run({cases}){const saved=cases[0].token;cases[0].token+='changed';cases[0].token=saved;return oracle({cases})}`],
+    ["mutation-hidden-by-json-hook", `import {run as oracle} from ${JSON.stringify(join(submission,"checker.mjs"))};export async function run({cases}){const stringify=JSON.stringify;JSON.stringify=(v,...args)=>v===cases?'hidden':stringify(v,...args);cases[0].token+='changed';return oracle({cases})}`],
   ]) { const result = evaluate(body); results.push({ name, passed: !result.accepted, ...result }); }
-  const protectedPaths = ["/tests/domain.mjs", "/tmp/authority/domain.mjs", join(privateRoot, "reward.txt"), ...candidateDirectories.map((d) => join(d, "entry.mjs"))];
+  const protectedPaths = ["/tests/domain.mjs", "/tmp/authority/domain.mjs", join(privateRoot, "reward.txt"), ...candidateDirectories.map((d) => join(d, "entry.mjs")), ...readdirSync(root).filter(n => n.startsWith("storage-")).map(n => join(root,n,"probe"))];
   const isolation = evaluate(`
 import {readFileSync,writeFileSync} from 'node:fs';
 import {run as oracle} from ${JSON.stringify(join(submission, "checker.mjs"))};
@@ -141,6 +151,13 @@ export async function run(input) {
   return result;
 }`);
   results.push({ name: "private-read-and-reward-write-denied", passed: isolation.accepted, ...isolation });
+  const marker=`/tmp/descendant-${randomUUID()}`;
+  // Spawn only after the second deterministic invocation. A descendant of the
+  // first invocation is still within the live checker execution, not a leak.
+  const descendant=evaluate(`import {spawn} from 'node:child_process';import {existsSync} from 'node:fs';import {run as oracle} from ${JSON.stringify(join(submission,"checker.mjs"))};let calls=0;
+export async function run(input){const result=await oracle(input);if(++calls===2){const child=spawn(process.execPath,['-e',${JSON.stringify("require('node:fs').writeFileSync("+JSON.stringify(marker+".started")+",'ready');setTimeout(()=>require('node:fs').writeFileSync("+JSON.stringify(marker)+",'escaped'),500)")}],{detached:true,stdio:'ignore'});child.unref();const deadline=Date.now()+2000;while(!existsSync(${JSON.stringify(marker+".started")})){if(Date.now()>deadline)throw Error('probe child failed to start');Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,5)}}return result}`);
+  spawnSync("sleep",["0.7"]);
+  results.push({name:"detached-descendant-reaped",passed:descendant.accepted&&existsSync(marker+".started")&&!existsSync(marker),...descendant});
   return results;
 }
 
@@ -158,7 +175,8 @@ try {
   if (summary.service || process.argv.includes("--validate")) {
     phase = "calibration";
     const cases = [], labels = new Map(), candidateDirectories = [];
-    const candidates = [{ name: "reference", expected: true }, { name: "alternative", expected: true }, ...controls.map((control) => ({ name: "reference", expected: false, control }))];
+    const variants = existsSync("/tests/variants") ? readdirSync("/tests/variants").sort().map(n => ({name:"variants/"+n,expected:true})) : [];
+    const candidates = [{ name: "reference", expected: true }, { name: "alternative", expected: true }, ...variants, ...controls.map((control) => ({ name: "reference", expected: false, control }))];
     for (const row of candidates) {
       const candidateDirectory = candidate(row.name, row.control);
       const cells = await execute(candidateDirectory);
@@ -175,6 +193,15 @@ try {
     }
     // Opaque identifiers and shuffled order prevent an authoring-order label shortcut.
     cases.sort((a, b) => a.token.localeCompare(b.token));
+    if (checkerConfig.tokenCoverage === "opaque-v1") {
+      const opaque = ["__proto__", "constructor", "toString", "", "0", "01", "token/λ"];
+      const expected = cases.map(c => labels.get(c.token));
+      labels.clear();
+      cases.forEach((c, i) => {
+        c.token = opaque[i] ?? c.token;
+        labels.set(c.token, expected[i]);
+      });
+    }
     phase = "checker";
     const result = checker(submission, cases);
     summary.checker = result.passed && cases.every(({ token }) => result.verdicts[token].ok === labels.get(token));

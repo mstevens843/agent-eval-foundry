@@ -18,51 +18,6 @@
     "clean": "case-024"
   },
   {
-    "id": "erase-cancelled-history",
-    "overlay": {
-      "entry.mjs": "controls/erase-cancelled-history.mjs"
-    },
-    "check": "history",
-    "selectionRole": "development-regression",
-    "clean": "case-024"
-  },
-  {
-    "id": "reset-attendee-responses",
-    "overlay": {
-      "entry.mjs": "controls/reset-attendee-responses.mjs"
-    },
-    "check": "preservation",
-    "selectionRole": "development-regression",
-    "clean": "case-024"
-  },
-  {
-    "id": "global-series-change",
-    "overlay": {
-      "entry.mjs": "controls/global-series-change.mjs"
-    },
-    "check": "preservation",
-    "selectionRole": "development-regression",
-    "clean": "case-024"
-  },
-  {
-    "id": "booking-display-key",
-    "overlay": {
-      "entry.mjs": "controls/booking-display-key.mjs"
-    },
-    "check": "bookings",
-    "selectionRole": "development-regression",
-    "clean": "case-024"
-  },
-  {
-    "id": "drop-external-bookings",
-    "overlay": {
-      "entry.mjs": "controls/drop-external-bookings.mjs"
-    },
-    "check": "bookings",
-    "selectionRole": "development-regression",
-    "clean": "case-024"
-  },
-  {
     "id": "no-work",
     "overlay": {
       "entry.mjs": "controls/no-work.mjs"
@@ -88,12 +43,63 @@
     "isolation": true
   },
   {
-    "id": "wall-clock-duration",
+    "id": "arrival-order",
     "overlay": {
-      "entry.mjs": "controls/wall-clock-duration.mjs"
+      "src/sync.mjs": "controls/arrival-order-v3.mjs"
     },
-    "check": "civil_time",
-    "clean": "case-024",
-    "selectionRole": "post-selection-validation"
+    "check": "source_revisions",
+    "clean": "case-024"
+  },
+  {
+    "id": "append-bookings",
+    "overlay": {
+      "src/sync.mjs": "controls/append-bookings-v3.mjs"
+    },
+    "check": "bookings",
+    "clean": "case-024"
+  },
+  {
+    "id": "drop-foreign",
+    "overlay": {
+      "src/sync.mjs": "controls/drop-foreign-v3.mjs"
+    },
+    "check": "bookings",
+    "clean": "case-024"
+  },
+  {
+    "id": "display-window",
+    "overlay": {
+      "src/sync.mjs": "controls/display-window-v3.mjs"
+    },
+    "check": "occurrence_identity",
+    "clean": "case-024"
+  },
+  {
+    "id": "repaired-event-corruption",
+    "overlay": {
+      "entry.mjs": "controls/repaired-event-corruption.mjs"
+    },
+    "check": "preservation"
+  },
+  {
+    "id": "repaired-source-corruption",
+    "overlay": {
+      "entry.mjs": "controls/repaired-source-corruption.mjs"
+    },
+    "check": "source_revisions"
+  },
+  {
+    "id": "repaired-booking-deletion",
+    "overlay": {
+      "entry.mjs": "controls/repaired-booking-deletion.mjs"
+    },
+    "check": "bookings"
+  },
+  {
+    "id": "missing-acknowledgement",
+    "overlay": {
+      "entry.mjs": "controls/missing-acknowledgement.mjs"
+    },
+    "check": "completion"
   }
 ]

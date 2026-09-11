@@ -1,0 +1,381 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-11",
+  "purpose": "Historical Trial 6; fourth 3.0.0 attempt; all five providers switched; identical coverage-v2 packages",
+  "concurrency": 5,
+  "maxProviderCalls": 5,
+  "automaticRetries": false,
+  "billingMode": "subscription-only",
+  "wallMsPerTask": 10800000,
+  "runRoot": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen",
+  "files": {
+    "controller": {
+      "path": ".local/hardened-next-five-trial-four-2026-09-11/campaign.mjs",
+      "sha256": "63d405bc0e2334800e3834679511829285303692b7e74f79a8695515e80e4187"
+    },
+    "ready": {
+      "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/READY.json",
+      "sha256": "aa0b91a5dae68a8788758f8bd6a8410b3d38504de63de05df617ae8706dcb0a4"
+    },
+    "runtimeVerification": {
+      "path": ".local/hardened-next-five-trial-four-2026-09-11/runtime-verification.json",
+      "sha256": "e218002cf94fcbd268017974032fa1f52aef15709f694a3875a0cd8922fa025d"
+    },
+    "dependencies": {
+      "path": ".local/hardened-next-five-trial-four-2026-09-11/dependencies.json",
+      "sha256": "1d8a88bdde1ee8a60351de78f29b3ce369f9da4e90ea51ad76657f03a6152f5a"
+    },
+    "provenance": {
+      "path": ".local/hardened-next-five-trial-four-2026-09-11/provenance.json",
+      "sha256": "e46c59ed2ac9731c328504f9e658f0305af628e028bd5349c239478196732829"
+    },
+    "controllerDiff": {
+      "path": ".local/hardened-next-five-trial-four-2026-09-11/controller.diff",
+      "sha256": "b8c401a4a1cbb3a82686209cf2cb1590dc5929da4650bf8d168e719e4624d594"
+    },
+    "previousController": {
+      "path": ".local/hardened-next-five-trial-four-2026-09-11/previous-controller.mjs",
+      "sha256": "c97343e6bcbcef359caad2df0a227dd1f2a1e007fca8f56551967c81ef773947"
+    },
+    "hardeningEvidence": {
+      "path": ".local/hardened-next-five-trial-four-2026-09-11/evidence.json",
+      "sha256": "1fab5b71e7d3ffd81747442e1b75d98d5695912fc0f2b1a8bf62361911d2bbab"
+    },
+    "buildLog": {
+      "path": ".local/hardened-next-five-trial-four-2026-09-11/build.log",
+      "sha256": "0eded5701ea447fda3fd6fce6137f29a20b36e713f81f3304a2a86e4bbece05f"
+    }
+  },
+  "runtime": {
+    "directory": ".local/hardened-next-five-trial-four-2026-09-11/frozen-source",
+    "sourceDigest": "597df061330dad6fc300dc1bf12fdbc12d29817b1e6d58c80732fc4dea71accc",
+    "bundleSha256": "c0a422da75fbc5bac969fcd614a329458780205fc3dcd034cb9f287699fef8d8"
+  },
+  "predecessor": {
+    "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-three-preparation.json",
+    "sha256": "c7c118f45c60161bd8765f3a7e02714f8fb6144713f2f79162c4ac1ea01db524"
+  },
+  "runtimeRebuilt": true,
+  "packageBytesChanged": false,
+  "providerAssignmentsChanged": true,
+  "browserMitigation": {
+    "previousMemoryMiB": 2048,
+    "memoryMiB": 4096,
+    "confirmedCrashCause": false,
+    "resourceDiagnostics": true,
+    "interruptedTrial": 5,
+    "interruptedTarget": "claude",
+    "countedReward": null,
+    "missingClaudeSlotStillPending": true
+  },
+  "priorRecords": [
+    {
+      "id": "route-policy-repair",
+      "completion": {
+        "path": ".local/hardened-next-five-trial-three-2026-09-11/real-campaign-frozen/jobs/real-provider/records/route-policy-repair-attempt-1/completion.json",
+        "sha256": "3925a7db136230f4c285bab935877dd19969e2d994d2422c335d20bc555fac30"
+      },
+      "files": 960,
+      "countsAsModelFailure": false
+    },
+    {
+      "id": "browser-replay-repair",
+      "completion": {
+        "path": ".local/hardened-next-five-trial-three-2026-09-11/real-campaign-frozen/jobs/real-provider/records/browser-replay-repair-attempt-1/completion.json",
+        "sha256": "faf6c620d1511b68d61ca33e19769488eeb3a5571925c3f3b88d1a8ea7228268"
+      },
+      "files": 102,
+      "countsAsModelFailure": false
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "completion": {
+        "path": ".local/hardened-next-five-trial-three-2026-09-11/real-campaign-frozen/jobs/real-provider/records/recurring-calendar-repair-attempt-1/completion.json",
+        "sha256": "d9e6d1a7e931ac71ac8dedbf04b62bb8ee201a0d12a9fb9360a1718cdda44677"
+      },
+      "files": 978,
+      "countsAsModelFailure": false
+    },
+    {
+      "id": "workflow-authority-repair",
+      "completion": {
+        "path": ".local/hardened-next-five-trial-three-2026-09-11/real-campaign-frozen/jobs/real-provider/records/workflow-authority-repair-attempt-1/completion.json",
+        "sha256": "417302d110d509079003ef438cfdff87c52968cf40a423fa86b11cd281eafadc"
+      },
+      "files": 896,
+      "countsAsModelFailure": false
+    },
+    {
+      "id": "delegated-budget-repair",
+      "completion": {
+        "path": ".local/hardened-next-five-trial-three-2026-09-11/real-campaign-frozen/jobs/real-provider/records/delegated-budget-repair-attempt-1/completion.json",
+        "sha256": "0ad884b60c9d45c77600f3ac99c8120420d46024e603d020458bac6eddd6bc71"
+      },
+      "files": 1309,
+      "countsAsModelFailure": false
+    }
+  ],
+  "packages": [
+    {
+      "id": "route-policy-repair",
+      "target": "codex",
+      "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "historicalTrial": 6,
+      "versionAttempt": 4,
+      "gradingRevision": "coverage-v2",
+      "analysisDocument": "reports/screening/third-five/14-route-policy-repair.md",
+      "profile": {
+        "schemaVersion": 1,
+        "target": "codex",
+        "requested": {
+          "provider": "openai",
+          "model": "openai/gpt-5.6-sol",
+          "effort": "xhigh",
+          "scaffold": "codex"
+        },
+        "provenance": {
+          "revision": "83c7a6172d629c6575b785ab12c8db787bb2e323",
+          "source": ".github/harbor-run-defaults.yml@83c7a6172d629c6575b785ab12c8db787bb2e323"
+        },
+        "adapter": {
+          "id": "foundry-subscription-cli",
+          "version": "2",
+          "scaffoldVersion": "0.153.2"
+        },
+        "authoring": {
+          "image": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+          "network": "bridge",
+          "tools": [
+            "node",
+            "shell",
+            "codex"
+          ],
+          "credentials": "broker"
+        },
+        "gradingRoute": "professional-multifile/authority-process@1",
+        "context": {
+          "handling": "scaffold-default-unobserved",
+          "outputTokens": null
+        },
+        "limits": {
+          "wallMs": 10800000,
+          "outputBytes": 33554432,
+          "artifactBytes": 8388608,
+          "memoryMiB": 2048,
+          "cpus": 2,
+          "pids": 256
+        }
+      }
+    },
+    {
+      "id": "browser-replay-repair",
+      "target": "codex",
+      "packageDigest": "712f97575821006724eef7f3b3161c97512019897af62e46ab32b9c32dcddf31",
+      "profileDigest": "552855d36d4339bb73a354a610053478e653297b2db17d5bcd85739318a0bfc3",
+      "historicalTrial": 6,
+      "versionAttempt": 4,
+      "gradingRevision": "coverage-v2",
+      "analysisDocument": "reports/screening/original-five/03-browser-replay-repair.md",
+      "profile": {
+        "schemaVersion": 1,
+        "target": "codex",
+        "requested": {
+          "provider": "openai",
+          "model": "openai/gpt-5.6-sol",
+          "effort": "xhigh",
+          "scaffold": "codex"
+        },
+        "provenance": {
+          "revision": "83c7a6172d629c6575b785ab12c8db787bb2e323",
+          "source": ".github/harbor-run-defaults.yml@83c7a6172d629c6575b785ab12c8db787bb2e323"
+        },
+        "adapter": {
+          "id": "foundry-subscription-cli",
+          "version": "2",
+          "scaffoldVersion": "0.153.2"
+        },
+        "authoring": {
+          "image": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+          "network": "bridge",
+          "tools": [
+            "node",
+            "shell",
+            "codex"
+          ],
+          "credentials": "broker"
+        },
+        "gradingRoute": "professional-multifile/authority-process@1",
+        "context": {
+          "handling": "scaffold-default-unobserved",
+          "outputTokens": null
+        },
+        "limits": {
+          "wallMs": 10800000,
+          "outputBytes": 33554432,
+          "artifactBytes": 8388608,
+          "memoryMiB": 4096,
+          "cpus": 2,
+          "pids": 256
+        }
+      }
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "target": "claude",
+      "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "historicalTrial": 6,
+      "versionAttempt": 4,
+      "gradingRevision": "coverage-v2",
+      "analysisDocument": "reports/screening/fourth-five/18-recurring-calendar-repair.md",
+      "profile": {
+        "schemaVersion": 1,
+        "target": "claude",
+        "requested": {
+          "provider": "anthropic",
+          "model": "anthropic/claude-opus-5",
+          "effort": "max",
+          "scaffold": "claude-code"
+        },
+        "provenance": {
+          "revision": "83c7a6172d629c6575b785ab12c8db787bb2e323",
+          "source": ".github/harbor-run-defaults.yml@83c7a6172d629c6575b785ab12c8db787bb2e323"
+        },
+        "adapter": {
+          "id": "foundry-subscription-cli",
+          "version": "2",
+          "scaffoldVersion": "2.1.263"
+        },
+        "authoring": {
+          "image": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+          "network": "bridge",
+          "tools": [
+            "node",
+            "shell",
+            "claude"
+          ],
+          "credentials": "broker"
+        },
+        "gradingRoute": "professional-multifile/authority-process@1",
+        "context": {
+          "handling": "scaffold-default-unobserved",
+          "outputTokens": 128000
+        },
+        "limits": {
+          "wallMs": 10800000,
+          "outputBytes": 33554432,
+          "artifactBytes": 8388608,
+          "memoryMiB": 2048,
+          "cpus": 2,
+          "pids": 256
+        }
+      }
+    },
+    {
+      "id": "workflow-authority-repair",
+      "target": "claude",
+      "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "historicalTrial": 6,
+      "versionAttempt": 4,
+      "gradingRevision": "coverage-v2",
+      "analysisDocument": "reports/screening/fourth-five/20-workflow-authority-repair.md",
+      "profile": {
+        "schemaVersion": 1,
+        "target": "claude",
+        "requested": {
+          "provider": "anthropic",
+          "model": "anthropic/claude-opus-5",
+          "effort": "max",
+          "scaffold": "claude-code"
+        },
+        "provenance": {
+          "revision": "83c7a6172d629c6575b785ab12c8db787bb2e323",
+          "source": ".github/harbor-run-defaults.yml@83c7a6172d629c6575b785ab12c8db787bb2e323"
+        },
+        "adapter": {
+          "id": "foundry-subscription-cli",
+          "version": "2",
+          "scaffoldVersion": "2.1.263"
+        },
+        "authoring": {
+          "image": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+          "network": "bridge",
+          "tools": [
+            "node",
+            "shell",
+            "claude"
+          ],
+          "credentials": "broker"
+        },
+        "gradingRoute": "professional-multifile/authority-process@1",
+        "context": {
+          "handling": "scaffold-default-unobserved",
+          "outputTokens": 128000
+        },
+        "limits": {
+          "wallMs": 10800000,
+          "outputBytes": 33554432,
+          "artifactBytes": 8388608,
+          "memoryMiB": 2048,
+          "cpus": 2,
+          "pids": 256
+        }
+      }
+    },
+    {
+      "id": "delegated-budget-repair",
+      "target": "claude",
+      "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "historicalTrial": 6,
+      "versionAttempt": 4,
+      "gradingRevision": "coverage-v2",
+      "analysisDocument": "reports/screening/original-five/04-delegated-budget-repair.md",
+      "profile": {
+        "schemaVersion": 1,
+        "target": "claude",
+        "requested": {
+          "provider": "anthropic",
+          "model": "anthropic/claude-opus-5",
+          "effort": "max",
+          "scaffold": "claude-code"
+        },
+        "provenance": {
+          "revision": "83c7a6172d629c6575b785ab12c8db787bb2e323",
+          "source": ".github/harbor-run-defaults.yml@83c7a6172d629c6575b785ab12c8db787bb2e323"
+        },
+        "adapter": {
+          "id": "foundry-subscription-cli",
+          "version": "2",
+          "scaffoldVersion": "2.1.263"
+        },
+        "authoring": {
+          "image": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+          "network": "bridge",
+          "tools": [
+            "node",
+            "shell",
+            "claude"
+          ],
+          "credentials": "broker"
+        },
+        "gradingRoute": "professional-multifile/authority-process@1",
+        "context": {
+          "handling": "scaffold-default-unobserved",
+          "outputTokens": 128000
+        },
+        "limits": {
+          "wallMs": 10800000,
+          "outputBytes": 33554432,
+          "artifactBytes": 8388608,
+          "memoryMiB": 2048,
+          "cpus": 2,
+          "pids": 256
+        }
+      }
+    }
+  ],
+  "providerCallsMade": 0
+}

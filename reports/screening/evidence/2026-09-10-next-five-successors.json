@@ -1,0 +1,2623 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-10",
+  "purpose": "Implemented successor tasks for independent review; not model-trial or final submission qualification",
+  "report": "reports/screening/next-five-successor-implementation-2026-09-10.md",
+  "contractPlan": "docs/next-five-successor-contracts-2026-09-10.md",
+  "providerCallsMade": 0,
+  "modelTrialsLaunched": 0,
+  "commitsMade": 0,
+  "pushesMade": 0,
+  "externalMessagesSent": 0,
+  "finalistStandings": {
+    "unchanged": true,
+    "count": 5,
+    "ids": [
+      "incremental-build-repair",
+      "issued-report-repair",
+      "variant-cache-repair",
+      "snapshot-recovery-repair",
+      "temporal-capacity-repair"
+    ],
+    "successorAdditions": 0
+  },
+  "preservation": {
+    "baseline": {
+      "path": ".local/next-five-successors-2026-09-10/baseline.json",
+      "sha256": "2b62e1413386565afa3ad3449b68fa557846f665e5b3c69edebf56635d2a107b",
+      "bytes": 3552010
+    },
+    "maintainedStartingFiles": 171,
+    "startingMatches": 171,
+    "result": {
+      "path": ".local/next-five-successors-2026-09-10/preservation-result.json",
+      "sha256": "55a78bef530591abced28b703b777699c21e650c0644d02d21c60c7d767c95af",
+      "bytes": 810
+    },
+    "checkedFiles": 14002,
+    "changed": [],
+    "analysisPrefixes": [
+      {
+        "path": "reports/screening/third-five/14-route-policy-repair.md",
+        "originalBytes": 24719,
+        "preserved": true
+      },
+      {
+        "path": "reports/screening/original-five/03-browser-replay-repair.md",
+        "originalBytes": 14920,
+        "preserved": true
+      },
+      {
+        "path": "reports/screening/fourth-five/18-recurring-calendar-repair.md",
+        "originalBytes": 22161,
+        "preserved": true
+      },
+      {
+        "path": "reports/screening/fourth-five/20-workflow-authority-repair.md",
+        "originalBytes": 20624,
+        "preserved": true
+      },
+      {
+        "path": "reports/screening/original-five/04-delegated-budget-repair.md",
+        "originalBytes": 13642,
+        "preserved": true
+      }
+    ],
+    "pass": true
+  },
+  "tasks": [
+    {
+      "id": "route-policy-repair",
+      "version": "3.0.0",
+      "sourceFiles": [
+        {
+          "path": "tasks/route-policy-repair/private/alternative/entry.mjs",
+          "sha256": "ad4a03413f75c016f34bc7c0ea8d5b54409b22ab2861907bae73277d255e8f24"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/alternative/src/change.mjs",
+          "sha256": "c9017d4283c33469c490e7291bcb301dfa4436656dc6c3461789cbba22abc032"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/alternative/src/names.mjs",
+          "sha256": "345f8e7936d2975a9533b6af858d2290cd19e0b1e9f0f238bf6febba0a2f078b"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/alternative/src/plan.mjs",
+          "sha256": "7d58963dba0d5494e31f927869d88d758684cfafba402e6fa4c85c85ea3e5074"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/alternative/src/specialize.mjs",
+          "sha256": "8c37d2dfe52adaaa969c902f6f27ec9ce676a67d751451efe001f987b9f1f75d"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/alternative/src/target.mjs",
+          "sha256": "08c0730fe3d611ff91e74f75403204d4bd4ffeff397fb44d16b613c3d82334a6"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/checker-required.json",
+          "sha256": "201650dccec4b11c8d4f51dbe1ed0243b8056700e80da5526a1a5833cdd4c040"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/control-manifest.json",
+          "sha256": "a7ca6cf41bc012f11096c54bdd7f810cfc0e782a9afd7c65938d8deca6f6d8c1"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/all-egresses.mjs",
+          "sha256": "e9bc65e28a78eeea4852923c2c91029f992c80deffe241188264c31b68e8729d"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/drop-mutation-v3.mjs",
+          "sha256": "66fb7136e4e0cf787aa8da0b9512724ca9cc9a5ea2a2c1df36da59df786fa7f6"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/early-accept.mjs",
+          "sha256": "648fe2fe283b6496d46699fac38ad05b91fe5259a09d6e76b6740ec139505297"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/example-hardcoding.mjs",
+          "sha256": "872228436c6843a3e2f5edebc0b42403cee6f685ea2f93216026aace658b1552"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/falsy-preference.mjs",
+          "sha256": "77a254d28c74e6b94db7e3c67f944ec0e667863e11e0a18d8effff880e1f956c"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/forged-completion.mjs",
+          "sha256": "61e495f7f728ad9b12f673c4ea45184f0de6e62c0517cb21c8c5b9a2d7590dea"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/ignore-prefix-length.mjs",
+          "sha256": "6d06e8e4e98182e14cc46e8aa6516fbac879b900439414ae0d061fb584041c00"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/isolation.mjs",
+          "sha256": "5cb0fe8d8addd65dc72cbf04795ca088df98e5bb7b20a87c16b3c01463d9066b"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/leave-nested-calls.mjs",
+          "sha256": "9d78e4c5a71c464b816d94ceaa149eeab37d3f55acf9995233816980ddc7bbec"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/lost-return-v3.mjs",
+          "sha256": "5a89eab884af773e2213de7c9fb0f2d32ea6b031d1675f72bcfcb654adab8709"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/match-mutated-community.mjs",
+          "sha256": "39feb94aedd1d3e25b06563a3cd001b6efd3bbbb35e398b79e0435bc261f8bf5"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/mutated-scope-v3.mjs",
+          "sha256": "b99b6ada199072a345d2248702378675bf0df7a5f6269455295fe62eba49d3ef"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/no-work.mjs",
+          "sha256": "1fe7efc4c7640f4fceacc777b7a0ef5e39579b3633143b4a4127caa007aa56ae"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/original-preference-v3.mjs",
+          "sha256": "c22ba327f64175219c65fe80a8cb9f19c3707c60d453cccf7ceceb7b4786a1ef"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/domain.mjs",
+          "sha256": "faf1f7e4c8ec0cb01eef6ba1cf513a9eeeafcef33fad142d4870174d603edee2"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/equivalence.mjs",
+          "sha256": "f832296656592ad4de4a5791a016609bdf0b4ef5f53e7b9bef2bb8cabf19f97f"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/reference/checker-utils.mjs",
+          "sha256": "9eb8005fd21cc8df4a86c254f3c49805416b7b38d4fa28f3b92087e870dfb30b"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/reference/checker.mjs",
+          "sha256": "d284a1e53a2e8115c6d6f778495139b3baa6566d87025053f870d1b1ffb24e53"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/reference/entry.mjs",
+          "sha256": "d3e69f2104574f3bfd924aa9c64b315a48141a4e93362cf4d848324d59253e2a"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/reference/src/change.mjs",
+          "sha256": "c9017d4283c33469c490e7291bcb301dfa4436656dc6c3461789cbba22abc032"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/reference/src/equivalence.mjs",
+          "sha256": "f832296656592ad4de4a5791a016609bdf0b4ef5f53e7b9bef2bb8cabf19f97f"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/reference/src/names.mjs",
+          "sha256": "345f8e7936d2975a9533b6af858d2290cd19e0b1e9f0f238bf6febba0a2f078b"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/reference/src/plan.mjs",
+          "sha256": "7d58963dba0d5494e31f927869d88d758684cfafba402e6fa4c85c85ea3e5074"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/reference/src/specialize.mjs",
+          "sha256": "8c37d2dfe52adaaa969c902f6f27ec9ce676a67d751451efe001f987b9f1f75d"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/reference/src/target.mjs",
+          "sha256": "08c0730fe3d611ff91e74f75403204d4bd4ffeff397fb44d16b613c3d82334a6"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/scenarios.mjs",
+          "sha256": "ce5f48f637cf8f3de57a9e16dbdf4e824375c7c58d5729f8e429ca55268ae859"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/target.mjs",
+          "sha256": "08c0730fe3d611ff91e74f75403204d4bd4ffeff397fb44d16b613c3d82334a6"
+        },
+        {
+          "path": "tasks/route-policy-repair/public/api.d.ts",
+          "sha256": "61bcbdd1fdd9382f85340fa14755d20b02e03f38a7459544d2548447e0e96e26"
+        },
+        {
+          "path": "tasks/route-policy-repair/public/CHECKER-INPUT.md",
+          "sha256": "508190e3f8921d06b73f52be7770085450a9fb6eac030bbb9d9bbe8b730653e5"
+        },
+        {
+          "path": "tasks/route-policy-repair/public/entry.mjs",
+          "sha256": "65d1804c2d43ada53fbec3229f66083c212a66d18f8914fe1ea43e9d2a416876"
+        },
+        {
+          "path": "tasks/route-policy-repair/public/instruction.md",
+          "sha256": "3bc385cde816be4c2f1e8a85a5126a5c4171c1dce17b0481bb7acaf282dec521"
+        },
+        {
+          "path": "tasks/route-policy-repair/public/package.json",
+          "sha256": "24ea07a7a2496ab366b29eaf5e22b44a274a58f49ce6e4ba8e0e09fdc7ae00ff"
+        },
+        {
+          "path": "tasks/route-policy-repair/public/SEMANTICS.md",
+          "sha256": "2f18608fb5167ba81c77e71f9b25da7c7790f3845d4aeed29ccd7abb30a5c5ab"
+        },
+        {
+          "path": "tasks/route-policy-repair/public/target.mjs",
+          "sha256": "08c0730fe3d611ff91e74f75403204d4bd4ffeff397fb44d16b613c3d82334a6"
+        }
+      ],
+      "foundry": {
+        "directory": ".local/next-five-successors-2026-09-10/release-four/route-policy-repair/export",
+        "digest": "52fa87b20db4cbd8169f50ccba8cd29a3efd81e11e611e7718049c3ff6cde496",
+        "pointer": {
+          "path": ".local/next-five-successors-2026-09-10/release-four/route-policy-repair/export/package.json",
+          "sha256": "41a019cf462896bb60706f21fa0303a74f60e2340e9b65f0ac4f048ce61c42d7",
+          "bytes": 103
+        },
+        "assurance": {
+          "path": ".local/next-five-successors-2026-09-10/release-four/route-policy-repair/validation/assurance.json",
+          "sha256": "11c0c1c99e69aa17b3a363bd1bb66e3c8db431d2c96151397d193b7bff728a21",
+          "bytes": 77711
+        },
+        "checkerEvidence": {
+          "path": ".local/next-five-successors-2026-09-10/release-four/route-policy-repair/oracle-checker/grade-summary.json",
+          "sha256": "1caf0ff806ba3cc766f598faac2ce56923358edae633105cbe2503dbf5d1dbbe",
+          "bytes": 2179
+        },
+        "reproducibleBuild": true,
+        "recipientEvidence": {
+          "path": ".local/next-five-successors-2026-09-10/route-recipient/result.json",
+          "sha256": "364132e98f64720a31d84f62c581e630754cc3eea5083395ab4abd8fdffd913e",
+          "bytes": 571
+        },
+        "recipient": {
+          "packageId": "route-policy-repair",
+          "packageDigest": "52fa87b20db4cbd8169f50ccba8cd29a3efd81e11e611e7718049c3ff6cde496",
+          "operations": 11,
+          "scenarioCount": 33,
+          "browserTraces": 0,
+          "invalidExecutionExcluded": true,
+          "artifactDriftRejected": true,
+          "evidenceDriftRejected": true,
+          "sourceCheckoutRequired": false,
+          "providerCallsMade": 0
+        }
+      },
+      "native": {
+        "directory": ".local/next-five-successors-2026-09-10/harbor-final/route-policy-repair",
+        "digest": "d21ab13ce42a296f6786cc38760522d633f45bec706617999ecfcad42f4b1ca2",
+        "manifest": {
+          "path": ".local/next-five-successors-2026-09-10/harbor-final/route-policy-repair/export-manifest.json",
+          "sha256": "8a29586f64e96cace6588cd33b7556722936262aab530400676a27e47bed2e3b",
+          "bytes": 15122
+        },
+        "reproducibleBuild": true,
+        "oracle": {
+          "directory": ".local/next-five-successors-2026-09-10/jobs/five-successors-oracle/route-policy-repair__BTAdVuG",
+          "result": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-oracle/route-policy-repair__BTAdVuG/result.json",
+            "sha256": "c425ab15186b46c9124103e3864924bf583ba7d5b870b0d71a581bb547c750c9",
+            "bytes": 4189
+          },
+          "summary": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-oracle/route-policy-repair__BTAdVuG/verifier/summary.json",
+            "sha256": "131c03af8daddbaa74bbd18ef23010b4e2b26f210fbf151796b550c72b3b71fa",
+            "bytes": 860
+          },
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "reason": null,
+          "infrastructureError": false
+        },
+        "nop": {
+          "directory": ".local/next-five-successors-2026-09-10/jobs/five-successors-nop/route-policy-repair__DsSN3nr",
+          "result": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-nop/route-policy-repair__DsSN3nr/result.json",
+            "sha256": "2e2b836f2024710d9dbc5af45ded348db55e658100a2574e39aac082dcc2c7c3",
+            "bytes": 4177
+          },
+          "summary": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-nop/route-policy-repair__DsSN3nr/verifier/summary.json",
+            "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1",
+            "bytes": 460
+          },
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "reason": "Error: missing required deliverable\n    at file:///tests/harbor-grade.mjs:152:105\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:643:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)",
+          "infrastructureError": false
+        },
+        "integrity": [
+          {
+            "name": "missing-verdicts",
+            "passed": true,
+            "accepted": false,
+            "outputValid": false
+          },
+          {
+            "name": "always-accept",
+            "passed": true,
+            "accepted": false,
+            "outputValid": true
+          },
+          {
+            "name": "always-reject",
+            "passed": true,
+            "accepted": false,
+            "outputValid": true
+          },
+          {
+            "name": "mutated-input",
+            "passed": true,
+            "accepted": false,
+            "outputValid": false
+          },
+          {
+            "name": "private-read-and-reward-write-denied",
+            "passed": true,
+            "accepted": true,
+            "outputValid": true
+          },
+          {
+            "name": "forged-reward-and-output-symlink-rejected",
+            "passed": true
+          }
+        ]
+      },
+      "reference": {
+        "count": 33,
+        "passes": 33,
+        "semanticFailures": 0,
+        "infrastructureErrors": 0
+      },
+      "alternative": {
+        "count": 33,
+        "passes": 33,
+        "semanticFailures": 0,
+        "infrastructureErrors": 0
+      },
+      "starter": {
+        "count": 33,
+        "passes": 0,
+        "semanticFailures": 33,
+        "infrastructureErrors": 0
+      },
+      "checker": {
+        "correct": 8,
+        "total": 8,
+        "pass": true,
+        "reasonPolicy": "diagnostic-only"
+      },
+      "localControls": [
+        {
+          "candidate": "reference",
+          "scenarios": 33,
+          "semanticFailures": 0,
+          "maxApiPayloadBytes": 36296,
+          "maxScenarioCalls": 1,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "alternative",
+          "scenarios": 33,
+          "semanticFailures": 0,
+          "maxApiPayloadBytes": 36296,
+          "maxScenarioCalls": 2,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "starter",
+          "scenarios": 33,
+          "semanticFailures": 33,
+          "maxApiPayloadBytes": 1628,
+          "maxScenarioCalls": 0,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "original-preference",
+          "scenarios": 33,
+          "semanticFailures": 30,
+          "maxApiPayloadBytes": 36279,
+          "maxScenarioCalls": 1,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "mutated-scope",
+          "scenarios": 33,
+          "semanticFailures": 6,
+          "maxApiPayloadBytes": 36285,
+          "maxScenarioCalls": 1,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "lost-return",
+          "scenarios": 33,
+          "semanticFailures": 16,
+          "maxApiPayloadBytes": 8450,
+          "maxScenarioCalls": 1,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "drop-mutation",
+          "scenarios": 33,
+          "semanticFailures": 16,
+          "maxApiPayloadBytes": 45912,
+          "maxScenarioCalls": 1,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "no-work",
+          "scenarios": 33,
+          "semanticFailures": 33,
+          "maxApiPayloadBytes": 1628,
+          "maxScenarioCalls": 0,
+          "expectedOutcomeMatched": true
+        }
+      ]
+    },
+    {
+      "id": "browser-replay-repair",
+      "version": "3.0.0",
+      "sourceFiles": [
+        {
+          "path": "tasks/browser-replay-repair/private/alternative/entry.mjs",
+          "sha256": "caabce287dbca37b500ed3325520dbddd5945eec5383c5d3a1966f30369751ad"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/alternative/src/form.mjs",
+          "sha256": "54efb2d38a65c95c16fa1cfdbc418a74c63d692b048843d2c1486cda7cae0d1b"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/alternative/src/journal.mjs",
+          "sha256": "98009ada67a56abad85d037052d0fc048d529870a0a64792e2fb45c069032512"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/alternative/src/recording.mjs",
+          "sha256": "264646ddcb90c825a3999e8ed5ba031bffd3b36f6648aa326f0698fdb0106edd"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/alternative/src/replay.mjs",
+          "sha256": "f62f69c83255926bdeea5436ee44993a3fb447ba6e65b6b445200adcfebaf305"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/alternative/src/resolver.mjs",
+          "sha256": "ed88af86f40a46339af9697574b7dc128eb8971a0ea348bb0fa27ef79fd16560"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/application/driver.mjs",
+          "sha256": "eb8a8778fa28bb5cd0b705e15fda2a24999dbbf9998d826cd84c98afe019dc84"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/application/page.mjs",
+          "sha256": "18a9d34174b1be81a7ad0aff0f12a5e9cf9fad141b437e904c5d45b0c905b1df"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/application/server.mjs",
+          "sha256": "70fe47bb30c0ae9fc5a406f741a65b8a5e31d8b720c5d15d087dbc034031091f"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/checker-required.json",
+          "sha256": "201650dccec4b11c8d4f51dbe1ed0243b8056700e80da5526a1a5833cdd4c040"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/control-manifest.json",
+          "sha256": "0a378895b3723698fee24c88600fb5091a15e3f243174fd32dcce8a49a7c4508"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/claim-only.mjs",
+          "sha256": "faa70bae36b36026fa32f2bfe41efce1575bda502ba7d85b932605772a52084d"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/competing-dialog-v3.mjs",
+          "sha256": "bd664c18472ca6806d9075a3a0c2f541365de26c810c47d0f862c52af496f4a9"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/early-report.mjs",
+          "sha256": "ba8b60e32260da3dca3695e7a2cf971cf7b293fe52d085ead6351b0519811f5b"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/first-candidate.mjs",
+          "sha256": "56f6b7e745cd599f6f64d2bc4420aa4287b1a7dcefcf5d657f66f0ff6bd8a704"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/incomplete-work.mjs",
+          "sha256": "e58904feda04883da5709541eaa0f3c61d284b5038e97c6ff456d6fb0e045154"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/isolation.mjs",
+          "sha256": "3bbdf08d1c17d390dba49d9773f75870a1355fa3b9a2cb1d18b98bfb675d6d1b"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/no-confirmation.mjs",
+          "sha256": "24c3e75aca648c0f78b6c2cd71af9c722c88e9f263e26ff0f6dc4a30391c818e"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/pending-complete-v3.mjs",
+          "sha256": "7219726505980b8f34e3124f9d58bce365181eaad67f2c9d3aedfdcb6fb232bc"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/pre-fill-read.mjs",
+          "sha256": "2d010487ed2c1bc3f38935c0f97d972a5530355f59ac08fa74b9b29092695555"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/repeated-delivery.mjs",
+          "sha256": "3bf91d2ac6cff53dc2972ababb1a0bfee8146d5f0c333fb27a1bb3eebcc3a503"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/skip-later-steps-v3.mjs",
+          "sha256": "a9d327a27f49c8f919f5966e1ebf8a4dbde7eba0fd71689f97b17c2a1c80f4f7"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/tuple-identity-v3.mjs",
+          "sha256": "e174d223118df064e88822d659b8dfbcc11726a88d8dda23488560a810086716"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/whole-trace-memoization.mjs",
+          "sha256": "ddf9f07c552aa72f3e66d08fa85959002f52b7d23544a026814b42f13fd390a8"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/domain.mjs",
+          "sha256": "8157fb3b3510ab8166b86e62d5bccc28efda3fb931ec27511a5851c5bbbf2093"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/page.mjs",
+          "sha256": "24385a35a2da13bb01cd6f015e041fc0ce5a0ea050f1142eb1b9fa8ce938f63b"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/reference/checker-utils.mjs",
+          "sha256": "9eb8005fd21cc8df4a86c254f3c49805416b7b38d4fa28f3b92087e870dfb30b"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/reference/checker.mjs",
+          "sha256": "d9655c5c2e2d3b4b2a65608cc5ed285f6321385f46a7902d33e7b8256f7d1e48"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/reference/entry.mjs",
+          "sha256": "3e6200a183d27424ae6e494bf1e597646c7244d578aa02ac2bc66c3ee8b6cfd2"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/reference/src/form.mjs",
+          "sha256": "ef809b68c9d6222e563173cab1876f46f27080312e9e029ebbb0ae3a483b2b17"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/reference/src/journal.mjs",
+          "sha256": "98009ada67a56abad85d037052d0fc048d529870a0a64792e2fb45c069032512"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/reference/src/recording.mjs",
+          "sha256": "264646ddcb90c825a3999e8ed5ba031bffd3b36f6648aa326f0698fdb0106edd"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/reference/src/replay.mjs",
+          "sha256": "f62f69c83255926bdeea5436ee44993a3fb447ba6e65b6b445200adcfebaf305"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/reference/src/resolver.mjs",
+          "sha256": "23a8f5c27d32ca0af7719c24b45fdf404b42d4b00be972772ce6eb861bdd3cad"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/restart.mjs",
+          "sha256": "c87842964b7fb3d9eb17645c40bf370f6d1138d72f808f8dadfef41960141a72"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/scenarios.mjs",
+          "sha256": "bfeac53045d0657e4ad0925eb21103f093cd8a58717d6da6b9414e1b579b362e"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/app/driver.mjs",
+          "sha256": "eb8a8778fa28bb5cd0b705e15fda2a24999dbbf9998d826cd84c98afe019dc84"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/app/page.mjs",
+          "sha256": "18a9d34174b1be81a7ad0aff0f12a5e9cf9fad141b437e904c5d45b0c905b1df"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/app/server.mjs",
+          "sha256": "70fe47bb30c0ae9fc5a406f741a65b8a5e31d8b720c5d15d087dbc034031091f"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/CHECKER-INPUT.md",
+          "sha256": "16335f5ac73eed2a4347f17225ed2fcb9e71417ca7718b9a3118a831020faa7c"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/dev.mjs",
+          "sha256": "bb005abe0329ac6bcacd79b4e86b39c6a010396a09f9bcf1151e80c4fdff365f"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/entry.mjs",
+          "sha256": "65d1804c2d43ada53fbec3229f66083c212a66d18f8914fe1ea43e9d2a416876"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/fixture.json",
+          "sha256": "149698662b2cf5c974049380a897c0dbc896e1e9c63c23c206224ce2ac3f32ca"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/instruction.md",
+          "sha256": "30fdca9e81fd226a93ec7ff3ea11d451a02789ff3625f92cbf1288e734d5e918"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/package.json",
+          "sha256": "ebd12b9e36ed111944143d3a0d2d4c9eed933b544555023d7f9be9fe1913505c"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/replay.mjs",
+          "sha256": "2b6a7176e2e647d3766eb3527d2d03869db74a32063039d63e23f76f98443a2d"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/SEMANTICS.md",
+          "sha256": "a94f1d2fa0e79a6aede416e4b3b001ec198fa6638ef1448bbe8b4eae958c64c4"
+        }
+      ],
+      "foundry": {
+        "directory": ".local/next-five-successors-2026-09-10/release-browser/browser-replay-repair/export",
+        "digest": "db0f4449af8ea94e00339a4957925ef563dd6735b887a5931dd7cb9cca977ac6",
+        "pointer": {
+          "path": ".local/next-five-successors-2026-09-10/release-browser/browser-replay-repair/export/package.json",
+          "sha256": "783b14c11d08b22d09b29e77c9f2803fff796e215cbafa1053d21fe35bc055e3",
+          "bytes": 103
+        },
+        "assurance": {
+          "path": ".local/next-five-successors-2026-09-10/release-browser/browser-replay-repair/validation/assurance.json",
+          "sha256": "915ef8d5c21713a7cb984ea7a2d19dfc5c194eddf1bd259f843bd9b2e0451260",
+          "bytes": 95614
+        },
+        "checkerEvidence": {
+          "path": ".local/next-five-successors-2026-09-10/release-browser/browser-replay-repair/oracle-checker/grade-summary.json",
+          "sha256": "f3e37ba265a5161623fc45224bf530e2c8ca03f6a7e1a0a2a9853951050cc5dc",
+          "bytes": 1945
+        },
+        "reproducibleBuild": true,
+        "recipientEvidence": {
+          "path": ".local/next-five-successors-2026-09-10/release-browser/recipient/result.json",
+          "sha256": "e251252fd9d437f6608a3f2894cde60918af8b4497c9d01e42e2d5d6e7d66426",
+          "bytes": 574
+        },
+        "recipient": {
+          "packageId": "browser-replay-repair",
+          "packageDigest": "db0f4449af8ea94e00339a4957925ef563dd6735b887a5931dd7cb9cca977ac6",
+          "operations": 11,
+          "scenarioCount": 18,
+          "browserTraces": 18,
+          "invalidExecutionExcluded": true,
+          "artifactDriftRejected": true,
+          "evidenceDriftRejected": true,
+          "sourceCheckoutRequired": false,
+          "providerCallsMade": 0
+        }
+      },
+      "native": {
+        "directory": ".local/next-five-successors-2026-09-10/harbor-final/browser-replay-repair",
+        "digest": "22c19f0403a1aa2b53bd6b92e3489b910887e3d85da1f5f5db8d4fc5215874c1",
+        "manifest": {
+          "path": ".local/next-five-successors-2026-09-10/harbor-final/browser-replay-repair/export-manifest.json",
+          "sha256": "0c7735acb83976fcd5bdd0cffb642bd3befa73033f2558435b83081803ac0ab6",
+          "bytes": 16500
+        },
+        "reproducibleBuild": true,
+        "oracle": {
+          "directory": ".local/next-five-successors-2026-09-10/jobs/five-successors-oracle/browser-replay-repair__GMuu3dY",
+          "result": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-oracle/browser-replay-repair__GMuu3dY/result.json",
+            "sha256": "b40f8fe82de61a28ad16632b2950f073fbbf89215ac1d0b990eaef5b9873fe3c",
+            "bytes": 4201
+          },
+          "summary": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-oracle/browser-replay-repair__GMuu3dY/verifier/summary.json",
+            "sha256": "66871a7ff42a1416bf03ed7e372d7c08cf2f889d2e32ca2f0b976d41bcd89b87",
+            "bytes": 866
+          },
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "reason": null,
+          "infrastructureError": false
+        },
+        "nop": {
+          "directory": ".local/next-five-successors-2026-09-10/jobs/five-successors-nop/browser-replay-repair__2ohYqRe",
+          "result": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-nop/browser-replay-repair__2ohYqRe/result.json",
+            "sha256": "3af7b3a585232f0277898f4b630d187f86c2b6b5a1d792d938561c153dedb8d3",
+            "bytes": 4189
+          },
+          "summary": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-nop/browser-replay-repair__2ohYqRe/verifier/summary.json",
+            "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1",
+            "bytes": 460
+          },
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "reason": "Error: missing required deliverable\n    at file:///tests/harbor-grade.mjs:152:105\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:643:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)",
+          "infrastructureError": false
+        },
+        "integrity": [
+          {
+            "name": "missing-verdicts",
+            "passed": true,
+            "accepted": false,
+            "outputValid": false
+          },
+          {
+            "name": "always-accept",
+            "passed": true,
+            "accepted": false,
+            "outputValid": true
+          },
+          {
+            "name": "always-reject",
+            "passed": true,
+            "accepted": false,
+            "outputValid": true
+          },
+          {
+            "name": "mutated-input",
+            "passed": true,
+            "accepted": false,
+            "outputValid": false
+          },
+          {
+            "name": "private-read-and-reward-write-denied",
+            "passed": true,
+            "accepted": true,
+            "outputValid": true
+          },
+          {
+            "name": "forged-reward-and-output-symlink-rejected",
+            "passed": true
+          }
+        ]
+      },
+      "reference": {
+        "count": 18,
+        "passes": 18,
+        "semanticFailures": 0,
+        "infrastructureErrors": 0
+      },
+      "alternative": {
+        "count": 18,
+        "passes": 18,
+        "semanticFailures": 0,
+        "infrastructureErrors": 0
+      },
+      "starter": {
+        "count": 18,
+        "passes": 0,
+        "semanticFailures": 18,
+        "infrastructureErrors": 0
+      },
+      "checker": {
+        "correct": 8,
+        "total": 8,
+        "pass": true,
+        "reasonPolicy": "diagnostic-only"
+      },
+      "localControls": [
+        {
+          "candidate": "reference",
+          "scenarios": 18,
+          "semanticFailures": 0,
+          "maxApiPayloadBytes": 924,
+          "maxScenarioCalls": 113,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "alternative",
+          "scenarios": 18,
+          "semanticFailures": 0,
+          "maxApiPayloadBytes": 926,
+          "maxScenarioCalls": 114,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "starter",
+          "scenarios": 18,
+          "semanticFailures": 18,
+          "maxApiPayloadBytes": 922,
+          "maxScenarioCalls": 0,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "tuple-identity",
+          "scenarios": 18,
+          "semanticFailures": 17,
+          "maxApiPayloadBytes": 929,
+          "maxScenarioCalls": 95,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "pending-complete",
+          "scenarios": 18,
+          "semanticFailures": 18,
+          "maxApiPayloadBytes": 931,
+          "maxScenarioCalls": 97,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "competing-dialog",
+          "scenarios": 18,
+          "semanticFailures": 14,
+          "maxApiPayloadBytes": 931,
+          "maxScenarioCalls": 106,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "skip-later-steps",
+          "scenarios": 18,
+          "semanticFailures": 17,
+          "maxApiPayloadBytes": 931,
+          "maxScenarioCalls": 45,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "no-work",
+          "scenarios": 18,
+          "semanticFailures": 18,
+          "maxApiPayloadBytes": 922,
+          "maxScenarioCalls": 0,
+          "expectedOutcomeMatched": true
+        }
+      ]
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "version": "3.0.0",
+      "sourceFiles": [
+        {
+          "path": "tasks/recurring-calendar-repair/private/alternative/entry.mjs",
+          "sha256": "c3f0a990141546de7c223172106a902742736a1c8ab57dafe87c79f654624389"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/alternative/src/changes.mjs",
+          "sha256": "9642b689e4aaecc8ed4f9603f584456e49e9c769292b6b1df12ae3bad4cb89ac"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/alternative/src/expand.mjs",
+          "sha256": "6c3d4db183d0d28f6678545ebf617e81a7bf03d151fc11a2d06a20d6282e77de"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/alternative/src/publication.mjs",
+          "sha256": "b0244208a95ee7523b0b7563c411f31371ec8b429a4796a58c0676fcc854ce57"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/alternative/src/service.mjs",
+          "sha256": "315603d548b9978ba0ab3c947e864c3b48e8af095a0d56208d30cb96d70f7a49"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/alternative/src/sync.mjs",
+          "sha256": "78dd3a72a0265d01413b658987dd28a77fa55860ac19f2662cdbeea019a46a29"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/alternative/src/time.mjs",
+          "sha256": "7b291e46627ce103b85cfd0db44b23bf7e711b4bc7c5a821b2f016b6b4e6ed0f"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/checker-required.json",
+          "sha256": "201650dccec4b11c8d4f51dbe1ed0243b8056700e80da5526a1a5833cdd4c040"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/control-manifest.json",
+          "sha256": "076db106a63d32a37959b299f549583bb4d44908a62a2cb311b4e93667c26660"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/append-bookings-v3.mjs",
+          "sha256": "a5c9d604fa09a9b83c3d835b3e3b459fa5d9221096cb3cd1e9b7a1302463578f"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/arrival-order-v3.mjs",
+          "sha256": "898a8d3b071e61319ecd00035df03ef4cbcd5f196a5969903edce0f50bb23c12"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/booking-display-key.mjs",
+          "sha256": "ea903b5bca0d42eb38f383d09ad4fd793b6da95128d49710711eafb3a6da4dd4"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/display-time-identity.mjs",
+          "sha256": "9642b689e4aaecc8ed4f9603f584456e49e9c769292b6b1df12ae3bad4cb89ac"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/display-window-v3.mjs",
+          "sha256": "d42746aecb014d834c088fc23cdb51b39b896714a7295e024425b8b573b0c7ca"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/drop-external-bookings.mjs",
+          "sha256": "9ee1194859845394ff7285f2ee00a20bde1ab246bb5ba600ce33f4ac987924ab"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/drop-foreign-v3.mjs",
+          "sha256": "b6fd917251d48cc4f1c46058000d6778a86fc02ed759a4b4473e0a38eda754bf"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/erase-cancelled-history.mjs",
+          "sha256": "9a93859498e04af7dc17de55c19e871809fde5124a9f61d3491f24cd833193ea"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/fixed-zone-offset.mjs",
+          "sha256": "7b291e46627ce103b85cfd0db44b23bf7e711b4bc7c5a821b2f016b6b4e6ed0f"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/forged-completion.mjs",
+          "sha256": "9b6ca5fe17341cefd04a0f860e844e06aed65cab70070ef8ed5673326ace6366"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/global-series-change.mjs",
+          "sha256": "01543d5434d88b44081b5314be3dc39df8a5c088608133542f6a9557d81fb250"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/isolation.mjs",
+          "sha256": "5cb0fe8d8addd65dc72cbf04795ca088df98e5bb7b20a87c16b3c01463d9066b"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/no-work.mjs",
+          "sha256": "1a13543eb23501e77da041735b1ec2d65398a46ac89b54f7d20b9d337ab31336"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/reset-attendee-responses.mjs",
+          "sha256": "cd451ccec34bdd7dda9a8f2593dd2755777a82954f36360426dd6b9085f9a640"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/wall-clock-duration.mjs",
+          "sha256": "c53743f9e15fd6ad54387df43148e2528cfa242bf7651a2973c98949a07d34e2"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/domain.mjs",
+          "sha256": "9542b06fb6ddf5a5a469ba37e57c225822abb24247608becf2ca98263af0ba2b"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/reference/checker-utils.mjs",
+          "sha256": "9eb8005fd21cc8df4a86c254f3c49805416b7b38d4fa28f3b92087e870dfb30b"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/reference/checker.mjs",
+          "sha256": "4c98eeffacb465028c04fee437a483c6c1c05ed04217089771ea869c07fe1a5c"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/reference/entry.mjs",
+          "sha256": "6a3aebc000d1aa658f7a3bcad31c771ad83e2e8ae7244bb000e70b004faed371"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/reference/src/changes.mjs",
+          "sha256": "1aa61f6e5fb04ff0dfef8d027231c2f06052fd81bb22332067e07dc2bbe34d01"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/reference/src/expand.mjs",
+          "sha256": "6c3d4db183d0d28f6678545ebf617e81a7bf03d151fc11a2d06a20d6282e77de"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/reference/src/publication.mjs",
+          "sha256": "b0244208a95ee7523b0b7563c411f31371ec8b429a4796a58c0676fcc854ce57"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/reference/src/service.mjs",
+          "sha256": "56ecc796cb50d87001468fb967499daf25f3e20fe6f9dc97715efd0edad935d6"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/reference/src/sync.mjs",
+          "sha256": "78dd3a72a0265d01413b658987dd28a77fa55860ac19f2662cdbeea019a46a29"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/reference/src/time.mjs",
+          "sha256": "979c20fb00810bcb60948c78445a43c8aa0bbab262d81a8e01eb0408c469747b"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/restart.mjs",
+          "sha256": "c87842964b7fb3d9eb17645c40bf370f6d1138d72f808f8dadfef41960141a72"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/scenarios.mjs",
+          "sha256": "19cf61bc3f8dfd64b97297eaf4c1b12dbe0a07a8763e7574485772c1d1c0a243"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/public/api.d.ts",
+          "sha256": "8e72f6b8fa0fedbfd586a6c3bbe2dfedb173156f982f032dbab3fee05de52e26"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/public/CHECKER-INPUT.md",
+          "sha256": "c9ffbbc78d6e58c200df5988e2868ef57d014c565b1de382a5a00a677a8e02a9"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/public/entry.mjs",
+          "sha256": "65d1804c2d43ada53fbec3229f66083c212a66d18f8914fe1ea43e9d2a416876"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/public/instruction.md",
+          "sha256": "4047d78ac001af779d6e07d23bd4a193a3ec03885d31f7d08d1e9209ffc9230d"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/public/package.json",
+          "sha256": "24ea07a7a2496ab366b29eaf5e22b44a274a58f49ce6e4ba8e0e09fdc7ae00ff"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/public/SEMANTICS.md",
+          "sha256": "d4ede68331f5f0b78e161076b254159c77adc9f07f6d95b653be516a05dc058c"
+        }
+      ],
+      "foundry": {
+        "directory": ".local/next-five-successors-2026-09-10/release-rest/recurring-calendar-repair/export",
+        "digest": "d3260d6bd73005542e01cd33f61cef690750590112f1441f792ab9d6e1c8bb6c",
+        "pointer": {
+          "path": ".local/next-five-successors-2026-09-10/release-rest/recurring-calendar-repair/export/package.json",
+          "sha256": "35d37077a9ea7c3a9ec65cbe39c71a68f64c86fdc898b9716e1b68e0446c73f1",
+          "bytes": 103
+        },
+        "assurance": {
+          "path": ".local/next-five-successors-2026-09-10/release-rest/recurring-calendar-repair/validation/assurance.json",
+          "sha256": "b31a77f2b1d241bd62ec094fb61076749cbbc6fc33c5f98452c9bf901ce89896",
+          "bytes": 100733
+        },
+        "checkerEvidence": {
+          "path": ".local/next-five-successors-2026-09-10/release-rest/recurring-calendar-repair/oracle-checker/grade-summary.json",
+          "sha256": "567f4d82aadb365621a85297c3303df7ccb5b39390bcfe5d67f00cc96385a853",
+          "bytes": 2820
+        },
+        "reproducibleBuild": true,
+        "recipientEvidence": {
+          "path": ".local/next-five-successors-2026-09-10/release-rest/recipient/result.json",
+          "sha256": "34c43662f7b17399d50b645e25ed152f765692009063e43508fa8f223891d22b",
+          "bytes": 1397
+        },
+        "recipient": {
+          "packageId": "recurring-calendar-repair",
+          "packageDigest": "d3260d6bd73005542e01cd33f61cef690750590112f1441f792ab9d6e1c8bb6c",
+          "operations": 14,
+          "scenarioCount": 35,
+          "browserTraces": 0,
+          "invalidExecutionExcluded": true,
+          "artifactDriftRejected": true,
+          "evidenceDriftRejected": true,
+          "sourceCheckoutRequired": false,
+          "providerCallsMade": 0
+        }
+      },
+      "native": {
+        "directory": ".local/next-five-successors-2026-09-10/harbor-final/recurring-calendar-repair",
+        "digest": "4c486ab9a2b4aca505066ebfe77d85b767c5a9e4f9f8ec4867cf0f9ada676023",
+        "manifest": {
+          "path": ".local/next-five-successors-2026-09-10/harbor-final/recurring-calendar-repair/export-manifest.json",
+          "sha256": "8b52f9d42c85233ed5e7fa991f8ea818cd897a2d3efb51153c51e1b6808c1e30",
+          "bytes": 15225
+        },
+        "reproducibleBuild": true,
+        "oracle": {
+          "directory": ".local/next-five-successors-2026-09-10/jobs/five-successors-oracle/recurring-calendar-repair__d8o7aKP",
+          "result": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-oracle/recurring-calendar-repair__d8o7aKP/result.json",
+            "sha256": "59e8b6704fac74a4612e7da8fb32ed61278e4240e8c9ecc3c07ec6c35a8b72fe",
+            "bytes": 4225
+          },
+          "summary": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-oracle/recurring-calendar-repair__d8o7aKP/verifier/summary.json",
+            "sha256": "49dc94bed6f031afce90530c6f169d6cef6ca92fbd55e669336497e22f896502",
+            "bytes": 1140
+          },
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "reason": null,
+          "infrastructureError": false
+        },
+        "nop": {
+          "directory": ".local/next-five-successors-2026-09-10/jobs/five-successors-nop/recurring-calendar-repair__jp5cEmS",
+          "result": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-nop/recurring-calendar-repair__jp5cEmS/result.json",
+            "sha256": "5748553994745a2606e98b7d253374c67269d87cb8e6063571e4b6594859f402",
+            "bytes": 4213
+          },
+          "summary": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-nop/recurring-calendar-repair__jp5cEmS/verifier/summary.json",
+            "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1",
+            "bytes": 460
+          },
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "reason": "Error: missing required deliverable\n    at file:///tests/harbor-grade.mjs:152:105\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:643:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)",
+          "infrastructureError": false
+        },
+        "integrity": [
+          {
+            "name": "missing-verdicts",
+            "passed": true,
+            "accepted": false,
+            "outputValid": false
+          },
+          {
+            "name": "always-accept",
+            "passed": true,
+            "accepted": false,
+            "outputValid": true
+          },
+          {
+            "name": "always-reject",
+            "passed": true,
+            "accepted": false,
+            "outputValid": true
+          },
+          {
+            "name": "mutated-input",
+            "passed": true,
+            "accepted": false,
+            "outputValid": false
+          },
+          {
+            "name": "private-read-and-reward-write-denied",
+            "passed": true,
+            "accepted": true,
+            "outputValid": true
+          },
+          {
+            "name": "forged-reward-and-output-symlink-rejected",
+            "passed": true
+          }
+        ]
+      },
+      "reference": {
+        "count": 35,
+        "passes": 35,
+        "semanticFailures": 0,
+        "infrastructureErrors": 0
+      },
+      "alternative": {
+        "count": 35,
+        "passes": 35,
+        "semanticFailures": 0,
+        "infrastructureErrors": 0
+      },
+      "starter": {
+        "count": 35,
+        "passes": 0,
+        "semanticFailures": 35,
+        "infrastructureErrors": 0
+      },
+      "checker": {
+        "correct": 11,
+        "total": 11,
+        "pass": true,
+        "reasonPolicy": "diagnostic-only"
+      },
+      "localControls": [
+        {
+          "candidate": "reference",
+          "scenarios": 35,
+          "semanticFailures": 0,
+          "maxApiPayloadBytes": 11385,
+          "maxScenarioCalls": 19,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "alternative",
+          "scenarios": 35,
+          "semanticFailures": 0,
+          "maxApiPayloadBytes": 11385,
+          "maxScenarioCalls": 24,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "starter",
+          "scenarios": 35,
+          "semanticFailures": 35,
+          "maxApiPayloadBytes": 5186,
+          "maxScenarioCalls": 0,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "fixed-zone-offset",
+          "scenarios": 35,
+          "semanticFailures": 29,
+          "maxApiPayloadBytes": 11609,
+          "maxScenarioCalls": 19,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "display-time-identity",
+          "scenarios": 35,
+          "semanticFailures": 33,
+          "maxApiPayloadBytes": 11391,
+          "maxScenarioCalls": 19,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "no-work",
+          "scenarios": 35,
+          "semanticFailures": 35,
+          "maxApiPayloadBytes": 5186,
+          "maxScenarioCalls": 0,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "forged-completion",
+          "scenarios": 35,
+          "semanticFailures": 35,
+          "maxApiPayloadBytes": 5196,
+          "maxScenarioCalls": 0,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "arrival-order",
+          "scenarios": 35,
+          "semanticFailures": 33,
+          "maxApiPayloadBytes": 11385,
+          "maxScenarioCalls": 21,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "append-bookings",
+          "scenarios": 35,
+          "semanticFailures": 27,
+          "maxApiPayloadBytes": 11385,
+          "maxScenarioCalls": 19,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "drop-foreign",
+          "scenarios": 35,
+          "semanticFailures": 34,
+          "maxApiPayloadBytes": 11262,
+          "maxScenarioCalls": 19,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "display-window",
+          "scenarios": 35,
+          "semanticFailures": 33,
+          "maxApiPayloadBytes": 11385,
+          "maxScenarioCalls": 19,
+          "expectedOutcomeMatched": true
+        }
+      ]
+    },
+    {
+      "id": "workflow-authority-repair",
+      "version": "3.0.0",
+      "sourceFiles": [
+        {
+          "path": "tasks/workflow-authority-repair/private/alternative/entry.mjs",
+          "sha256": "611500615eb265ba5a7d34f7b41cb0d0cdb3131c2af772711720c6a3b4d22540"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/alternative/src/admission.mjs",
+          "sha256": "683f2a8f4a3fe37070b3142d34dc79d430ff71fe6a85ab01ebae5104d1072da8"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/alternative/src/context.mjs",
+          "sha256": "2f1acf1594f3571808d3b39d22c74cf9450e639d98344fc7afff8e2f63613438"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/alternative/src/dispatcher.mjs",
+          "sha256": "e761f60aa9ddfef5cf06aedae5b9e0dc22735c4b07c659d7444d47584304b6be"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/alternative/src/grants.mjs",
+          "sha256": "f447c09ca3e552bee4f502bbb4567da2281975c6d8c192ff57a17ad12a338317"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/alternative/src/service.mjs",
+          "sha256": "e20d016af3c98d92a86b661b3c106a42adfd0e56e1c6bab9f114aa4e3cf482f9"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/checker-required.json",
+          "sha256": "201650dccec4b11c8d4f51dbe1ed0243b8056700e80da5526a1a5833cdd4c040"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/control-manifest.json",
+          "sha256": "aa20b85c3a2ac57ef31f5d4ac3c32ef0b91d4ba9c1616a5a44234e355347b018"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/abandon-stale-admission.mjs",
+          "sha256": "72a2028d64363f0418008946b2adc93e16df0ec86f845c156ab106869f9557e2"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/admission-only.mjs",
+          "sha256": "7d9051c40487f7524eaa292a9ed03fa9a4417ae1e087be1b8443123dfa40ad4b"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/crash-unsafe-memoization.mjs",
+          "sha256": "04afd94006a4baae39f3d38c126acfa62035aeaf69429e1c278b0fd9321f3ac3"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/deny-all.mjs",
+          "sha256": "2b903da310bf126d073da001af17abe78d8d0bbb2b097f2c4ea9627678cd7229"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/deny-v3.mjs",
+          "sha256": "36f1b9ec0228da0142dbd8a164cf70e160e4cef5deaaf4e4fea9a0a2e491f7ac"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/forged-completion.mjs",
+          "sha256": "9b6ca5fe17341cefd04a0f860e844e06aed65cab70070ef8ed5673326ace6366"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/ignore-action-attenuation.mjs",
+          "sha256": "102921fbb62205cc7f3411d04ec1ea1fbc1fa99ccb8c6210f9b56a421087f0dd"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/immediate-parent-origin.mjs",
+          "sha256": "f8be4ab1db84ac7775b39ae1afefa86617718e39b3cf160a3793b13856b583d5"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/isolation.mjs",
+          "sha256": "5cb0fe8d8addd65dc72cbf04795ca088df98e5bb7b20a87c16b3c01463d9066b"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/misattribute-delivery.mjs",
+          "sha256": "8986937b64cd308203f9c06738e8e33a3162e0e0d2ba5386ece6e7525d268f59"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/no-work.mjs",
+          "sha256": "1a13543eb23501e77da041735b1ec2d65398a46ac89b54f7d20b9d337ab31336"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/path-v3.mjs",
+          "sha256": "cf841d4caf1ab7d05978bede024fc557e155669823d0e50845ee8d6e4a044a47"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/payload-v3.mjs",
+          "sha256": "75b3d3d4a032402f69bd8db74573ef90f2dfe8f0e88bf5240df550090628bf8e"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/pending-complete.mjs",
+          "sha256": "4c030bbf85b78c400210d425207ca46681612e1f7f063c9cb578e7ae95aba971"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/reactivate-revoked-path.mjs",
+          "sha256": "4f9487d8ae323a2b64d95b6dc350531f4fa5fcdf932a5edfa1860529b5142752"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/redecide-terminal-job.mjs",
+          "sha256": "e761f60aa9ddfef5cf06aedae5b9e0dc22735c4b07c659d7444d47584304b6be"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/wrong-effect-payload.mjs",
+          "sha256": "7e52fde944aa43278692f2c19c5d1cde35e00db5ce1f9bc773f8d3c8741655fe"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/wrong-origin-v3.mjs",
+          "sha256": "44624d0154e7afd89392e9b43d49b64bfea3e3e3ff9cf2544875417fff6c919f"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/domain.mjs",
+          "sha256": "b5e1b86f49ef7c38a6c2a53addc73e69567cb8610d2bfa99af87726d3f3cf1ed"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/reference/checker-utils.mjs",
+          "sha256": "9eb8005fd21cc8df4a86c254f3c49805416b7b38d4fa28f3b92087e870dfb30b"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/reference/checker.mjs",
+          "sha256": "da91a84d9589605357c77ed32ee465718b7e335f765305604759d002d664a669"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/reference/entry.mjs",
+          "sha256": "6a3aebc000d1aa658f7a3bcad31c771ad83e2e8ae7244bb000e70b004faed371"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/reference/src/admission.mjs",
+          "sha256": "683f2a8f4a3fe37070b3142d34dc79d430ff71fe6a85ab01ebae5104d1072da8"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/reference/src/context.mjs",
+          "sha256": "6136c7388a24e1ffc5e2c0221ad35e3846f4d35fee40e0ea14655ff808551589"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/reference/src/dispatcher.mjs",
+          "sha256": "603ac9391dd06bb3ed7ec09b72bebeea0b5a08df77d9e6d4c4b517d216e92d6b"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/reference/src/grants.mjs",
+          "sha256": "f447c09ca3e552bee4f502bbb4567da2281975c6d8c192ff57a17ad12a338317"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/reference/src/service.mjs",
+          "sha256": "e20d016af3c98d92a86b661b3c106a42adfd0e56e1c6bab9f114aa4e3cf482f9"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/restart.mjs",
+          "sha256": "dcd5b1ac17ae4a79e7ad86f202a48502626c6bb9a24f647468f03f886e89898d"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/scenarios.mjs",
+          "sha256": "f2f5cb4bc7cd69e54dc9fc767972679e22d1d14f0a3cc274e3ee1112a2b2d4e7"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/public/api.d.ts",
+          "sha256": "131d6b42e0cc3b4b0628db8533535e8266fa7b59cfff2449714367150f365cbe"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/public/CHECKER-INPUT.md",
+          "sha256": "61088e7d680b9d3ec7a305b99edfb57ffbdbac15416b1f02e430516f6140d980"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/public/entry.mjs",
+          "sha256": "65d1804c2d43ada53fbec3229f66083c212a66d18f8914fe1ea43e9d2a416876"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/public/instruction.md",
+          "sha256": "f43148f22aac9518f914daf95c951d388462ba32c5e50c35fc599c2913ca0dba"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/public/package.json",
+          "sha256": "24ea07a7a2496ab366b29eaf5e22b44a274a58f49ce6e4ba8e0e09fdc7ae00ff"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/public/SEMANTICS.md",
+          "sha256": "1629deccac6b64d1137ac1dcbde496ae49a29e9eb3d62c358ca5dc5e36977242"
+        }
+      ],
+      "foundry": {
+        "directory": ".local/next-five-successors-2026-09-10/release-rest/workflow-authority-repair/export",
+        "digest": "86769759d271d5ded598029d5e7e1d7e8ee12e37cbe22563a6853e5bcf86f08e",
+        "pointer": {
+          "path": ".local/next-five-successors-2026-09-10/release-rest/workflow-authority-repair/export/package.json",
+          "sha256": "bb694b5621561b9d69e0d89f0bd24d189ad9d9756ee965736202a9f1ba9a0652",
+          "bytes": 103
+        },
+        "assurance": {
+          "path": ".local/next-five-successors-2026-09-10/release-rest/workflow-authority-repair/validation/assurance.json",
+          "sha256": "e12aff6294a214efa573246ee40bf0a513a764ae4a297f4dd307e409f0dd1007",
+          "bytes": 82766
+        },
+        "checkerEvidence": {
+          "path": ".local/next-five-successors-2026-09-10/release-rest/workflow-authority-repair/oracle-checker/grade-summary.json",
+          "sha256": "183f11a0f2d2451a11e532e071b2e53cfbd0abeac3e977c9a855200b6a76ff2a",
+          "bytes": 2224
+        },
+        "reproducibleBuild": true,
+        "recipientEvidence": {
+          "path": ".local/next-five-successors-2026-09-10/release-rest/recipient/result.json",
+          "sha256": "34c43662f7b17399d50b645e25ed152f765692009063e43508fa8f223891d22b",
+          "bytes": 1397
+        },
+        "recipient": {
+          "packageId": "workflow-authority-repair",
+          "packageDigest": "86769759d271d5ded598029d5e7e1d7e8ee12e37cbe22563a6853e5bcf86f08e",
+          "operations": 13,
+          "scenarioCount": 36,
+          "browserTraces": 0,
+          "invalidExecutionExcluded": true,
+          "artifactDriftRejected": true,
+          "evidenceDriftRejected": true,
+          "sourceCheckoutRequired": false,
+          "providerCallsMade": 0
+        }
+      },
+      "native": {
+        "directory": ".local/next-five-successors-2026-09-10/harbor-final/workflow-authority-repair",
+        "digest": "35a7555b10fd558c8c2a3b1915eadcf2a8c59133461efa6aa8a1c9cd5a3e48ec",
+        "manifest": {
+          "path": ".local/next-five-successors-2026-09-10/harbor-final/workflow-authority-repair/export-manifest.json",
+          "sha256": "4ebcd96250ea44b122b1362dd45e04d5af38478dd63e48c874e823f7baefedf1",
+          "bytes": 15380
+        },
+        "reproducibleBuild": true,
+        "oracle": {
+          "directory": ".local/next-five-successors-2026-09-10/jobs/five-successors-oracle/workflow-authority-repair__edeUGCj",
+          "result": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-oracle/workflow-authority-repair__edeUGCj/result.json",
+            "sha256": "128e14dcc1f1fd4955c1a0eaff4a3835790d51ee9c451018033f5cdc0a864523",
+            "bytes": 4225
+          },
+          "summary": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-oracle/workflow-authority-repair__edeUGCj/verifier/summary.json",
+            "sha256": "c93741cea5dab86805e3cdf79f59b0d9faae139113ba896df4f71fccbc4c55ee",
+            "bytes": 1029
+          },
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "reason": null,
+          "infrastructureError": false
+        },
+        "nop": {
+          "directory": ".local/next-five-successors-2026-09-10/jobs/five-successors-nop/workflow-authority-repair__VsMNPQn",
+          "result": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-nop/workflow-authority-repair__VsMNPQn/result.json",
+            "sha256": "03e17e35de4ce6d000ba7587e24e6a58418374298a916e83d068a053994f0c6b",
+            "bytes": 4213
+          },
+          "summary": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-nop/workflow-authority-repair__VsMNPQn/verifier/summary.json",
+            "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1",
+            "bytes": 460
+          },
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "reason": "Error: missing required deliverable\n    at file:///tests/harbor-grade.mjs:152:105\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:643:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)",
+          "infrastructureError": false
+        },
+        "integrity": [
+          {
+            "name": "missing-verdicts",
+            "passed": true,
+            "accepted": false,
+            "outputValid": false
+          },
+          {
+            "name": "always-accept",
+            "passed": true,
+            "accepted": false,
+            "outputValid": true
+          },
+          {
+            "name": "always-reject",
+            "passed": true,
+            "accepted": false,
+            "outputValid": true
+          },
+          {
+            "name": "mutated-input",
+            "passed": true,
+            "accepted": false,
+            "outputValid": false
+          },
+          {
+            "name": "private-read-and-reward-write-denied",
+            "passed": true,
+            "accepted": true,
+            "outputValid": true
+          },
+          {
+            "name": "forged-reward-and-output-symlink-rejected",
+            "passed": true
+          }
+        ]
+      },
+      "reference": {
+        "count": 36,
+        "passes": 36,
+        "semanticFailures": 0,
+        "infrastructureErrors": 0
+      },
+      "alternative": {
+        "count": 36,
+        "passes": 36,
+        "semanticFailures": 0,
+        "infrastructureErrors": 0
+      },
+      "starter": {
+        "count": 36,
+        "passes": 1,
+        "semanticFailures": 35,
+        "infrastructureErrors": 0
+      },
+      "checker": {
+        "correct": 10,
+        "total": 10,
+        "pass": true,
+        "reasonPolicy": "diagnostic-only"
+      },
+      "localControls": [
+        {
+          "candidate": "reference",
+          "scenarios": 36,
+          "semanticFailures": 0,
+          "maxApiPayloadBytes": 1923,
+          "maxScenarioCalls": 115,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "alternative",
+          "scenarios": 36,
+          "semanticFailures": 0,
+          "maxApiPayloadBytes": 1925,
+          "maxScenarioCalls": 117,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "starter",
+          "scenarios": 36,
+          "semanticFailures": 35,
+          "maxApiPayloadBytes": 1921,
+          "maxScenarioCalls": 0,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "pending-complete",
+          "scenarios": 36,
+          "semanticFailures": 25,
+          "maxApiPayloadBytes": 1930,
+          "maxScenarioCalls": 97,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "wrong-origin",
+          "scenarios": 36,
+          "semanticFailures": 35,
+          "maxApiPayloadBytes": 1926,
+          "maxScenarioCalls": 115,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "deny-all",
+          "scenarios": 36,
+          "semanticFailures": 34,
+          "maxApiPayloadBytes": 1922,
+          "maxScenarioCalls": 67,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "wrong-payload",
+          "scenarios": 36,
+          "semanticFailures": 35,
+          "maxApiPayloadBytes": 1927,
+          "maxScenarioCalls": 115,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "empty-path",
+          "scenarios": 36,
+          "semanticFailures": 32,
+          "maxApiPayloadBytes": 1924,
+          "maxScenarioCalls": 115,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "admission-only",
+          "scenarios": 36,
+          "semanticFailures": 34,
+          "maxApiPayloadBytes": 1928,
+          "maxScenarioCalls": 67,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "no-work",
+          "scenarios": 36,
+          "semanticFailures": 35,
+          "maxApiPayloadBytes": 1921,
+          "maxScenarioCalls": 0,
+          "expectedOutcomeMatched": true
+        }
+      ]
+    },
+    {
+      "id": "delegated-budget-repair",
+      "version": "3.0.0",
+      "sourceFiles": [
+        {
+          "path": "tasks/delegated-budget-repair/private/alternative/entry.mjs",
+          "sha256": "cc4c42ea795651eba3f9130a2d96712e45a36106d229daef0f281ce01ea57b68"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/alternative/src/allocation.mjs",
+          "sha256": "264355bdfa043dd2f1f88f8ca826fd4af1f991bb1d90f620951d6560e5fce786"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/alternative/src/authority.mjs",
+          "sha256": "98b38e47fddcc942640de7302dc889c779bffa5f16b7770dc000ee5ef8636571"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/alternative/src/dispatcher.mjs",
+          "sha256": "99a1195643734e9f0a521dc2cb5371417f468d1651d82aabc8d5f3b202ec09a8"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/alternative/src/journal.mjs",
+          "sha256": "fb7e55bb54cd223000fef60c5bf51a3ec94631e0542735ba40c75cd998e3c3e3"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/alternative/src/queue.mjs",
+          "sha256": "65ab96365852373e4b51962cc814d9182030e8ee1d66725a1a72a225e10b203c"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/alternative/src/transport.mjs",
+          "sha256": "ae07895123f437bf6e742d54a188b1abce3ec030391407b6c7120def5b24f57a"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/checker-required.json",
+          "sha256": "201650dccec4b11c8d4f51dbe1ed0243b8056700e80da5526a1a5833cdd4c040"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/control-manifest.json",
+          "sha256": "f1d148718c9723d650abe5cbe6de86f9c8490299727a6774c384cdb9c641130c"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/cross-wallet-v3.mjs",
+          "sha256": "944695b43d0cf00f37150b4c44ab3817ca76ea3bfe6942e0770daabb4fdb8033"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/ignore-holds-v3.mjs",
+          "sha256": "1ec50f0ba2015485944b64ef6b0853b4879d514ca67ae65c8020b322208b3505"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/isolation.mjs",
+          "sha256": "9bd5957425f71c6907bb631474f4bd24913f78b37e665b31c051e0ec35b48a01"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/local-receipt-only.mjs",
+          "sha256": "0399aa51a570a8fe592c0faa67e94883c0da69f961fd2ca8d24bc3cf49e03ced"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/no-work.mjs",
+          "sha256": "1ac4cbde8de585d096fd075e5da491f0d03161c65844cd5884ebd53452049ee3"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/owner-blind.mjs",
+          "sha256": "ede2b39a888571f7b2869beaebfb35a3e3f31670484285b6a198e0933270e81a"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/per-request-budget.mjs",
+          "sha256": "239a38007f8faece6cb459f35640bda44a56d7c195e0686f33f04c087cb3051b"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/receipt-claim.mjs",
+          "sha256": "45ad5eb586c3b6ca93bc8673f835391784c5352fa195767a5fcd447e69d738c2"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/release-captured-v3.mjs",
+          "sha256": "60a2bdd8520cea0d80611b392aaf5778fc4d353b2b84acf850d386dbec16975b"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/settle-current-version-v3.mjs",
+          "sha256": "582379735ae00cf9f029ca92e4484ba0a1225ac4990dd1ea7a02780d3176c2d6"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/stale-reserve-version-v3.mjs",
+          "sha256": "93f3a296e5ceec36d21a731b12763aa29ad78f790d13a5dd2bc42fa570186494"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/stale-version.mjs",
+          "sha256": "58aad90d99bae2be471889a7590d036db5f0b667336a62fd55de4bb6fe53d6b4"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/uncertain-abandon-v3.mjs",
+          "sha256": "bf0047d034ed82fac62cf7bdd27a7e9e3e4125e280eb7acc2d4409ed31a4a0ad"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/unknown-abandon.mjs",
+          "sha256": "5fb0c1c0608e54c12245a2e6e13ac75343cb5af08c5c4d3db26f9f59d2557f7f"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/domain.mjs",
+          "sha256": "e016677f423f1f6fce6e39720cc915140fa98675e9f4f5507888473bea902d45"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/reference/checker-utils.mjs",
+          "sha256": "9eb8005fd21cc8df4a86c254f3c49805416b7b38d4fa28f3b92087e870dfb30b"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/reference/checker.mjs",
+          "sha256": "1f25e4cff820dc4eaa8299e823aa6babbdb9707d815bd1c22841781d0ff5a907"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/reference/entry.mjs",
+          "sha256": "223821d48a4626a9638c23f931c0a435afb4d555c7d91c650eb7cdcd847a9c39"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/reference/src/allocation.mjs",
+          "sha256": "b20b4f8a05e6086c9d8fd34100631dd868abb464b5283a8ab3bd1ca3c35b647c"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/reference/src/authority.mjs",
+          "sha256": "24a9db16689a61894e7394067145a0f95f3dd5aa060552ce3d7e2ccdf1a5697b"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/reference/src/dispatcher.mjs",
+          "sha256": "99a1195643734e9f0a521dc2cb5371417f468d1651d82aabc8d5f3b202ec09a8"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/reference/src/journal.mjs",
+          "sha256": "fb7e55bb54cd223000fef60c5bf51a3ec94631e0542735ba40c75cd998e3c3e3"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/reference/src/queue.mjs",
+          "sha256": "65ab96365852373e4b51962cc814d9182030e8ee1d66725a1a72a225e10b203c"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/reference/src/transport.mjs",
+          "sha256": "747ffe4191400581ba7645e998c34d6c0ff836638b58756eabf36cff06fa16bc"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/restart.mjs",
+          "sha256": "c87842964b7fb3d9eb17645c40bf370f6d1138d72f808f8dadfef41960141a72"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/scenarios.mjs",
+          "sha256": "d2173fda6f918de43b356ea9517aa9f7b689acfd1fcd18916e391a504ec2ebbb"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/public/api.d.ts",
+          "sha256": "18e3edef2c70e733f85805eb077d1ec96b9198c6a531cc186649ae86686ae86f"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/public/CHECKER-INPUT.md",
+          "sha256": "08d9922934abc96eb4a72718004910d02d02006e385e7d9766855b1c99a51152"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/public/entry.mjs",
+          "sha256": "65d1804c2d43ada53fbec3229f66083c212a66d18f8914fe1ea43e9d2a416876"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/public/instruction.md",
+          "sha256": "dd1af402e9b9df6f9e2270b54de1a8db9e9057141fc6d53ea3e345758635e1a8"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/public/package.json",
+          "sha256": "24ea07a7a2496ab366b29eaf5e22b44a274a58f49ce6e4ba8e0e09fdc7ae00ff"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/public/SEMANTICS.md",
+          "sha256": "060e600e403bc74bbad295155335082cff345c2cad322dd2b91101b3437166f0"
+        }
+      ],
+      "foundry": {
+        "directory": ".local/next-five-successors-2026-09-10/release-rest/delegated-budget-repair/export",
+        "digest": "413b7bb5d01028898e44e2d88b1b75cabf5b21729f47475864d0ea2c123ecf5f",
+        "pointer": {
+          "path": ".local/next-five-successors-2026-09-10/release-rest/delegated-budget-repair/export/package.json",
+          "sha256": "2def219b3dc658d2336a5e71780258e853f7069972b084c61c9608ac46efe7e1",
+          "bytes": 103
+        },
+        "assurance": {
+          "path": ".local/next-five-successors-2026-09-10/release-rest/delegated-budget-repair/validation/assurance.json",
+          "sha256": "e3188afaeba8e0a013a2f60f67a2cc761dcee12c4be359b2b60c5452723f9fdc",
+          "bytes": 69328
+        },
+        "checkerEvidence": {
+          "path": ".local/next-five-successors-2026-09-10/release-rest/delegated-budget-repair/oracle-checker/grade-summary.json",
+          "sha256": "ce011e77c8a8e205106b16f79bd7b6bcd2bcf0fe560d3097ffd6040b9dd6df6d",
+          "bytes": 2253
+        },
+        "reproducibleBuild": true,
+        "recipientEvidence": {
+          "path": ".local/next-five-successors-2026-09-10/release-rest/recipient/result.json",
+          "sha256": "34c43662f7b17399d50b645e25ed152f765692009063e43508fa8f223891d22b",
+          "bytes": 1397
+        },
+        "recipient": {
+          "packageId": "delegated-budget-repair",
+          "packageDigest": "413b7bb5d01028898e44e2d88b1b75cabf5b21729f47475864d0ea2c123ecf5f",
+          "operations": 13,
+          "scenarioCount": 19,
+          "browserTraces": 0,
+          "invalidExecutionExcluded": true,
+          "artifactDriftRejected": true,
+          "evidenceDriftRejected": true,
+          "sourceCheckoutRequired": false,
+          "providerCallsMade": 0
+        }
+      },
+      "native": {
+        "directory": ".local/next-five-successors-2026-09-10/harbor-final/delegated-budget-repair",
+        "digest": "feddb03d1e5717b1a713807f3ed8dd22d6087b64efd0012317f08686c859551a",
+        "manifest": {
+          "path": ".local/next-five-successors-2026-09-10/harbor-final/delegated-budget-repair/export-manifest.json",
+          "sha256": "2bf31c0a3b5a9509e9dc18a8486da7dd9d263247517317d7c11ef0db1cb83568",
+          "bytes": 14926
+        },
+        "reproducibleBuild": true,
+        "oracle": {
+          "directory": ".local/next-five-successors-2026-09-10/jobs/five-successors-oracle/delegated-budget-repair__pmFhBfv",
+          "result": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-oracle/delegated-budget-repair__pmFhBfv/result.json",
+            "sha256": "2926f07f7c601e605de7308da9ffd0026456ccd390277de071637e995ac6f31c",
+            "bytes": 4213
+          },
+          "summary": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-oracle/delegated-budget-repair__pmFhBfv/verifier/summary.json",
+            "sha256": "bc5a3b360ccc5811572ceedd65abe0f6dbee80cfbd1145cdb8b3053f58ff6215",
+            "bytes": 1056
+          },
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "reason": null,
+          "infrastructureError": false
+        },
+        "nop": {
+          "directory": ".local/next-five-successors-2026-09-10/jobs/five-successors-nop/delegated-budget-repair__AQdq8fB",
+          "result": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-nop/delegated-budget-repair__AQdq8fB/result.json",
+            "sha256": "7b79d2158576f2879964a6ee0aeee0963828f49a1df39250997a828ec8e9820f",
+            "bytes": 4201
+          },
+          "summary": {
+            "path": ".local/next-five-successors-2026-09-10/jobs/five-successors-nop/delegated-budget-repair__AQdq8fB/verifier/summary.json",
+            "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1",
+            "bytes": 460
+          },
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "reason": "Error: missing required deliverable\n    at file:///tests/harbor-grade.mjs:152:105\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:643:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)",
+          "infrastructureError": false
+        },
+        "integrity": [
+          {
+            "name": "missing-verdicts",
+            "passed": true,
+            "accepted": false,
+            "outputValid": false
+          },
+          {
+            "name": "always-accept",
+            "passed": true,
+            "accepted": false,
+            "outputValid": true
+          },
+          {
+            "name": "always-reject",
+            "passed": true,
+            "accepted": false,
+            "outputValid": true
+          },
+          {
+            "name": "mutated-input",
+            "passed": true,
+            "accepted": false,
+            "outputValid": false
+          },
+          {
+            "name": "private-read-and-reward-write-denied",
+            "passed": true,
+            "accepted": true,
+            "outputValid": true
+          },
+          {
+            "name": "forged-reward-and-output-symlink-rejected",
+            "passed": true
+          }
+        ]
+      },
+      "reference": {
+        "count": 19,
+        "passes": 19,
+        "semanticFailures": 0,
+        "infrastructureErrors": 0
+      },
+      "alternative": {
+        "count": 19,
+        "passes": 19,
+        "semanticFailures": 0,
+        "infrastructureErrors": 0
+      },
+      "starter": {
+        "count": 19,
+        "passes": 0,
+        "semanticFailures": 19,
+        "infrastructureErrors": 0
+      },
+      "checker": {
+        "correct": 10,
+        "total": 10,
+        "pass": true,
+        "reasonPolicy": "diagnostic-only"
+      },
+      "localControls": [
+        {
+          "candidate": "reference",
+          "scenarios": 19,
+          "semanticFailures": 0,
+          "maxApiPayloadBytes": 3225,
+          "maxScenarioCalls": 98,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "alternative",
+          "scenarios": 19,
+          "semanticFailures": 0,
+          "maxApiPayloadBytes": 3225,
+          "maxScenarioCalls": 117,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "starter",
+          "scenarios": 19,
+          "semanticFailures": 19,
+          "maxApiPayloadBytes": 1671,
+          "maxScenarioCalls": 0,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "ignore-holds",
+          "scenarios": 19,
+          "semanticFailures": 12,
+          "maxApiPayloadBytes": 3367,
+          "maxScenarioCalls": 98,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "settle-current-version",
+          "scenarios": 19,
+          "semanticFailures": 18,
+          "maxApiPayloadBytes": 2768,
+          "maxScenarioCalls": 98,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "release-captured",
+          "scenarios": 19,
+          "semanticFailures": 12,
+          "maxApiPayloadBytes": 3477,
+          "maxScenarioCalls": 98,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "cross-wallet",
+          "scenarios": 19,
+          "semanticFailures": 18,
+          "maxApiPayloadBytes": 2771,
+          "maxScenarioCalls": 98,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "stale-reserve-version",
+          "scenarios": 19,
+          "semanticFailures": 6,
+          "maxApiPayloadBytes": 3225,
+          "maxScenarioCalls": 98,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "uncertain-abandon",
+          "scenarios": 19,
+          "semanticFailures": 12,
+          "maxApiPayloadBytes": 3225,
+          "maxScenarioCalls": 76,
+          "expectedOutcomeMatched": true
+        },
+        {
+          "candidate": "no-work",
+          "scenarios": 19,
+          "semanticFailures": 19,
+          "maxApiPayloadBytes": 1671,
+          "maxScenarioCalls": 0,
+          "expectedOutcomeMatched": true
+        }
+      ]
+    }
+  ],
+  "runtime": {
+    "archive": {
+      "sha256": "f09648e16d4c765abb50f2063302a943fe18469fa28b55c0f8b960668716ea68",
+      "size": 974875136
+    },
+    "browser": "1.62.1",
+    "image": "sha256:0d111d755a70b9f8a3e8fec4f7bc641b3211bcf6ebb03bfd6fbded7c776176ab",
+    "node": "v24.18.1",
+    "platform": "linux/arm64",
+    "metadata": {
+      "path": ".local/next-five-successors-2026-09-10/runtime/runtime.json",
+      "sha256": "d4e51612d7fe43177c9ac20ee98c825536610f93e6f833f6c2f3c2b4a93f5fde",
+      "bytes": 250
+    }
+  },
+  "validation": {
+    "staticChecks": {
+      "total": 110,
+      "passed": 110,
+      "evidence": {
+        "path": ".local/next-five-successors-2026-09-10/static/summary.json",
+        "sha256": "0e39c488c253c9679f3f204a6cdad45e86ffb3b3ebe738805bd6e0c4a9c0a453",
+        "bytes": 26296
+      }
+    },
+    "interfaceCapacity": {
+      "path": ".local/next-five-successors-2026-09-10/interface-capacity.json",
+      "sha256": "d6448e0c0837030415d22743582b0033c6fb49fbbe15c70a013b0d27db0b4440",
+      "bytes": 28706
+    },
+    "nativeIntegrity": {
+      "path": ".local/next-five-successors-2026-09-10/native-integrity/summary.json",
+      "sha256": "4253fecad86d5bc2f9b2f95eea26b6ed594eccd4b5f3b9ea70d4afff84c893e5",
+      "bytes": 5337
+    },
+    "affectedRegressionTests": 24,
+    "lintFiles": 501,
+    "typecheckPassed": true,
+    "commands": [
+      {
+        "command": "node",
+        "args": [
+          "scripts/verify-next-five-author.mjs",
+          ".local/next-five-successors-2026-09-10/author-four",
+          "route-policy-repair",
+          "recurring-calendar-repair",
+          "workflow-authority-repair",
+          "delegated-budget-repair"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:08:30.116Z",
+        "end": "2026-09-10T23:08:44.586Z",
+        "exitCode": 0,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/author-four.log",
+          "sha256": "fb85e73d683ba4537013f490a5d4a040b380c508ccf111ed4edd99a9be58e1e9",
+          "bytes": 6475
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/author-four.json",
+          "sha256": "a67cb2bdaa0ec9f9082f1e4ea5d8f2327704ff1954cc25652ae5163f12049b06",
+          "bytes": 568
+        }
+      },
+      {
+        "command": "node",
+        "args": [
+          "scripts/verify-next-five-author.mjs",
+          ".local/next-five-successors-2026-09-10/browser-iteration-3",
+          "browser-replay-repair"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:08:11.047Z",
+        "end": "2026-09-10T23:09:36.732Z",
+        "exitCode": 0,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/browser-author.log",
+          "sha256": "3c4aa803230cdea4ae063126ec0f08857018bb746dd08af485f6c065482dea45",
+          "bytes": 1316
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/browser-author.json",
+          "sha256": "2e3cd1ac01a341f229885f56694a2dcfbff5bb8d2f8e5a80e773b557351430d1",
+          "bytes": 484
+        }
+      },
+      {
+        "command": "node",
+        "args": [
+          "scripts/verify-next-five-evidence.mjs"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:51:17.165Z",
+        "end": "2026-09-10T23:51:17.195Z",
+        "exitCode": 0,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/evidence-consistency.log",
+          "sha256": "e404752ec1fa2e224e5c483d1f6ca088ca8211c8f915ad86e8caeb79d800d066",
+          "bytes": 69
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/evidence-consistency.json",
+          "sha256": "542ecd6912f6e27c5986f0b9532c3b1451513c381c18b9b9b57d75f6cbd6d557",
+          "bytes": 397
+        }
+      },
+      {
+        "command": "node",
+        "args": [
+          "scripts/verify-selected-portfolio.mjs",
+          ".local/next-five-successors-2026-09-10/release-browser",
+          ".local/next-five-successors-2026-09-10/runtime",
+          "browser-replay-repair",
+          "--release"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:26:00.961Z",
+        "end": "2026-09-10T23:28:18.537Z",
+        "exitCode": 0,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/foundry-browser.log",
+          "sha256": "b8c3fc5e0ae9694a2aa9624744d78fe07f95d27fb5564773e1a472606304cb68",
+          "bytes": 378
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/foundry-browser.json",
+          "sha256": "52d11077011cae511b1aedd053f15612ae09963e0e765550f01c32d9f2d81133",
+          "bytes": 554
+        }
+      },
+      {
+        "command": "node",
+        "args": [
+          "scripts/verify-selected-portfolio.mjs",
+          ".local/next-five-successors-2026-09-10/release-four",
+          ".local/next-five-successors-2026-09-10/runtime",
+          "route-policy-repair",
+          "recurring-calendar-repair",
+          "workflow-authority-repair",
+          "delegated-budget-repair",
+          "--release"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:09:15.029Z",
+        "end": "2026-09-10T23:10:28.514Z",
+        "exitCode": 1,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/foundry-four.log",
+          "sha256": "61defcb8ecec2703a714f1675438ed991f16c52072712a76e0ab9dcbaf7e1a14",
+          "bytes": 637
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/foundry-four.json",
+          "sha256": "dccfdd923017f1b1f160ebb685ff211434021eb9fb64e48e66fa3df9f606aca8",
+          "bytes": 643
+        }
+      },
+      {
+        "command": "node",
+        "args": [
+          "scripts/verify-selected-portfolio.mjs",
+          ".local/next-five-successors-2026-09-10/release-rest",
+          ".local/next-five-successors-2026-09-10/runtime",
+          "recurring-calendar-repair",
+          "workflow-authority-repair",
+          "delegated-budget-repair",
+          "--release"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:28:30.548Z",
+        "end": "2026-09-10T23:31:28.705Z",
+        "exitCode": 0,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/foundry-rest.log",
+          "sha256": "a00624983851225a564d13cbc1847e4f34204863c67a55e43a9cd5aae0718e4e",
+          "bytes": 1151
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/foundry-rest.json",
+          "sha256": "85572512778f730eced172c2e6b0daf98f22e16b214cb90ac2b6c5074b39b08e",
+          "bytes": 616
+        }
+      },
+      {
+        "command": "harbor",
+        "args": [
+          "run",
+          "--config",
+          ".local/next-five-successors-2026-09-10/harbor-nop.json"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:43:53.728Z",
+        "end": "2026-09-10T23:44:37.911Z",
+        "exitCode": 0,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/harbor-nop.log",
+          "sha256": "0389d28b74bc0b7cf3a7ef041216eeb735fcc1e8c0ca024a0ade16ffed6d9b2b",
+          "bytes": 1310
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/harbor-nop.json",
+          "sha256": "7ee83c555c1849a24c95094dc9d64d23da36c01aba18541586428f3407204d1d",
+          "bytes": 433
+        }
+      },
+      {
+        "command": "harbor",
+        "args": [
+          "run",
+          "--config",
+          ".local/next-five-successors-2026-09-10/harbor-oracle.json"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:38:51.371Z",
+        "end": "2026-09-10T23:41:54.059Z",
+        "exitCode": 0,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/harbor-oracle.log",
+          "sha256": "48ec1ea84d6fec835df282ad06c56b9c8b1d2843f4819071998176af65636202",
+          "bytes": 1322
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/harbor-oracle.json",
+          "sha256": "c718cb4c7271be642299c81873d501ac6f49ccdc63396639e94c8a8a477042eb",
+          "bytes": 439
+        }
+      },
+      {
+        "command": "node",
+        "args": [
+          "scripts/verify-next-five-interfaces.mjs"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:41:45.169Z",
+        "end": "2026-09-10T23:41:50.486Z",
+        "exitCode": 0,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/interfaces-capacity-fixed.log",
+          "sha256": "3c87c25bfe5e26a5d7a8cb77708bd31c3d143ea52a4d0fd475e18895a4a2c75d",
+          "bytes": 116
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/interfaces-capacity-fixed.json",
+          "sha256": "4feb6e6d1744cec696565934a900ff32714a72f45a18f1944ef840a93de3244f",
+          "bytes": 404
+        }
+      },
+      {
+        "command": "node",
+        "args": [
+          "scripts/verify-next-five-interfaces.mjs"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:41:10.320Z",
+        "end": "2026-09-10T23:41:14.132Z",
+        "exitCode": 1,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/interfaces-capacity.log",
+          "sha256": "583d8dc158c2e713e7abb62bc9553e495c85f7cb360390310f8df67ca100a1ae",
+          "bytes": 823
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/interfaces-capacity.json",
+          "sha256": "9dc6775383b6d3fcac330b3240355b69083498f967e3cf89d826dfcb059ed163",
+          "bytes": 398
+        }
+      },
+      {
+        "command": "pnpm",
+        "args": [
+          "lint"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:37:44.722Z",
+        "end": "2026-09-10T23:37:45.141Z",
+        "exitCode": 0,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/lint.log",
+          "sha256": "6aed0f7c262c2e0da6f9aa56cf3280fe5ab48589f7e8cbfc3ccc03d52043961c",
+          "bytes": 181
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/lint.json",
+          "sha256": "c8fefd2dff0e5e4745e5ff6451eb494a5e7d5f51167b964382090d40dcf1743f",
+          "bytes": 348
+        }
+      },
+      {
+        "command": "node",
+        "args": [
+          "scripts/build-harbor-portfolio.mjs",
+          ".local/next-five-successors-2026-09-10/harbor-final",
+          "route-policy-repair",
+          "browser-replay-repair",
+          "recurring-calendar-repair",
+          "workflow-authority-repair",
+          "delegated-budget-repair"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:33:05.638Z",
+        "end": "2026-09-10T23:33:05.739Z",
+        "exitCode": 0,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/native-build.log",
+          "sha256": "37336b1a9552725b3cb6ec974bc275f1c58f52036b163cc9d68108078282ca2c",
+          "bytes": 683
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/native-build.json",
+          "sha256": "2a2fa78baa3a36903bf16998258885223f193e78ad83c24853de9d77d89942f7",
+          "bytes": 598
+        }
+      },
+      {
+        "command": "node",
+        "args": [
+          "scripts/verify-harbor-integrity.mjs",
+          ".local/next-five-successors-2026-09-10/native-integrity",
+          ".local/next-five-successors-2026-09-10/harbor-final/route-policy-repair",
+          ".local/next-five-successors-2026-09-10/harbor-final/browser-replay-repair",
+          ".local/next-five-successors-2026-09-10/harbor-final/recurring-calendar-repair",
+          ".local/next-five-successors-2026-09-10/harbor-final/workflow-authority-repair",
+          ".local/next-five-successors-2026-09-10/harbor-final/delegated-budget-repair"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:39:56.956Z",
+        "end": "2026-09-10T23:44:30.388Z",
+        "exitCode": 0,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/native-integrity.log",
+          "sha256": "f3eba2bd8041eafbe7e14587aa89c85c8373df4f7518004120fde0730bf0f391",
+          "bytes": 3144
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/native-integrity.json",
+          "sha256": "2f4e8d09bf64dcd929177edca088d8ae8aa14449d3f7138aaff457f7a8a5bf25",
+          "bytes": 867
+        }
+      },
+      {
+        "command": "node",
+        "args": [
+          "scripts/build-harbor-portfolio.mjs",
+          ".local/next-five-successors-2026-09-10/harbor-rebuild",
+          "route-policy-repair",
+          "browser-replay-repair",
+          "recurring-calendar-repair",
+          "workflow-authority-repair",
+          "delegated-budget-repair"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:33:05.799Z",
+        "end": "2026-09-10T23:33:05.879Z",
+        "exitCode": 0,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/native-rebuild.log",
+          "sha256": "37336b1a9552725b3cb6ec974bc275f1c58f52036b163cc9d68108078282ca2c",
+          "bytes": 683
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/native-rebuild.json",
+          "sha256": "9d75354db9d8ac315272491da50efe0d1c51d30536c33175aea801d7ff563975",
+          "bytes": 602
+        }
+      },
+      {
+        "command": "node",
+        "args": [
+          "scripts/check-harbor-tasks.mjs",
+          ".local/next-five-successors-2026-09-10/static",
+          "scripts/tb-upstream-checks",
+          ".local/next-five-successors-2026-09-10/harbor-final/route-policy-repair",
+          ".local/next-five-successors-2026-09-10/harbor-final/browser-replay-repair",
+          ".local/next-five-successors-2026-09-10/harbor-final/recurring-calendar-repair",
+          ".local/next-five-successors-2026-09-10/harbor-final/workflow-authority-repair",
+          ".local/next-five-successors-2026-09-10/harbor-final/delegated-budget-repair"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:38:02.300Z",
+        "end": "2026-09-10T23:38:06.380Z",
+        "exitCode": 0,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/native-static.log",
+          "sha256": "112ee77cba5d1314ad3c0dae59366fa8de297028bf57c1b6ac71d27f4966455a",
+          "bytes": 27
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/native-static.json",
+          "sha256": "11f299e7a7c6e19c0487de4000830db10be64394333ef523bfd90b7206771eb1",
+          "bytes": 883
+        }
+      },
+      {
+        "command": "node",
+        "args": [
+          "scripts/prepare-next-five-runtime.mjs"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:07:12.483Z",
+        "end": "2026-09-10T23:07:14.487Z",
+        "exitCode": 0,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/prepare-runtime.log",
+          "sha256": "dc8f72c2f391ce201b4ca5302ab292efe44b35b8640ff30671f3a19e155c0f59",
+          "bytes": 274
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/prepare-runtime.json",
+          "sha256": "9ac924f9951e8230257769c3c64e41cab79ff3228115b327afe58f405f75395a",
+          "bytes": 392
+        }
+      },
+      {
+        "command": "node",
+        "args": [
+          "scripts/next-five-preservation.mjs",
+          "--verify"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:45:22.874Z",
+        "end": "2026-09-10T23:45:33.750Z",
+        "exitCode": 0,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/preservation.log",
+          "sha256": "9dcc757bf316521230e4779bedf05769b9a0ae56978e402897e802e3bc79c00f",
+          "bytes": 620
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/preservation.json",
+          "sha256": "92f666606026daab4e6c6655b8b3de699ea6415d6e8003520268fd6f7664ab50",
+          "bytes": 402
+        }
+      },
+      {
+        "command": "pnpm",
+        "args": [
+          "exec",
+          "vitest",
+          "run",
+          "test/next-five-implementation.test.ts",
+          "test/third-portfolio.test.ts",
+          "test/fourth-portfolio.test.ts"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:29:49.754Z",
+        "end": "2026-09-10T23:29:59.342Z",
+        "exitCode": 0,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/regressions.log",
+          "sha256": "95cac1bf0da3d9a26b5fb468ff8cb2d67cf65356ae85004ae62810ec67d8f7d4",
+          "bytes": 1224
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/regressions.json",
+          "sha256": "6c55beee97bf0a9ddc1a4bdb0e0fde95c67c4307afbd16caa0ef24d204ec90f0",
+          "bytes": 498
+        }
+      },
+      {
+        "command": "node",
+        "args": [
+          "scripts/verify-portfolio-exports.mjs",
+          ".local/next-five-successors-2026-09-10/route-recipient",
+          ".local/next-five-successors-2026-09-10/release-four/route-policy-repair/export"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:37:42.389Z",
+        "end": "2026-09-10T23:37:57.372Z",
+        "exitCode": 0,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/route-recipient.log",
+          "sha256": "05dff470020ef711fe5bb28e9cce167aba4342e8a8aeace5025a42d00ab5a794",
+          "bytes": 315
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/route-recipient.json",
+          "sha256": "cb2c4666ee1bfb2ea89d5c804547d1db4488a5ed4c9ba07dd6b1b960037fe46a",
+          "bytes": 539
+        }
+      },
+      {
+        "command": "pnpm",
+        "args": [
+          "typecheck"
+        ],
+        "cwd": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry",
+        "start": "2026-09-10T23:37:43.552Z",
+        "end": "2026-09-10T23:37:47.134Z",
+        "exitCode": 0,
+        "signal": null,
+        "log": {
+          "path": ".local/next-five-successors-2026-09-10/commands/typecheck.log",
+          "sha256": "ee08b8075d9144524e71c4edb36dedb8506ea13daec493374f8406c7c6fe4226",
+          "bytes": 132
+        },
+        "providerCallsMade": 0,
+        "record": {
+          "path": ".local/next-five-successors-2026-09-10/commands/typecheck.json",
+          "sha256": "ac9e1d492148f168a43e08a0675f7657125151ec9623ca790a69c7f1db51781f",
+          "bytes": 358
+        }
+      }
+    ]
+  },
+  "recoveredDevelopmentFailures": {
+    "foundry-four": "Calendar collector duplicated cumulative observations across process results, exceeding 16 MiB. Package-local result de-duplication fixed it; foundry-rest and native oracle passed.",
+    "interfaces-capacity": "Author proof script initially passed s.view instead of top-level scenario; corrected script passed as interfaces-capacity-fixed."
+  },
+  "ancillaryEvidence": {
+    "browserScreenshot": {
+      "path": "output/playwright/next-five-successors/public-app.png",
+      "sha256": "18b896c6f1417eea08c766592af2de063d7f0efe510b69cc9797e0972b1d49ad",
+      "bytes": 39381
+    },
+    "browserCliDirectory": ".playwright-cli",
+    "browserCliArchivalNote": "Moving generated CLI logs into staging was blocked by filesystem policy; original logs remain in place. This does not block package validation."
+  },
+  "remainingBlockers": [],
+  "nextPhase": [
+    "Independent implementation review",
+    "Comprehensive grader/checker/verifier/cheat hardening on these exact digests",
+    "Human-authored final contribution material and required external qualification before submission",
+    "Separately authorized model trials after hardening"
+  ]
+}

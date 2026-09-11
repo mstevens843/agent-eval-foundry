@@ -1,0 +1,37 @@
+{
+  "traceId": "demo",
+  "events": [
+    {
+      "step": 0,
+      "entity": "account-7",
+      "field": "name",
+      "value": "Ada",
+      "selector": "#name",
+      "path": "/records/account-7"
+    },
+    {
+      "step": 1,
+      "entity": "account-7",
+      "field": "name",
+      "value": "Ada",
+      "selector": "#name",
+      "path": "/records/account-7"
+    },
+    {
+      "step": 2,
+      "entity": "account-8",
+      "field": "memo",
+      "value": "Follow up",
+      "selector": "#memo",
+      "path": "/records/account-8"
+    }
+  ],
+  "renew": true,
+  "confirmation": true,
+  "competing": true,
+  "decoy": true,
+  "remount": true,
+  "remountAfterFill": true,
+  "receiptLag": 2,
+  "delay": 1
+}

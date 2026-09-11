@@ -1,44 +1,51 @@
 [
   {
-    "id": "receipt-claim",
+    "id": "ignore-holds",
     "overlay": {
-      "entry.mjs": "controls/receipt-claim.mjs"
-    },
-    "check": "decisions",
-    "clean": "case-000",
-    "selectionRole": "post-selection-validation"
-  },
-  {
-    "id": "per-request-budget",
-    "overlay": {
-      "src/allocation.mjs": "controls/per-request-budget.mjs"
+      "src/dispatcher.mjs": "controls/ignore-holds-v3.mjs"
     },
     "check": "aggregate_budget",
-    "clean": "case-000"
+    "clean": "clean"
   },
   {
-    "id": "owner-blind",
+    "id": "settle-current-version",
     "overlay": {
-      "src/allocation.mjs": "controls/owner-blind.mjs"
+      "src/dispatcher.mjs": "controls/settle-current-version-v3.mjs"
     },
-    "check": "ownership",
-    "clean": "case-000"
+    "check": "aggregate_budget",
+    "clean": "clean"
   },
   {
-    "id": "stale-version",
+    "id": "release-captured",
     "overlay": {
-      "src/allocation.mjs": "controls/stale-version.mjs"
+      "src/dispatcher.mjs": "controls/release-captured-v3.mjs"
     },
-    "check": "ownership",
-    "clean": "case-000"
+    "check": "aggregate_budget",
+    "clean": "clean"
   },
   {
-    "id": "unknown-abandon",
+    "id": "cross-wallet",
     "overlay": {
-      "src/transport.mjs": "controls/unknown-abandon.mjs"
+      "src/dispatcher.mjs": "controls/cross-wallet-v3.mjs"
+    },
+    "check": "aggregate_budget",
+    "clean": "clean"
+  },
+  {
+    "id": "stale-reserve-version",
+    "overlay": {
+      "src/dispatcher.mjs": "controls/stale-reserve-version-v3.mjs"
+    },
+    "check": "aggregate_budget",
+    "clean": "clean"
+  },
+  {
+    "id": "uncertain-abandon",
+    "overlay": {
+      "src/dispatcher.mjs": "controls/uncertain-abandon-v3.mjs"
     },
     "check": "decisions",
-    "clean": "case-000"
+    "clean": "clean"
   },
   {
     "id": "no-work",
@@ -56,12 +63,45 @@
     "isolation": true
   },
   {
-    "id": "local-receipt-only",
+    "id": "reuse-reservation",
     "overlay": {
-      "src/dispatcher.mjs": "controls/local-receipt-only.mjs"
+      "entry.mjs": "controls/reuse-reservation.mjs"
     },
-    "check": "decisions",
-    "clean": "case-011",
-    "selectionRole": "restart-regression"
+    "check": "aggregate_budget"
+  },
+  {
+    "id": "over-settlement",
+    "overlay": {
+      "entry.mjs": "controls/over-settlement.mjs"
+    },
+    "check": "aggregate_budget"
+  },
+  {
+    "id": "wrong-owner-admission",
+    "overlay": {
+      "entry.mjs": "controls/wrong-owner-admission.mjs"
+    },
+    "check": "aggregate_budget"
+  },
+  {
+    "id": "wrong-delegate-admission",
+    "overlay": {
+      "entry.mjs": "controls/wrong-delegate-admission.mjs"
+    },
+    "check": "aggregate_budget"
+  },
+  {
+    "id": "reject-valid-reservation",
+    "overlay": {
+      "entry.mjs": "controls/reject-valid-reservation.mjs"
+    },
+    "check": "aggregate_budget"
+  },
+  {
+    "id": "wrong-report-receipt",
+    "overlay": {
+      "entry.mjs": "controls/wrong-report-receipt.mjs"
+    },
+    "check": "decisions"
   }
 ]

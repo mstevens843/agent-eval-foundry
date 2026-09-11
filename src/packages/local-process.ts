@@ -3,8 +3,9 @@ import { createHash } from "node:crypto";
 import { createReadStream, createWriteStream, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import { performance } from "node:perf_hooks";
-import { finished } from "node:stream/promises";
+import { finished, pipeline } from "node:stream/promises";
 import { StringDecoder } from "node:string_decoder";
+import { createGzip } from "node:zlib";
 
 export async function hashFile(path: string): Promise<string> {
   const hash = createHash("sha256");
@@ -21,6 +22,10 @@ export async function localProcess(
     timeoutMs?: number;
     limitBytes?: number;
     log?: string;
+    /** Opt-in lossless transform for `log`: every stdout/stderr byte is still captured, just
+     * gzip-encoded on disk at `${log}.gz` instead of written verbatim to `log`. Off by default
+     * so existing plain-text log readers and callers are unaffected. */
+    logCompression?: "gzip";
     /** Bounded host-owned input for local collectors. Never a provider prompt. */
     input?: string;
   } = {},
@@ -32,10 +37,22 @@ export async function localProcess(
     throw new Error("LOCAL_PROCESS_INVALID_LIMIT");
   if (options.input && Buffer.byteLength(options.input) > 16 * 1024 * 1024)
     throw new Error("LOCAL_PROCESS_INPUT_LIMIT");
-  if (options.log) mkdirSync(dirname(options.log), { recursive: true });
-  const log = options.log ? createWriteStream(options.log, { flags: "wx" }) : undefined;
+  let log: NodeJS.WritableStream | undefined;
   // Attach rejection handling immediately; resolve only after all evidence bytes have flushed.
-  const logFinished = log ? finished(log).catch((error: unknown) => error) : Promise.resolve(undefined);
+  let logFinished: Promise<unknown> = Promise.resolve(undefined);
+  if (options.log) {
+    mkdirSync(dirname(options.log), { recursive: true });
+    if (options.logCompression === "gzip") {
+      const gzip = createGzip();
+      const destination = createWriteStream(`${options.log}.gz`, { flags: "wx" });
+      logFinished = pipeline(gzip, destination).catch((error: unknown) => error);
+      log = gzip;
+    } else {
+      const destination = createWriteStream(options.log, { flags: "wx" });
+      logFinished = finished(destination).catch((error: unknown) => error);
+      log = destination;
+    }
+  }
   return new Promise((resolve, reject) => {
     const child = spawn(command, [...args], {
       cwd: options.cwd,

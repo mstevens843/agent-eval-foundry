@@ -1,5 +1,8 @@
 # Final screening results: five qualifying task packages
 
+This is the preserved September 9 milestone. See the [September 11 combined results](final-results-2026-09-11.md) for all nine qualifying tasks.
+
+
 September 9, 2026. **Three packages achieved 6/6 reward=0; two achieved 5/6. All five meet the reported ≥5/6 target.**
 
 Across the five completed sets, **28 of 30 counted trials received reward=0**. Each package has exactly three counted Codex and three counted Claude trials. No finalist trial remains pending.

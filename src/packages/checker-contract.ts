@@ -51,3 +51,10 @@ export function positiveVariantKeys(paths: readonly string[]): string[] {
     ),
   ].sort();
 }
+/** Exercise arbitrary string keys without tying any token to a candidate label. */
+export function checkerToken(index: number, coverage?: string): string {
+  const opaque = ["__proto__", "constructor", "toString", "", "0", "01", "token/λ"];
+  return (
+    (coverage === "opaque-v1" ? opaque[index] : undefined) ?? `candidate-${String.fromCharCode(65 + index)}`
+  );
+}

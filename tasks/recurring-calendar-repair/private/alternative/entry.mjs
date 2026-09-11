@@ -1,3 +1,4 @@
+import { sync } from "./src/sync.mjs";
 const parse = (s) => Date.parse(s + "Z") / 60000;
 const text = (n) => new Date(n * 60000).toISOString().slice(0, 16);
 function resolve(local, z) {
@@ -11,7 +12,7 @@ function resolve(local, z) {
   }
   return hits.length ? Math.min(...hits) : null;
 }
-export const subject = {
+const calendar = {
   async run(v, api) {
     const events = [];
     for (const s of [...v.series].reverse()) {
@@ -78,4 +79,23 @@ export const subject = {
     await api.commit({ events, bookings: [...bookings, ...v.externalBookings] });
     return { complete: true };
   },
+};
+
+export const subject = {
+  run: (v, api) =>
+    sync(
+      v,
+      api,
+      async (source) => {
+        let result;
+        await calendar.run(source, {
+          commit: async (r) => {
+            result = r;
+            return { stored: true };
+          },
+        });
+        return result;
+      },
+      { recover: true, reverse: true },
+    ),
 };

@@ -1,0 +1,439 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-11",
+  "purpose": "Explicit counting ledger through Round 4 for the user-authorized continuation after already-running Round 5",
+  "authorization": "User confirmed the corrected 4/4, 4/4, 4/4, 3/4, 2/2 starting totals and requested continuation to six counted trials, stopping a task on its next pass. This records the previously documented first-round regrades explicitly.",
+  "firstRoundRegrade": {
+    "basis": {
+      "path": "reports/screening/evidence/2026-09-11-next-five-coverage-v2.json",
+      "sha256": "1fab5b71e7d3ffd81747442e1b75d98d5695912fc0f2b1a8bf62361911d2bbab"
+    },
+    "changesFromOriginalRewards": [
+      "route-policy-repair",
+      "browser-replay-repair"
+    ],
+    "workflowNote": "Original host-response defect was fixed; the retained checker still fails the separately verified legal terminal-dispatch retry. Counted reward remains zero with the corrected cause documented.",
+    "newModelAttempts": 0,
+    "originalEvidenceModified": false
+  },
+  "packages": [
+    {
+      "id": "route-policy-repair",
+      "analysis": "reports/screening/third-five/14-route-policy-repair.md",
+      "history": [
+        {
+          "historicalTrial": 3,
+          "versionRound": 1,
+          "provider": "claude",
+          "originalReward": 1,
+          "countedReward": 0,
+          "disposition": "counted-after-documented-regrade",
+          "packageDigest": "c3ff40c39c331627595b3a5aa0a74f03d6777a26e9c34b5b27c042474fe0fd63",
+          "completionSha256": "5d744f38632971583d5116a979337a9e219b0f8057246ff229932526235cdd06",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-10-hardened-next-five-trial-one.json",
+            "sha256": "903aad6d7414430f6308e95a2683806961c21833c763bfe572f4efb80ed1b4de"
+          },
+          "diagnosticReward": 0,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-next-five-coverage-v2.json",
+            "sha256": "1fab5b71e7d3ffd81747442e1b75d98d5695912fc0f2b1a8bf62361911d2bbab"
+          }
+        },
+        {
+          "historicalTrial": 4,
+          "versionRound": 2,
+          "provider": "claude",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+          "completionSha256": "e30cd67128ab1985247da5c2ab6db43d8e11a8237e3b55239f27c40c14cd837a",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-two.json",
+            "sha256": "540c8d392eff72fc1da7c9e8cfb8418ed21189323663e0d1216b7e9f3e048140"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 5,
+          "versionRound": 3,
+          "provider": "claude",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+          "completionSha256": "3925a7db136230f4c285bab935877dd19969e2d994d2422c335d20bc555fac30",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-three.json",
+            "sha256": "f029d24edcb4715ae996e5a02f71e370c72821733168c9f703c38b92c830bb48"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 6,
+          "versionRound": 4,
+          "provider": "codex",
+          "originalReward": 1,
+          "countedReward": 1,
+          "disposition": "retained",
+          "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+          "completionSha256": "f529ec062e584f9fce0c96bd07dfbd8afb01235babe9cc6a4ede7a051bac9438",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-four.json",
+            "sha256": "b50f1d9ff46f91d81bbe6d1301f77b987d2e43ee4ea3e7db6463b06780eb108f"
+          },
+          "diagnosticReward": null,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-browser-round-four-disposition.json",
+            "sha256": "7ab8b7ad3f9684f73d5d623fcf89d1db854864e7c985a72b34978eacfa5b02eb"
+          }
+        }
+      ],
+      "failures": 3,
+      "scored": 4,
+      "providers": {
+        "codex": 1,
+        "claude": 3
+      }
+    },
+    {
+      "id": "browser-replay-repair",
+      "analysis": "reports/screening/original-five/03-browser-replay-repair.md",
+      "history": [
+        {
+          "historicalTrial": 3,
+          "versionRound": 1,
+          "provider": "claude",
+          "originalReward": 1,
+          "countedReward": 0,
+          "disposition": "counted-after-documented-regrade",
+          "packageDigest": "7511a91b15231268c3fe86e12e67b644805efc35e546edd83a5629eba2508ace",
+          "completionSha256": "c637ece78ff2c3f09cbf523cc5a99dd9297bd1ca4d1b79489c3a1b0848b3fa70",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-10-hardened-next-five-trial-one.json",
+            "sha256": "903aad6d7414430f6308e95a2683806961c21833c763bfe572f4efb80ed1b4de"
+          },
+          "diagnosticReward": 0,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-next-five-coverage-v2.json",
+            "sha256": "1fab5b71e7d3ffd81747442e1b75d98d5695912fc0f2b1a8bf62361911d2bbab"
+          }
+        },
+        {
+          "historicalTrial": 4,
+          "versionRound": 2,
+          "provider": "claude",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "712f97575821006724eef7f3b3161c97512019897af62e46ab32b9c32dcddf31",
+          "completionSha256": "c832ea154780be2c39357828f0d929532b5b2cd125a2fa9e624edc2db4bd1bf6",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-two.json",
+            "sha256": "540c8d392eff72fc1da7c9e8cfb8418ed21189323663e0d1216b7e9f3e048140"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 5,
+          "versionRound": 3,
+          "provider": "claude",
+          "originalReward": null,
+          "countedReward": null,
+          "disposition": "infrastructure-interrupted",
+          "packageDigest": "712f97575821006724eef7f3b3161c97512019897af62e46ab32b9c32dcddf31",
+          "completionSha256": "faf6c620d1511b68d61ca33e19769488eeb3a5571925c3f3b88d1a8ea7228268",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-three.json",
+            "sha256": "f029d24edcb4715ae996e5a02f71e370c72821733168c9f703c38b92c830bb48"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 6,
+          "versionRound": 4,
+          "provider": "codex",
+          "originalReward": 1,
+          "countedReward": null,
+          "disposition": "grading-void",
+          "packageDigest": "712f97575821006724eef7f3b3161c97512019897af62e46ab32b9c32dcddf31",
+          "completionSha256": "f22831aeb72abe95fb3efc43ee896001bdbd4b54ff6c6227505be3435f686fba",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-four.json",
+            "sha256": "b50f1d9ff46f91d81bbe6d1301f77b987d2e43ee4ea3e7db6463b06780eb108f"
+          },
+          "diagnosticReward": 0,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-browser-round-four-disposition.json",
+            "sha256": "7ab8b7ad3f9684f73d5d623fcf89d1db854864e7c985a72b34978eacfa5b02eb"
+          }
+        }
+      ],
+      "failures": 2,
+      "scored": 2,
+      "providers": {
+        "codex": 0,
+        "claude": 2
+      }
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "analysis": "reports/screening/fourth-five/18-recurring-calendar-repair.md",
+      "history": [
+        {
+          "historicalTrial": 3,
+          "versionRound": 1,
+          "provider": "codex",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "counted-after-documented-regrade",
+          "packageDigest": "8f438cc74fc23c4357caa4c2a6ce64edd068eb899b5c335bdecd81884444fde3",
+          "completionSha256": "177125813859b1d49b355ca94b61467939421154e28a5784eee22e49c9344872",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-10-hardened-next-five-trial-one.json",
+            "sha256": "903aad6d7414430f6308e95a2683806961c21833c763bfe572f4efb80ed1b4de"
+          },
+          "diagnosticReward": 0,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-next-five-coverage-v2.json",
+            "sha256": "1fab5b71e7d3ffd81747442e1b75d98d5695912fc0f2b1a8bf62361911d2bbab"
+          }
+        },
+        {
+          "historicalTrial": 4,
+          "versionRound": 2,
+          "provider": "codex",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+          "completionSha256": "c256a18763fb2aa9c6928c2706d5933b1044ce847712e0da49d3b0148c56e4a2",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-two.json",
+            "sha256": "540c8d392eff72fc1da7c9e8cfb8418ed21189323663e0d1216b7e9f3e048140"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 5,
+          "versionRound": 3,
+          "provider": "codex",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+          "completionSha256": "d9e6d1a7e931ac71ac8dedbf04b62bb8ee201a0d12a9fb9360a1718cdda44677",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-three.json",
+            "sha256": "f029d24edcb4715ae996e5a02f71e370c72821733168c9f703c38b92c830bb48"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 6,
+          "versionRound": 4,
+          "provider": "claude",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+          "completionSha256": "b8b494040ea147088107cfe25a2ee4c66661a0042d9054f9be50934b902ce815",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-four.json",
+            "sha256": "b50f1d9ff46f91d81bbe6d1301f77b987d2e43ee4ea3e7db6463b06780eb108f"
+          },
+          "diagnosticReward": null,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-browser-round-four-disposition.json",
+            "sha256": "7ab8b7ad3f9684f73d5d623fcf89d1db854864e7c985a72b34978eacfa5b02eb"
+          }
+        }
+      ],
+      "failures": 4,
+      "scored": 4,
+      "providers": {
+        "codex": 3,
+        "claude": 1
+      }
+    },
+    {
+      "id": "workflow-authority-repair",
+      "analysis": "reports/screening/fourth-five/20-workflow-authority-repair.md",
+      "history": [
+        {
+          "historicalTrial": 3,
+          "versionRound": 1,
+          "provider": "codex",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "counted-after-documented-regrade",
+          "packageDigest": "f7e8ebedfb12bad0fa67e7841e213d78991620e5266cc115a01f98b79bf8cdd0",
+          "completionSha256": "3fb9aa8ddc8ce97f44ab4f80795c4a3684ea9f6301baf7c724c2b1c127c3b130",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-10-hardened-next-five-trial-one.json",
+            "sha256": "903aad6d7414430f6308e95a2683806961c21833c763bfe572f4efb80ed1b4de"
+          },
+          "diagnosticReward": 0,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-next-five-coverage-v2.json",
+            "sha256": "1fab5b71e7d3ffd81747442e1b75d98d5695912fc0f2b1a8bf62361911d2bbab"
+          }
+        },
+        {
+          "historicalTrial": 4,
+          "versionRound": 2,
+          "provider": "codex",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+          "completionSha256": "072d7295f3a2ad690e841f279c05dc17eaaf1f342fe928c44604393b1228f1e0",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-two.json",
+            "sha256": "540c8d392eff72fc1da7c9e8cfb8418ed21189323663e0d1216b7e9f3e048140"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 5,
+          "versionRound": 3,
+          "provider": "codex",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+          "completionSha256": "417302d110d509079003ef438cfdff87c52968cf40a423fa86b11cd281eafadc",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-three.json",
+            "sha256": "f029d24edcb4715ae996e5a02f71e370c72821733168c9f703c38b92c830bb48"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 6,
+          "versionRound": 4,
+          "provider": "claude",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+          "completionSha256": "bdc08536d55fae8c1dc2b9f53f460218ea2ddb96f24c8f369b80bf8f79ba49f1",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-four.json",
+            "sha256": "b50f1d9ff46f91d81bbe6d1301f77b987d2e43ee4ea3e7db6463b06780eb108f"
+          },
+          "diagnosticReward": null,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-browser-round-four-disposition.json",
+            "sha256": "7ab8b7ad3f9684f73d5d623fcf89d1db854864e7c985a72b34978eacfa5b02eb"
+          }
+        }
+      ],
+      "failures": 4,
+      "scored": 4,
+      "providers": {
+        "codex": 3,
+        "claude": 1
+      }
+    },
+    {
+      "id": "delegated-budget-repair",
+      "analysis": "reports/screening/original-five/04-delegated-budget-repair.md",
+      "history": [
+        {
+          "historicalTrial": 3,
+          "versionRound": 1,
+          "provider": "codex",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "counted-after-documented-regrade",
+          "packageDigest": "db688724f5b932b9e0ee619e1202da3de81a636a37ef90976490702fb24c5f66",
+          "completionSha256": "ce82994a2ef11ead1688a54ed2b1ef584fc9ea921ee2b2067aef8900a06b2442",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-10-hardened-next-five-trial-one.json",
+            "sha256": "903aad6d7414430f6308e95a2683806961c21833c763bfe572f4efb80ed1b4de"
+          },
+          "diagnosticReward": 0,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-next-five-coverage-v2.json",
+            "sha256": "1fab5b71e7d3ffd81747442e1b75d98d5695912fc0f2b1a8bf62361911d2bbab"
+          }
+        },
+        {
+          "historicalTrial": 4,
+          "versionRound": 2,
+          "provider": "codex",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+          "completionSha256": "fa527299e1806dbce5da9a0145f7535489cee8b56cc84ba177258a7b34dc0dbb",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-two.json",
+            "sha256": "540c8d392eff72fc1da7c9e8cfb8418ed21189323663e0d1216b7e9f3e048140"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 5,
+          "versionRound": 3,
+          "provider": "codex",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+          "completionSha256": "0ad884b60c9d45c77600f3ac99c8120420d46024e603d020458bac6eddd6bc71",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-three.json",
+            "sha256": "f029d24edcb4715ae996e5a02f71e370c72821733168c9f703c38b92c830bb48"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 6,
+          "versionRound": 4,
+          "provider": "claude",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+          "completionSha256": "7435c5e182d55e4e239044160d8e3e63250fad5f9f2c1ca8e37d3b81a6bea5d3",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-four.json",
+            "sha256": "b50f1d9ff46f91d81bbe6d1301f77b987d2e43ee4ea3e7db6463b06780eb108f"
+          },
+          "diagnosticReward": null,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-browser-round-four-disposition.json",
+            "sha256": "7ab8b7ad3f9684f73d5d623fcf89d1db854864e7c985a72b34978eacfa5b02eb"
+          }
+        }
+      ],
+      "failures": 4,
+      "scored": 4,
+      "providers": {
+        "codex": 3,
+        "claude": 1
+      }
+    }
+  ],
+  "totals": {
+    "failures": 17,
+    "scored": 18,
+    "gradingVoids": 1,
+    "infrastructureInterruptions": 1
+  },
+  "round5Included": false,
+  "providerCallsMade": 0
+}

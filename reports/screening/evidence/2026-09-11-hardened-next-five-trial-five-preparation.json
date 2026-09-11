@@ -1,0 +1,435 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-11",
+  "purpose": "Round 5 on public 3.0.0, historical Trial 7, same providers as Round 4",
+  "concurrency": 5,
+  "maxProviderCalls": 5,
+  "automaticRetries": false,
+  "billingMode": "subscription-only",
+  "wallMsPerTask": 10800000,
+  "runRoot": ".local/hardened-next-five-trial-five-2026-09-11/real-campaign-frozen",
+  "files": {
+    "controller": {
+      "path": ".local/hardened-next-five-trial-five-2026-09-11/campaign.mjs",
+      "sha256": "4516afa6db7a19aca4ae602b12fb8ce07170373f7862a16638f493a7289546f5"
+    },
+    "ready": {
+      "path": ".local/hardened-next-five-trial-five-2026-09-11/real-campaign-frozen/READY.json",
+      "sha256": "46efb516891a3766919a39933c8083ad6d35c4d6787bd1cc0321b27ebb57abbc"
+    },
+    "runtimeVerification": {
+      "path": ".local/hardened-next-five-trial-five-2026-09-11/runtime-verification.json",
+      "sha256": "e218002cf94fcbd268017974032fa1f52aef15709f694a3875a0cd8922fa025d"
+    },
+    "dependencies": {
+      "path": ".local/hardened-next-five-trial-five-2026-09-11/dependencies.json",
+      "sha256": "1d8a88bdde1ee8a60351de78f29b3ce369f9da4e90ea51ad76657f03a6152f5a"
+    },
+    "hardeningEvidence": {
+      "path": ".local/hardened-next-five-trial-five-2026-09-11/evidence.json",
+      "sha256": "d6f77c2f8aa1a256c12460565a644e90161591e946cccbb3d3229fc64dec47f5"
+    },
+    "disposition": {
+      "path": ".local/hardened-next-five-trial-five-2026-09-11/disposition.json",
+      "sha256": "7ab8b7ad3f9684f73d5d623fcf89d1db854864e7c985a72b34978eacfa5b02eb"
+    },
+    "runtimeCopy": {
+      "path": ".local/hardened-next-five-trial-five-2026-09-11/runtime-copy.json",
+      "sha256": "7ab650365c58aea10d27c221352b5eb64b97073972cb5d139ee4e10e06c32aea"
+    },
+    "previousController": {
+      "path": ".local/hardened-next-five-trial-five-2026-09-11/previous-controller.mjs",
+      "sha256": "63d405bc0e2334800e3834679511829285303692b7e74f79a8695515e80e4187"
+    },
+    "controllerDiff": {
+      "path": ".local/hardened-next-five-trial-five-2026-09-11/controller.diff",
+      "sha256": "d26348ee9cb01a956bbfc23cec377a9653245645174d44f150a4263d77d9f8ef"
+    },
+    "provenance": {
+      "path": ".local/hardened-next-five-trial-five-2026-09-11/provenance.json",
+      "sha256": "06895a3f9623d5da14bc73406bc02d189e3ba76c8d026310364d6e9c0e4b45d8"
+    }
+  },
+  "runtime": {
+    "directory": ".local/hardened-next-five-trial-five-2026-09-11/frozen-source",
+    "sourceDigest": "597df061330dad6fc300dc1bf12fdbc12d29817b1e6d58c80732fc4dea71accc",
+    "bundleSha256": "c0a422da75fbc5bac969fcd614a329458780205fc3dcd034cb9f287699fef8d8"
+  },
+  "predecessor": {
+    "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-four-preparation.json",
+    "sha256": "1039386b77b3f2b03811e3b4317fb1e8319158c67e0caeadce41a6d1a19f55bc"
+  },
+  "runtimeRebuilt": false,
+  "changedPackages": [
+    "browser-replay-repair"
+  ],
+  "publicRequirementsChanged": false,
+  "providerAssignmentsChanged": false,
+  "packages": [
+    {
+      "id": "route-policy-repair",
+      "target": "codex",
+      "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "historicalTrial": 7,
+      "versionAttempt": 5,
+      "gradingRevision": "coverage-v2",
+      "analysisDocument": "reports/screening/third-five/14-route-policy-repair.md",
+      "profile": {
+        "schemaVersion": 1,
+        "target": "codex",
+        "requested": {
+          "provider": "openai",
+          "model": "openai/gpt-5.6-sol",
+          "effort": "xhigh",
+          "scaffold": "codex"
+        },
+        "provenance": {
+          "revision": "83c7a6172d629c6575b785ab12c8db787bb2e323",
+          "source": ".github/harbor-run-defaults.yml@83c7a6172d629c6575b785ab12c8db787bb2e323"
+        },
+        "adapter": {
+          "id": "foundry-subscription-cli",
+          "version": "2",
+          "scaffoldVersion": "0.153.2"
+        },
+        "authoring": {
+          "image": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+          "network": "bridge",
+          "tools": [
+            "node",
+            "shell",
+            "codex"
+          ],
+          "credentials": "broker"
+        },
+        "gradingRoute": "professional-multifile/authority-process@1",
+        "context": {
+          "handling": "scaffold-default-unobserved",
+          "outputTokens": null
+        },
+        "limits": {
+          "wallMs": 10800000,
+          "outputBytes": 33554432,
+          "artifactBytes": 8388608,
+          "memoryMiB": 2048,
+          "cpus": 2,
+          "pids": 256
+        }
+      }
+    },
+    {
+      "id": "browser-replay-repair",
+      "target": "codex",
+      "packageDigest": "3968e17e770da1476aec1ec0a5f742f6d31e248fc295ad55d33ad8bce0f9b644",
+      "profileDigest": "552855d36d4339bb73a354a610053478e653297b2db17d5bcd85739318a0bfc3",
+      "historicalTrial": 7,
+      "versionAttempt": 5,
+      "gradingRevision": "coverage-v3",
+      "analysisDocument": "reports/screening/original-five/03-browser-replay-repair.md",
+      "profile": {
+        "schemaVersion": 1,
+        "target": "codex",
+        "requested": {
+          "provider": "openai",
+          "model": "openai/gpt-5.6-sol",
+          "effort": "xhigh",
+          "scaffold": "codex"
+        },
+        "provenance": {
+          "revision": "83c7a6172d629c6575b785ab12c8db787bb2e323",
+          "source": ".github/harbor-run-defaults.yml@83c7a6172d629c6575b785ab12c8db787bb2e323"
+        },
+        "adapter": {
+          "id": "foundry-subscription-cli",
+          "version": "2",
+          "scaffoldVersion": "0.153.2"
+        },
+        "authoring": {
+          "image": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+          "network": "bridge",
+          "tools": [
+            "node",
+            "shell",
+            "codex"
+          ],
+          "credentials": "broker"
+        },
+        "gradingRoute": "professional-multifile/authority-process@1",
+        "context": {
+          "handling": "scaffold-default-unobserved",
+          "outputTokens": null
+        },
+        "limits": {
+          "wallMs": 10800000,
+          "outputBytes": 33554432,
+          "artifactBytes": 8388608,
+          "memoryMiB": 4096,
+          "cpus": 2,
+          "pids": 256
+        }
+      }
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "target": "claude",
+      "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "historicalTrial": 7,
+      "versionAttempt": 5,
+      "gradingRevision": "coverage-v2",
+      "analysisDocument": "reports/screening/fourth-five/18-recurring-calendar-repair.md",
+      "profile": {
+        "schemaVersion": 1,
+        "target": "claude",
+        "requested": {
+          "provider": "anthropic",
+          "model": "anthropic/claude-opus-5",
+          "effort": "max",
+          "scaffold": "claude-code"
+        },
+        "provenance": {
+          "revision": "83c7a6172d629c6575b785ab12c8db787bb2e323",
+          "source": ".github/harbor-run-defaults.yml@83c7a6172d629c6575b785ab12c8db787bb2e323"
+        },
+        "adapter": {
+          "id": "foundry-subscription-cli",
+          "version": "2",
+          "scaffoldVersion": "2.1.263"
+        },
+        "authoring": {
+          "image": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+          "network": "bridge",
+          "tools": [
+            "node",
+            "shell",
+            "claude"
+          ],
+          "credentials": "broker"
+        },
+        "gradingRoute": "professional-multifile/authority-process@1",
+        "context": {
+          "handling": "scaffold-default-unobserved",
+          "outputTokens": 128000
+        },
+        "limits": {
+          "wallMs": 10800000,
+          "outputBytes": 33554432,
+          "artifactBytes": 8388608,
+          "memoryMiB": 2048,
+          "cpus": 2,
+          "pids": 256
+        }
+      }
+    },
+    {
+      "id": "workflow-authority-repair",
+      "target": "claude",
+      "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "historicalTrial": 7,
+      "versionAttempt": 5,
+      "gradingRevision": "coverage-v2",
+      "analysisDocument": "reports/screening/fourth-five/20-workflow-authority-repair.md",
+      "profile": {
+        "schemaVersion": 1,
+        "target": "claude",
+        "requested": {
+          "provider": "anthropic",
+          "model": "anthropic/claude-opus-5",
+          "effort": "max",
+          "scaffold": "claude-code"
+        },
+        "provenance": {
+          "revision": "83c7a6172d629c6575b785ab12c8db787bb2e323",
+          "source": ".github/harbor-run-defaults.yml@83c7a6172d629c6575b785ab12c8db787bb2e323"
+        },
+        "adapter": {
+          "id": "foundry-subscription-cli",
+          "version": "2",
+          "scaffoldVersion": "2.1.263"
+        },
+        "authoring": {
+          "image": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+          "network": "bridge",
+          "tools": [
+            "node",
+            "shell",
+            "claude"
+          ],
+          "credentials": "broker"
+        },
+        "gradingRoute": "professional-multifile/authority-process@1",
+        "context": {
+          "handling": "scaffold-default-unobserved",
+          "outputTokens": 128000
+        },
+        "limits": {
+          "wallMs": 10800000,
+          "outputBytes": 33554432,
+          "artifactBytes": 8388608,
+          "memoryMiB": 2048,
+          "cpus": 2,
+          "pids": 256
+        }
+      }
+    },
+    {
+      "id": "delegated-budget-repair",
+      "target": "claude",
+      "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "historicalTrial": 7,
+      "versionAttempt": 5,
+      "gradingRevision": "coverage-v2",
+      "analysisDocument": "reports/screening/original-five/04-delegated-budget-repair.md",
+      "profile": {
+        "schemaVersion": 1,
+        "target": "claude",
+        "requested": {
+          "provider": "anthropic",
+          "model": "anthropic/claude-opus-5",
+          "effort": "max",
+          "scaffold": "claude-code"
+        },
+        "provenance": {
+          "revision": "83c7a6172d629c6575b785ab12c8db787bb2e323",
+          "source": ".github/harbor-run-defaults.yml@83c7a6172d629c6575b785ab12c8db787bb2e323"
+        },
+        "adapter": {
+          "id": "foundry-subscription-cli",
+          "version": "2",
+          "scaffoldVersion": "2.1.263"
+        },
+        "authoring": {
+          "image": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+          "network": "bridge",
+          "tools": [
+            "node",
+            "shell",
+            "claude"
+          ],
+          "credentials": "broker"
+        },
+        "gradingRoute": "professional-multifile/authority-process@1",
+        "context": {
+          "handling": "scaffold-default-unobserved",
+          "outputTokens": 128000
+        },
+        "limits": {
+          "wallMs": 10800000,
+          "outputBytes": 33554432,
+          "artifactBytes": 8388608,
+          "memoryMiB": 2048,
+          "cpus": 2,
+          "pids": 256
+        }
+      }
+    }
+  ],
+  "priorRecords": [
+    {
+      "id": "route-policy-repair",
+      "provider": "codex",
+      "historicalTrial": 6,
+      "versionRound": 4,
+      "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+      "recordedReward": 1,
+      "countedReward": 1,
+      "disposition": "retained",
+      "originalCompletion": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/route-policy-repair-attempt-1/completion.json",
+        "sha256": "f529ec062e584f9fce0c96bd07dfbd8afb01235babe9cc6a4ede7a051bac9438"
+      },
+      "originalGrade": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/route-policy-repair-attempt-1/grade.json",
+        "sha256": "b031742640ef5be5d51bfb02c58d808bfa4ea7377e57bd58885b1e604fe10fb7"
+      },
+      "filesVerified": 910
+    },
+    {
+      "id": "browser-replay-repair",
+      "provider": "codex",
+      "historicalTrial": 6,
+      "versionRound": 4,
+      "packageDigest": "712f97575821006724eef7f3b3161c97512019897af62e46ab32b9c32dcddf31",
+      "recordedReward": 1,
+      "countedReward": null,
+      "disposition": "grading-void",
+      "originalCompletion": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/browser-replay-repair-attempt-1/completion.json",
+        "sha256": "f22831aeb72abe95fb3efc43ee896001bdbd4b54ff6c6227505be3435f686fba"
+      },
+      "originalGrade": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/browser-replay-repair-attempt-1/grade.json",
+        "sha256": "a8d25d300d94e57b4961114dcfd6e02a7fd105809d880c6f36f9a24b5bc768d5"
+      },
+      "diagnosticReward": 0,
+      "reason": "Incomplete positive grading coverage: checker rejects a permitted existing-dialog confirmation without a redundant form submission.",
+      "replacementHistoricalTrial": 7,
+      "replacementVersionRound": 5,
+      "replacementProvider": "codex",
+      "userAuthorizedVoid": true,
+      "filesVerified": 1389
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "provider": "claude",
+      "historicalTrial": 6,
+      "versionRound": 4,
+      "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+      "recordedReward": 0,
+      "countedReward": 0,
+      "disposition": "retained",
+      "originalCompletion": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/recurring-calendar-repair-attempt-1/completion.json",
+        "sha256": "b8b494040ea147088107cfe25a2ee4c66661a0042d9054f9be50934b902ce815"
+      },
+      "originalGrade": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/recurring-calendar-repair-attempt-1/grade.json",
+        "sha256": "db5e9fb702345e8bcc7873d591b87b1709caf60309ff6fa6553a4a5b8052649d"
+      },
+      "filesVerified": 1026
+    },
+    {
+      "id": "workflow-authority-repair",
+      "provider": "claude",
+      "historicalTrial": 6,
+      "versionRound": 4,
+      "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+      "recordedReward": 0,
+      "countedReward": 0,
+      "disposition": "retained",
+      "originalCompletion": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/workflow-authority-repair-attempt-1/completion.json",
+        "sha256": "bdc08536d55fae8c1dc2b9f53f460218ea2ddb96f24c8f369b80bf8f79ba49f1"
+      },
+      "originalGrade": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/workflow-authority-repair-attempt-1/grade.json",
+        "sha256": "4405f13427ba67d7667ada47bdc39bfed2ba96fb6c5a629406ee7f4f048b16ab"
+      },
+      "filesVerified": 929
+    },
+    {
+      "id": "delegated-budget-repair",
+      "provider": "claude",
+      "historicalTrial": 6,
+      "versionRound": 4,
+      "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+      "recordedReward": 0,
+      "countedReward": 0,
+      "disposition": "retained",
+      "originalCompletion": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/delegated-budget-repair-attempt-1/completion.json",
+        "sha256": "7435c5e182d55e4e239044160d8e3e63250fad5f9f2c1ca8e37d3b81a6bea5d3"
+      },
+      "originalGrade": {
+        "path": ".local/hardened-next-five-trial-four-2026-09-11/real-campaign-frozen/jobs/real-provider/records/delegated-budget-repair-attempt-1/grade.json",
+        "sha256": "ced3898c39f675942c006d89c8e77221332e9f2038d611392d4cc60b7cfc469b"
+      },
+      "filesVerified": 1353
+    }
+  ],
+  "browserMissingClaudeSlotStillPending": true,
+  "providerCallsMade": 0
+}

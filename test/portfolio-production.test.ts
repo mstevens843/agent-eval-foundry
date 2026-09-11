@@ -88,6 +88,9 @@ describe("professional portfolio contracts", () => {
   it("binds the scenario selection record to the retained generator bytes", () => {
     const ledger = JSON.parse(readFileSync("data/portfolio-selection-ledger.json", "utf8"));
     const successors = [
+      "2026-09-11-browser-coverage-v3-generators",
+      "2026-09-11-next-five-generators",
+      "2026-09-10-next-five-generators",
       "2026-09-09-next-five-generators",
       "2026-09-09-fourth-ranked-five-generators",
       "2026-09-09-final-five-generators",

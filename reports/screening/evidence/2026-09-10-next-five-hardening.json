@@ -1,0 +1,3346 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-10",
+  "purpose": "Pretrial hardening of five 3.0.0 successors against their existing public contracts",
+  "report": "reports/screening/next-five-hardening-2026-09-10.md",
+  "coverage": "reports/screening/next-five-hardening-coverage-2026-09-10.md",
+  "providerCallsMade": 0,
+  "modelTrialsLaunched": 0,
+  "historicalRewardsChanged": 0,
+  "finalistStandings": {
+    "unchanged": true,
+    "count": 5,
+    "successorAdditions": 0
+  },
+  "tasks": [
+    {
+      "id": "route-policy-repair",
+      "version": "3.0.0",
+      "reference": {
+        "total": 33,
+        "passes": 33,
+        "failures": 0,
+        "infrastructureErrors": 0
+      },
+      "alternative": {
+        "total": 33,
+        "passes": 33,
+        "failures": 0,
+        "infrastructureErrors": 0
+      },
+      "starter": {
+        "total": 33,
+        "passes": 0,
+        "failures": 33,
+        "infrastructureErrors": 0
+      },
+      "positiveVariants": [
+        {
+          "id": "variant-redundant-flat-rules",
+          "total": 33,
+          "passes": 33,
+          "failures": 0,
+          "infrastructureErrors": 0
+        }
+      ],
+      "assuranceChecks": 16,
+      "checker": {
+        "correct": 13,
+        "total": 13,
+        "reasonPolicy": "diagnostic-only",
+        "scenarioCoverage": "all"
+      },
+      "addedControls": [
+        {
+          "id": "unsampled-route",
+          "check": "translation"
+        },
+        {
+          "id": "changed-unrequested-egress",
+          "check": "translation"
+        },
+        {
+          "id": "changed-rejected-attributes",
+          "check": "translation"
+        },
+        {
+          "id": "publish-after-success",
+          "check": "legal_config"
+        }
+      ],
+      "localControlResults": [
+        {
+          "candidate": "reference",
+          "scenarios": 33,
+          "maxPayloadBytes": 36296,
+          "maxCalls": 1,
+          "pass": true
+        },
+        {
+          "candidate": "alternative",
+          "scenarios": 33,
+          "maxPayloadBytes": 36296,
+          "maxCalls": 2,
+          "pass": true
+        },
+        {
+          "candidate": "variant-redundant-flat-rules",
+          "scenarios": 33,
+          "maxPayloadBytes": 36554,
+          "maxCalls": 2,
+          "pass": true
+        },
+        {
+          "candidate": "starter",
+          "scenarios": 33,
+          "maxPayloadBytes": 1627,
+          "maxCalls": 0,
+          "pass": true
+        },
+        {
+          "candidate": "original-preference",
+          "scenarios": 33,
+          "maxPayloadBytes": 36279,
+          "maxCalls": 1,
+          "pass": true
+        },
+        {
+          "candidate": "mutated-scope",
+          "scenarios": 33,
+          "maxPayloadBytes": 36285,
+          "maxCalls": 1,
+          "pass": true
+        },
+        {
+          "candidate": "lost-return",
+          "scenarios": 33,
+          "maxPayloadBytes": 8450,
+          "maxCalls": 1,
+          "pass": true
+        },
+        {
+          "candidate": "drop-mutation",
+          "scenarios": 33,
+          "maxPayloadBytes": 45912,
+          "maxCalls": 1,
+          "pass": true
+        },
+        {
+          "candidate": "no-work",
+          "scenarios": 33,
+          "maxPayloadBytes": 1627,
+          "maxCalls": 0,
+          "pass": true
+        },
+        {
+          "candidate": "unsampled-route",
+          "scenarios": 33,
+          "maxPayloadBytes": 36424,
+          "maxCalls": 1,
+          "pass": true
+        },
+        {
+          "candidate": "changed-unrequested-egress",
+          "scenarios": 33,
+          "maxPayloadBytes": 26013,
+          "maxCalls": 1,
+          "pass": true
+        },
+        {
+          "candidate": "changed-rejected-attributes",
+          "scenarios": 33,
+          "maxPayloadBytes": 36584,
+          "maxCalls": 1,
+          "pass": true
+        },
+        {
+          "candidate": "publish-after-success",
+          "scenarios": 33,
+          "maxPayloadBytes": 36296,
+          "maxCalls": 2,
+          "pass": true
+        }
+      ],
+      "sourceFiles": [
+        {
+          "path": "tasks/route-policy-repair/private/alternative/entry.mjs",
+          "sha256": "ad4a03413f75c016f34bc7c0ea8d5b54409b22ab2861907bae73277d255e8f24"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/alternative/src/change.mjs",
+          "sha256": "c9017d4283c33469c490e7291bcb301dfa4436656dc6c3461789cbba22abc032"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/alternative/src/names.mjs",
+          "sha256": "345f8e7936d2975a9533b6af858d2290cd19e0b1e9f0f238bf6febba0a2f078b"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/alternative/src/plan.mjs",
+          "sha256": "7d58963dba0d5494e31f927869d88d758684cfafba402e6fa4c85c85ea3e5074"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/alternative/src/specialize.mjs",
+          "sha256": "8c37d2dfe52adaaa969c902f6f27ec9ce676a67d751451efe001f987b9f1f75d"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/alternative/src/target.mjs",
+          "sha256": "08c0730fe3d611ff91e74f75403204d4bd4ffeff397fb44d16b613c3d82334a6"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/checker-required.json",
+          "sha256": "f295d2e6cf13e9fddf6f81e2e9b8bc08e64243f4dd04269bd5b9bb84fcf17de7"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/control-manifest.json",
+          "sha256": "c4e94236713c50d674d63536971c0d765d6735c94b5ea52f143bfaa344bf6779"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/all-egresses.mjs",
+          "sha256": "e9bc65e28a78eeea4852923c2c91029f992c80deffe241188264c31b68e8729d"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/changed-rejected-attributes.mjs",
+          "sha256": "61373d96b012015d8fbb14db60eedda1164470b39dfcf8aab7c98af674dbe2cd"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/changed-unrequested-egress.mjs",
+          "sha256": "dbccd04726cb122395ba1ea34987674d108397002e19a7d4abc7e2f2dbf7aab3"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/drop-mutation-v3.mjs",
+          "sha256": "66fb7136e4e0cf787aa8da0b9512724ca9cc9a5ea2a2c1df36da59df786fa7f6"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/early-accept.mjs",
+          "sha256": "648fe2fe283b6496d46699fac38ad05b91fe5259a09d6e76b6740ec139505297"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/example-hardcoding.mjs",
+          "sha256": "872228436c6843a3e2f5edebc0b42403cee6f685ea2f93216026aace658b1552"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/falsy-preference.mjs",
+          "sha256": "77a254d28c74e6b94db7e3c67f944ec0e667863e11e0a18d8effff880e1f956c"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/forged-completion.mjs",
+          "sha256": "61e495f7f728ad9b12f673c4ea45184f0de6e62c0517cb21c8c5b9a2d7590dea"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/ignore-prefix-length.mjs",
+          "sha256": "6d06e8e4e98182e14cc46e8aa6516fbac879b900439414ae0d061fb584041c00"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/isolation.mjs",
+          "sha256": "5cb0fe8d8addd65dc72cbf04795ca088df98e5bb7b20a87c16b3c01463d9066b"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/leave-nested-calls.mjs",
+          "sha256": "9d78e4c5a71c464b816d94ceaa149eeab37d3f55acf9995233816980ddc7bbec"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/lost-return-v3.mjs",
+          "sha256": "5a89eab884af773e2213de7c9fb0f2d32ea6b031d1675f72bcfcb654adab8709"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/match-mutated-community.mjs",
+          "sha256": "39feb94aedd1d3e25b06563a3cd001b6efd3bbbb35e398b79e0435bc261f8bf5"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/mutated-scope-v3.mjs",
+          "sha256": "b99b6ada199072a345d2248702378675bf0df7a5f6269455295fe62eba49d3ef"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/no-work.mjs",
+          "sha256": "1fe7efc4c7640f4fceacc777b7a0ef5e39579b3633143b4a4127caa007aa56ae"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/original-preference-v3.mjs",
+          "sha256": "c22ba327f64175219c65fe80a8cb9f19c3707c60d453cccf7ceceb7b4786a1ef"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/publish-after-success.mjs",
+          "sha256": "5a106fb4637fdf0f2ca4babf8ac2b36198a7d72a1221cd82efe056a4fcd099f3"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/controls/unsampled-route.mjs",
+          "sha256": "fbcb53ed9cdf86c10cdf18027f7fe2b8698f9be26f138167bc452b7460de43b6"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/domain.mjs",
+          "sha256": "faf1f7e4c8ec0cb01eef6ba1cf513a9eeeafcef33fad142d4870174d603edee2"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/equivalence.mjs",
+          "sha256": "f832296656592ad4de4a5791a016609bdf0b4ef5f53e7b9bef2bb8cabf19f97f"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/reference/checker-utils.mjs",
+          "sha256": "9eb8005fd21cc8df4a86c254f3c49805416b7b38d4fa28f3b92087e870dfb30b"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/reference/checker.mjs",
+          "sha256": "d284a1e53a2e8115c6d6f778495139b3baa6566d87025053f870d1b1ffb24e53"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/reference/entry.mjs",
+          "sha256": "d3e69f2104574f3bfd924aa9c64b315a48141a4e93362cf4d848324d59253e2a"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/reference/src/change.mjs",
+          "sha256": "c9017d4283c33469c490e7291bcb301dfa4436656dc6c3461789cbba22abc032"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/reference/src/equivalence.mjs",
+          "sha256": "f832296656592ad4de4a5791a016609bdf0b4ef5f53e7b9bef2bb8cabf19f97f"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/reference/src/names.mjs",
+          "sha256": "345f8e7936d2975a9533b6af858d2290cd19e0b1e9f0f238bf6febba0a2f078b"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/reference/src/plan.mjs",
+          "sha256": "7d58963dba0d5494e31f927869d88d758684cfafba402e6fa4c85c85ea3e5074"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/reference/src/specialize.mjs",
+          "sha256": "8c37d2dfe52adaaa969c902f6f27ec9ce676a67d751451efe001f987b9f1f75d"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/reference/src/target.mjs",
+          "sha256": "08c0730fe3d611ff91e74f75403204d4bd4ffeff397fb44d16b613c3d82334a6"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/scenarios.mjs",
+          "sha256": "ce5f48f637cf8f3de57a9e16dbdf4e824375c7c58d5729f8e429ca55268ae859"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/target.mjs",
+          "sha256": "08c0730fe3d611ff91e74f75403204d4bd4ffeff397fb44d16b613c3d82334a6"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/variants/redundant-flat-rules/checker-utils.mjs",
+          "sha256": "9eb8005fd21cc8df4a86c254f3c49805416b7b38d4fa28f3b92087e870dfb30b"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/variants/redundant-flat-rules/checker.mjs",
+          "sha256": "d284a1e53a2e8115c6d6f778495139b3baa6566d87025053f870d1b1ffb24e53"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/variants/redundant-flat-rules/entry.mjs",
+          "sha256": "2a0cf235928934a68b5abee74c6cd2dc6bf76296f2bdd29a6e44895dad053db5"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/variants/redundant-flat-rules/src/change.mjs",
+          "sha256": "c9017d4283c33469c490e7291bcb301dfa4436656dc6c3461789cbba22abc032"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/variants/redundant-flat-rules/src/equivalence.mjs",
+          "sha256": "f832296656592ad4de4a5791a016609bdf0b4ef5f53e7b9bef2bb8cabf19f97f"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/variants/redundant-flat-rules/src/names.mjs",
+          "sha256": "345f8e7936d2975a9533b6af858d2290cd19e0b1e9f0f238bf6febba0a2f078b"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/variants/redundant-flat-rules/src/plan.mjs",
+          "sha256": "7d58963dba0d5494e31f927869d88d758684cfafba402e6fa4c85c85ea3e5074"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/variants/redundant-flat-rules/src/specialize.mjs",
+          "sha256": "8c37d2dfe52adaaa969c902f6f27ec9ce676a67d751451efe001f987b9f1f75d"
+        },
+        {
+          "path": "tasks/route-policy-repair/private/variants/redundant-flat-rules/src/target.mjs",
+          "sha256": "08c0730fe3d611ff91e74f75403204d4bd4ffeff397fb44d16b613c3d82334a6"
+        },
+        {
+          "path": "tasks/route-policy-repair/public/api.d.ts",
+          "sha256": "61bcbdd1fdd9382f85340fa14755d20b02e03f38a7459544d2548447e0e96e26"
+        },
+        {
+          "path": "tasks/route-policy-repair/public/CHECKER-INPUT.md",
+          "sha256": "508190e3f8921d06b73f52be7770085450a9fb6eac030bbb9d9bbe8b730653e5"
+        },
+        {
+          "path": "tasks/route-policy-repair/public/entry.mjs",
+          "sha256": "65d1804c2d43ada53fbec3229f66083c212a66d18f8914fe1ea43e9d2a416876"
+        },
+        {
+          "path": "tasks/route-policy-repair/public/instruction.md",
+          "sha256": "3bc385cde816be4c2f1e8a85a5126a5c4171c1dce17b0481bb7acaf282dec521"
+        },
+        {
+          "path": "tasks/route-policy-repair/public/package.json",
+          "sha256": "24ea07a7a2496ab366b29eaf5e22b44a274a58f49ce6e4ba8e0e09fdc7ae00ff"
+        },
+        {
+          "path": "tasks/route-policy-repair/public/SEMANTICS.md",
+          "sha256": "490914b89c1c1ce94a89561002740ffa7479a33daaa26fa05266222cc5270392"
+        },
+        {
+          "path": "tasks/route-policy-repair/public/target.mjs",
+          "sha256": "08c0730fe3d611ff91e74f75403204d4bd4ffeff397fb44d16b613c3d82334a6"
+        }
+      ],
+      "foundry": {
+        "directory": ".local/next-five-hardening-2026-09-10/release-four/route-policy-repair/export",
+        "digest": "c3ff40c39c331627595b3a5aa0a74f03d6777a26e9c34b5b27c042474fe0fd63",
+        "pointer": {
+          "path": ".local/next-five-hardening-2026-09-10/release-four/route-policy-repair/export/package.json",
+          "sha256": "2bce265d4c222404aa3bea4bb56beb9e365ece2f8fa40caa8ba98d7327cbb9af",
+          "bytes": 103
+        },
+        "assurance": {
+          "path": ".local/next-five-hardening-2026-09-10/release-four/route-policy-repair/validation/assurance.json",
+          "sha256": "eea8a6cfeb05bd6a5832014fed4fdcfba348e767f01266ff4c8f505b38c469ca",
+          "bytes": 118996
+        },
+        "checkerEvidence": {
+          "path": ".local/next-five-hardening-2026-09-10/release-four/route-policy-repair/oracle-checker/grade-summary.json",
+          "sha256": "f648247b33f4dd028173c73f8c0b2c79ffad1d9830d93187bc95e0262c8de3f7",
+          "bytes": 3351
+        },
+        "recipientEvidence": {
+          "path": ".local/next-five-hardening-2026-09-10/release-four/recipient/result.json",
+          "sha256": "1acd3052c9676394caed208567b6bedc88a4a144264d8bf8c006f010b36c7130",
+          "bytes": 1802
+        },
+        "recipient": {
+          "packageId": "route-policy-repair",
+          "packageDigest": "c3ff40c39c331627595b3a5aa0a74f03d6777a26e9c34b5b27c042474fe0fd63",
+          "operations": 16,
+          "scenarioCount": 33,
+          "browserTraces": 0,
+          "invalidExecutionExcluded": true,
+          "artifactDriftRejected": true,
+          "evidenceDriftRejected": true,
+          "sourceCheckoutRequired": false,
+          "providerCallsMade": 0
+        },
+        "reproducible": true
+      },
+      "native": {
+        "directory": ".local/next-five-hardening-2026-09-10/harbor-frozen-v2/route-policy-repair",
+        "digest": "eabcb2c0316df591f89077e6051866ee006300dbc1e9c860fdc64975c0ea3366",
+        "manifest": {
+          "path": ".local/next-five-hardening-2026-09-10/harbor-frozen-v2/route-policy-repair/export-manifest.json",
+          "sha256": "f5ab29f7f1a756cf6161fbfca374e0e10770833c80a187ea9abcbb19ff95f1f1",
+          "bytes": 19344
+        },
+        "reproduction": {
+          "path": ".local/next-five-hardening-2026-09-10/harbor-reproduction-v2/route-policy-repair/export-manifest.json",
+          "sha256": "f5ab29f7f1a756cf6161fbfca374e0e10770833c80a187ea9abcbb19ff95f1f1",
+          "bytes": 19344
+        },
+        "reproducible": true,
+        "oracle": {
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "infrastructureError": false,
+          "reason": null,
+          "result": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-five-final-oracle/route-policy-repair__ujtAS4V/result.json",
+            "sha256": "a564c8dbfa2507fee265825fd7b695d03c4ba820a99b4a4619b2e936c08da773",
+            "bytes": 4197
+          },
+          "summary": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-five-final-oracle/route-policy-repair__ujtAS4V/verifier/summary.json",
+            "sha256": "0c6a67e07daef7a72ebb1db196bb1c7de744fda7a6829a77daabce80f30f044a",
+            "bytes": 1355
+          }
+        },
+        "nop": {
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "infrastructureError": false,
+          "reason": "Error: missing required deliverable\n    at file:///tests/harbor-grade.mjs:168:105\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:643:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)",
+          "result": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-five-final-nop/route-policy-repair__iy8rmTn/result.json",
+            "sha256": "40c0081833ca1bcf4d968aec696177471c56b0f92911b7b383d12bc195d1ba8f",
+            "bytes": 4185
+          },
+          "summary": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-five-final-nop/route-policy-repair__iy8rmTn/verifier/summary.json",
+            "sha256": "d816ea2b8a1f61abad610620b48434e9d6a3e6795c59fc19c22390be48b5ed8b",
+            "bytes": 460
+          }
+        },
+        "integrity": [
+          {
+            "name": "missing-verdicts",
+            "passed": true
+          },
+          {
+            "name": "always-accept",
+            "passed": true
+          },
+          {
+            "name": "always-reject",
+            "passed": true
+          },
+          {
+            "name": "mutated-input",
+            "passed": true
+          },
+          {
+            "name": "mutation-restored-before-return",
+            "passed": true
+          },
+          {
+            "name": "mutation-hidden-by-json-hook",
+            "passed": true
+          },
+          {
+            "name": "private-read-and-reward-write-denied",
+            "passed": true
+          },
+          {
+            "name": "detached-descendant-reaped",
+            "passed": true
+          },
+          {
+            "name": "forged-reward-and-output-symlink-rejected",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "browser-replay-repair",
+      "version": "3.0.0",
+      "reference": {
+        "total": 19,
+        "passes": 19,
+        "failures": 0,
+        "infrastructureErrors": 0
+      },
+      "alternative": {
+        "total": 19,
+        "passes": 19,
+        "failures": 0,
+        "infrastructureErrors": 0
+      },
+      "starter": {
+        "total": 19,
+        "passes": 0,
+        "failures": 19,
+        "infrastructureErrors": 0
+      },
+      "positiveVariants": [
+        {
+          "id": "variant-repeat-committed-operation",
+          "total": 19,
+          "passes": 19,
+          "failures": 0,
+          "infrastructureErrors": 0
+        }
+      ],
+      "assuranceChecks": 15,
+      "checker": {
+        "correct": 12,
+        "total": 12,
+        "reasonPolicy": "diagnostic-only",
+        "scenarioCoverage": "all"
+      },
+      "addedControls": [
+        {
+          "id": "incorrect-completion-report",
+          "check": "reports"
+        },
+        {
+          "id": "out-of-order-effects",
+          "check": "exact_effects"
+        },
+        {
+          "id": "wrong-action-after-effects",
+          "check": "current_preconditions"
+        }
+      ],
+      "localControlResults": [
+        {
+          "candidate": "reference",
+          "scenarios": 19,
+          "maxPayloadBytes": 936,
+          "maxCalls": 113,
+          "pass": true
+        },
+        {
+          "candidate": "alternative",
+          "scenarios": 19,
+          "maxPayloadBytes": 938,
+          "maxCalls": 114,
+          "pass": true
+        },
+        {
+          "candidate": "variant-repeat-committed-operation",
+          "scenarios": 19,
+          "maxPayloadBytes": 961,
+          "maxCalls": 127,
+          "pass": true
+        },
+        {
+          "candidate": "starter",
+          "scenarios": 19,
+          "maxPayloadBytes": 934,
+          "maxCalls": 0,
+          "pass": true
+        },
+        {
+          "candidate": "tuple-identity",
+          "scenarios": 19,
+          "maxPayloadBytes": 941,
+          "maxCalls": 113,
+          "pass": true
+        },
+        {
+          "candidate": "pending-complete",
+          "scenarios": 19,
+          "maxPayloadBytes": 943,
+          "maxCalls": 97,
+          "pass": true
+        },
+        {
+          "candidate": "competing-dialog",
+          "scenarios": 19,
+          "maxPayloadBytes": 943,
+          "maxCalls": 106,
+          "pass": true
+        },
+        {
+          "candidate": "skip-later-steps",
+          "scenarios": 19,
+          "maxPayloadBytes": 943,
+          "maxCalls": 45,
+          "pass": true
+        },
+        {
+          "candidate": "no-work",
+          "scenarios": 19,
+          "maxPayloadBytes": 934,
+          "maxCalls": 0,
+          "pass": true
+        },
+        {
+          "candidate": "incorrect-completion-report",
+          "scenarios": 19,
+          "maxPayloadBytes": 954,
+          "maxCalls": 113,
+          "pass": true
+        },
+        {
+          "candidate": "out-of-order-effects",
+          "scenarios": 19,
+          "maxPayloadBytes": 947,
+          "maxCalls": 113,
+          "pass": true
+        },
+        {
+          "candidate": "wrong-action-after-effects",
+          "scenarios": 19,
+          "maxPayloadBytes": 953,
+          "maxCalls": 129,
+          "pass": true
+        }
+      ],
+      "sourceFiles": [
+        {
+          "path": "tasks/browser-replay-repair/private/alternative/entry.mjs",
+          "sha256": "caabce287dbca37b500ed3325520dbddd5945eec5383c5d3a1966f30369751ad"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/alternative/src/form.mjs",
+          "sha256": "54efb2d38a65c95c16fa1cfdbc418a74c63d692b048843d2c1486cda7cae0d1b"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/alternative/src/journal.mjs",
+          "sha256": "98009ada67a56abad85d037052d0fc048d529870a0a64792e2fb45c069032512"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/alternative/src/recording.mjs",
+          "sha256": "264646ddcb90c825a3999e8ed5ba031bffd3b36f6648aa326f0698fdb0106edd"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/alternative/src/replay.mjs",
+          "sha256": "f62f69c83255926bdeea5436ee44993a3fb447ba6e65b6b445200adcfebaf305"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/alternative/src/resolver.mjs",
+          "sha256": "ed88af86f40a46339af9697574b7dc128eb8971a0ea348bb0fa27ef79fd16560"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/application/driver.mjs",
+          "sha256": "eb8a8778fa28bb5cd0b705e15fda2a24999dbbf9998d826cd84c98afe019dc84"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/application/page.mjs",
+          "sha256": "18a9d34174b1be81a7ad0aff0f12a5e9cf9fad141b437e904c5d45b0c905b1df"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/application/server.mjs",
+          "sha256": "d1872eae22dfbd9a589a2d5f671240a0c489cf1603c6c6167f6070c49ba8a53c"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/checker-required.json",
+          "sha256": "f295d2e6cf13e9fddf6f81e2e9b8bc08e64243f4dd04269bd5b9bb84fcf17de7"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/control-manifest.json",
+          "sha256": "d7e847c8c743676524527086e0cd79e4466ffbadf188c6e372c1573540efa462"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/claim-only.mjs",
+          "sha256": "faa70bae36b36026fa32f2bfe41efce1575bda502ba7d85b932605772a52084d"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/competing-dialog-v3.mjs",
+          "sha256": "bd664c18472ca6806d9075a3a0c2f541365de26c810c47d0f862c52af496f4a9"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/early-report.mjs",
+          "sha256": "ba8b60e32260da3dca3695e7a2cf971cf7b293fe52d085ead6351b0519811f5b"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/first-candidate.mjs",
+          "sha256": "56f6b7e745cd599f6f64d2bc4420aa4287b1a7dcefcf5d657f66f0ff6bd8a704"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/incomplete-work.mjs",
+          "sha256": "e58904feda04883da5709541eaa0f3c61d284b5038e97c6ff456d6fb0e045154"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/incorrect-completion-report.mjs",
+          "sha256": "39eef1549140c83791211dde23b32909fba0a1cb94579f6df7e8fefe0d898e6d"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/isolation.mjs",
+          "sha256": "3bbdf08d1c17d390dba49d9773f75870a1355fa3b9a2cb1d18b98bfb675d6d1b"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/no-confirmation.mjs",
+          "sha256": "24c3e75aca648c0f78b6c2cd71af9c722c88e9f263e26ff0f6dc4a30391c818e"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/out-of-order-effects.mjs",
+          "sha256": "7de7cdcec08591c9d3f7f23cf94e8989182d9a62f69c7dc0b4dadf2ef056fa13"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/pending-complete-v3.mjs",
+          "sha256": "7219726505980b8f34e3124f9d58bce365181eaad67f2c9d3aedfdcb6fb232bc"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/pre-fill-read.mjs",
+          "sha256": "2d010487ed2c1bc3f38935c0f97d972a5530355f59ac08fa74b9b29092695555"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/repeated-delivery.mjs",
+          "sha256": "3bf91d2ac6cff53dc2972ababb1a0bfee8146d5f0c333fb27a1bb3eebcc3a503"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/skip-later-steps-v3.mjs",
+          "sha256": "a9d327a27f49c8f919f5966e1ebf8a4dbde7eba0fd71689f97b17c2a1c80f4f7"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/tuple-identity-v3.mjs",
+          "sha256": "e174d223118df064e88822d659b8dfbcc11726a88d8dda23488560a810086716"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/whole-trace-memoization.mjs",
+          "sha256": "ddf9f07c552aa72f3e66d08fa85959002f52b7d23544a026814b42f13fd390a8"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/controls/wrong-action-after-effects.mjs",
+          "sha256": "3197cf652a3fc5a0fef1e1e6fbbe4c69ead0e88ce5523cef145e69962b4c815a"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/domain.mjs",
+          "sha256": "3199ed4aa6246b2bfdc685a647a64769c59c51191aed7a9474a3231156075a9f"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/page.mjs",
+          "sha256": "24385a35a2da13bb01cd6f015e041fc0ce5a0ea050f1142eb1b9fa8ce938f63b"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/reference/checker-utils.mjs",
+          "sha256": "9eb8005fd21cc8df4a86c254f3c49805416b7b38d4fa28f3b92087e870dfb30b"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/reference/checker.mjs",
+          "sha256": "d9655c5c2e2d3b4b2a65608cc5ed285f6321385f46a7902d33e7b8256f7d1e48"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/reference/entry.mjs",
+          "sha256": "3e6200a183d27424ae6e494bf1e597646c7244d578aa02ac2bc66c3ee8b6cfd2"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/reference/src/form.mjs",
+          "sha256": "ef809b68c9d6222e563173cab1876f46f27080312e9e029ebbb0ae3a483b2b17"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/reference/src/journal.mjs",
+          "sha256": "98009ada67a56abad85d037052d0fc048d529870a0a64792e2fb45c069032512"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/reference/src/recording.mjs",
+          "sha256": "264646ddcb90c825a3999e8ed5ba031bffd3b36f6648aa326f0698fdb0106edd"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/reference/src/replay.mjs",
+          "sha256": "f62f69c83255926bdeea5436ee44993a3fb447ba6e65b6b445200adcfebaf305"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/reference/src/resolver.mjs",
+          "sha256": "23a8f5c27d32ca0af7719c24b45fdf404b42d4b00be972772ce6eb861bdd3cad"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/restart.mjs",
+          "sha256": "c87842964b7fb3d9eb17645c40bf370f6d1138d72f808f8dadfef41960141a72"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/scenarios.mjs",
+          "sha256": "c88033b80ecda4c49112a20716c8183177fe606dd609f6882f3bf72616aef797"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/variants/repeat-committed-operation/checker-utils.mjs",
+          "sha256": "9eb8005fd21cc8df4a86c254f3c49805416b7b38d4fa28f3b92087e870dfb30b"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/variants/repeat-committed-operation/checker.mjs",
+          "sha256": "d9655c5c2e2d3b4b2a65608cc5ed285f6321385f46a7902d33e7b8256f7d1e48"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/variants/repeat-committed-operation/entry.mjs",
+          "sha256": "5a2ce2c3744739875b605190ac97e016a4cb5684972a64f346aec484aa37e22c"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/variants/repeat-committed-operation/src/form.mjs",
+          "sha256": "ef809b68c9d6222e563173cab1876f46f27080312e9e029ebbb0ae3a483b2b17"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/variants/repeat-committed-operation/src/journal.mjs",
+          "sha256": "98009ada67a56abad85d037052d0fc048d529870a0a64792e2fb45c069032512"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/variants/repeat-committed-operation/src/recording.mjs",
+          "sha256": "264646ddcb90c825a3999e8ed5ba031bffd3b36f6648aa326f0698fdb0106edd"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/variants/repeat-committed-operation/src/replay.mjs",
+          "sha256": "f62f69c83255926bdeea5436ee44993a3fb447ba6e65b6b445200adcfebaf305"
+        },
+        {
+          "path": "tasks/browser-replay-repair/private/variants/repeat-committed-operation/src/resolver.mjs",
+          "sha256": "23a8f5c27d32ca0af7719c24b45fdf404b42d4b00be972772ce6eb861bdd3cad"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/app/driver.mjs",
+          "sha256": "eb8a8778fa28bb5cd0b705e15fda2a24999dbbf9998d826cd84c98afe019dc84"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/app/page.mjs",
+          "sha256": "18a9d34174b1be81a7ad0aff0f12a5e9cf9fad141b437e904c5d45b0c905b1df"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/app/server.mjs",
+          "sha256": "d1872eae22dfbd9a589a2d5f671240a0c489cf1603c6c6167f6070c49ba8a53c"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/CHECKER-INPUT.md",
+          "sha256": "16335f5ac73eed2a4347f17225ed2fcb9e71417ca7718b9a3118a831020faa7c"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/dev.mjs",
+          "sha256": "bb005abe0329ac6bcacd79b4e86b39c6a010396a09f9bcf1151e80c4fdff365f"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/entry.mjs",
+          "sha256": "65d1804c2d43ada53fbec3229f66083c212a66d18f8914fe1ea43e9d2a416876"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/fixture.json",
+          "sha256": "149698662b2cf5c974049380a897c0dbc896e1e9c63c23c206224ce2ac3f32ca"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/instruction.md",
+          "sha256": "30fdca9e81fd226a93ec7ff3ea11d451a02789ff3625f92cbf1288e734d5e918"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/package.json",
+          "sha256": "ebd12b9e36ed111944143d3a0d2d4c9eed933b544555023d7f9be9fe1913505c"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/replay.mjs",
+          "sha256": "2b6a7176e2e647d3766eb3527d2d03869db74a32063039d63e23f76f98443a2d"
+        },
+        {
+          "path": "tasks/browser-replay-repair/public/SEMANTICS.md",
+          "sha256": "a94f1d2fa0e79a6aede416e4b3b001ec198fa6638ef1448bbe8b4eae958c64c4"
+        }
+      ],
+      "foundry": {
+        "directory": ".local/next-five-hardening-2026-09-10/release-browser/browser-replay-repair/export",
+        "digest": "7511a91b15231268c3fe86e12e67b644805efc35e546edd83a5629eba2508ace",
+        "pointer": {
+          "path": ".local/next-five-hardening-2026-09-10/release-browser/browser-replay-repair/export/package.json",
+          "sha256": "430f6484581cf714cf53d7631e3d0024367bb9a0265eec97995557556c3fc372",
+          "bytes": 103
+        },
+        "assurance": {
+          "path": ".local/next-five-hardening-2026-09-10/release-browser/browser-replay-repair/validation/assurance.json",
+          "sha256": "cbd835c5446851e450f072fce888a7373501ae93fd3f7070790cc53ddd3d4f72",
+          "bytes": 141927
+        },
+        "checkerEvidence": {
+          "path": ".local/next-five-hardening-2026-09-10/release-browser/browser-replay-repair/oracle-checker/grade-summary.json",
+          "sha256": "8972d6193ab9835158d44c5c3981102693ddd0f9048fcf3fee1c22f3f46ed120",
+          "bytes": 2780
+        },
+        "recipientEvidence": {
+          "path": ".local/next-five-hardening-2026-09-10/release-browser/recipient/result.json",
+          "sha256": "39539b3412e59586cd5cc59529668ed12a00d968e4fdc08d35fe907491e59174",
+          "bytes": 574
+        },
+        "recipient": {
+          "packageId": "browser-replay-repair",
+          "packageDigest": "7511a91b15231268c3fe86e12e67b644805efc35e546edd83a5629eba2508ace",
+          "operations": 15,
+          "scenarioCount": 19,
+          "browserTraces": 19,
+          "invalidExecutionExcluded": true,
+          "artifactDriftRejected": true,
+          "evidenceDriftRejected": true,
+          "sourceCheckoutRequired": false,
+          "providerCallsMade": 0
+        },
+        "reproducible": true
+      },
+      "native": {
+        "directory": ".local/next-five-hardening-2026-09-10/harbor-frozen-v2/browser-replay-repair",
+        "digest": "1e04c8674236b4d7395cefb37e12a34c80ec228d2fe84ccebceb86b058eddfa0",
+        "manifest": {
+          "path": ".local/next-five-hardening-2026-09-10/harbor-frozen-v2/browser-replay-repair/export-manifest.json",
+          "sha256": "5074284119f809b1c53dc7f0658379e46c7747e4fcc2222db97f04957c6e8603",
+          "bytes": 20184
+        },
+        "reproduction": {
+          "path": ".local/next-five-hardening-2026-09-10/harbor-reproduction-v2/browser-replay-repair/export-manifest.json",
+          "sha256": "5074284119f809b1c53dc7f0658379e46c7747e4fcc2222db97f04957c6e8603",
+          "bytes": 20184
+        },
+        "reproducible": true,
+        "oracle": {
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "infrastructureError": false,
+          "reason": null,
+          "result": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-five-final-oracle/browser-replay-repair__GkT3aTc/result.json",
+            "sha256": "76f95cfeb828b5d84ef90b3042de22383785b18f3deaef19e53ebff837b578ce",
+            "bytes": 4209
+          },
+          "summary": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-five-final-oracle/browser-replay-repair__GkT3aTc/verifier/summary.json",
+            "sha256": "3c09b0f9a3544f585559be9ff589ebd79f62334ffe65e25f5fba14e3dbf1b86f",
+            "bytes": 1276
+          }
+        },
+        "nop": {
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "infrastructureError": false,
+          "reason": "Error: missing required deliverable\n    at file:///tests/harbor-grade.mjs:168:105\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:643:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)",
+          "result": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-five-final-nop/browser-replay-repair__m2SGzAc/result.json",
+            "sha256": "298f544e528ab10b06a9b273333f131735ae7e2e266f6e1a2256fda333c73ba2",
+            "bytes": 4197
+          },
+          "summary": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-five-final-nop/browser-replay-repair__m2SGzAc/verifier/summary.json",
+            "sha256": "d816ea2b8a1f61abad610620b48434e9d6a3e6795c59fc19c22390be48b5ed8b",
+            "bytes": 460
+          }
+        },
+        "integrity": [
+          {
+            "name": "missing-verdicts",
+            "passed": true
+          },
+          {
+            "name": "always-accept",
+            "passed": true
+          },
+          {
+            "name": "always-reject",
+            "passed": true
+          },
+          {
+            "name": "mutated-input",
+            "passed": true
+          },
+          {
+            "name": "mutation-restored-before-return",
+            "passed": true
+          },
+          {
+            "name": "mutation-hidden-by-json-hook",
+            "passed": true
+          },
+          {
+            "name": "private-read-and-reward-write-denied",
+            "passed": true
+          },
+          {
+            "name": "detached-descendant-reaped",
+            "passed": true
+          },
+          {
+            "name": "forged-reward-and-output-symlink-rejected",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "version": "3.0.0",
+      "reference": {
+        "total": 37,
+        "passes": 37,
+        "failures": 0,
+        "infrastructureErrors": 0
+      },
+      "alternative": {
+        "total": 37,
+        "passes": 37,
+        "failures": 0,
+        "infrastructureErrors": 0
+      },
+      "starter": {
+        "total": 37,
+        "passes": 0,
+        "failures": 37,
+        "infrastructureErrors": 0
+      },
+      "positiveVariants": [
+        {
+          "id": "variant-republish-and-reack",
+          "total": 37,
+          "passes": 37,
+          "failures": 0,
+          "infrastructureErrors": 0
+        }
+      ],
+      "assuranceChecks": 19,
+      "checker": {
+        "correct": 16,
+        "total": 16,
+        "reasonPolicy": "diagnostic-only",
+        "scenarioCoverage": "all"
+      },
+      "addedControls": [
+        {
+          "id": "repaired-event-corruption",
+          "check": "preservation"
+        },
+        {
+          "id": "repaired-source-corruption",
+          "check": "source_revisions"
+        },
+        {
+          "id": "repaired-booking-deletion",
+          "check": "bookings"
+        },
+        {
+          "id": "missing-acknowledgement",
+          "check": "completion"
+        }
+      ],
+      "localControlResults": [
+        {
+          "candidate": "reference",
+          "scenarios": 37,
+          "maxPayloadBytes": 11385,
+          "maxCalls": 22,
+          "pass": true
+        },
+        {
+          "candidate": "alternative",
+          "scenarios": 37,
+          "maxPayloadBytes": 11385,
+          "maxCalls": 28,
+          "pass": true
+        },
+        {
+          "candidate": "variant-republish-and-reack",
+          "scenarios": 37,
+          "maxPayloadBytes": 11385,
+          "maxCalls": 46,
+          "pass": true
+        },
+        {
+          "candidate": "starter",
+          "scenarios": 37,
+          "maxPayloadBytes": 5196,
+          "maxCalls": 0,
+          "pass": true
+        },
+        {
+          "candidate": "fixed-zone-offset",
+          "scenarios": 37,
+          "maxPayloadBytes": 11609,
+          "maxCalls": 22,
+          "pass": true
+        },
+        {
+          "candidate": "display-time-identity",
+          "scenarios": 37,
+          "maxPayloadBytes": 11391,
+          "maxCalls": 22,
+          "pass": true
+        },
+        {
+          "candidate": "no-work",
+          "scenarios": 37,
+          "maxPayloadBytes": 5196,
+          "maxCalls": 0,
+          "pass": true
+        },
+        {
+          "candidate": "forged-completion",
+          "scenarios": 37,
+          "maxPayloadBytes": 5206,
+          "maxCalls": 0,
+          "pass": true
+        },
+        {
+          "candidate": "arrival-order",
+          "scenarios": 37,
+          "maxPayloadBytes": 11385,
+          "maxCalls": 24,
+          "pass": true
+        },
+        {
+          "candidate": "append-bookings",
+          "scenarios": 37,
+          "maxPayloadBytes": 11385,
+          "maxCalls": 22,
+          "pass": true
+        },
+        {
+          "candidate": "drop-foreign",
+          "scenarios": 37,
+          "maxPayloadBytes": 11262,
+          "maxCalls": 22,
+          "pass": true
+        },
+        {
+          "candidate": "display-window",
+          "scenarios": 37,
+          "maxPayloadBytes": 11385,
+          "maxCalls": 22,
+          "pass": true
+        },
+        {
+          "candidate": "repaired-event-corruption",
+          "scenarios": 37,
+          "maxPayloadBytes": 11385,
+          "maxCalls": 24,
+          "pass": true
+        },
+        {
+          "candidate": "repaired-source-corruption",
+          "scenarios": 37,
+          "maxPayloadBytes": 11385,
+          "maxCalls": 25,
+          "pass": true
+        },
+        {
+          "candidate": "repaired-booking-deletion",
+          "scenarios": 37,
+          "maxPayloadBytes": 11385,
+          "maxCalls": 24,
+          "pass": true
+        },
+        {
+          "candidate": "missing-acknowledgement",
+          "scenarios": 37,
+          "maxPayloadBytes": 11385,
+          "maxCalls": 15,
+          "pass": true
+        }
+      ],
+      "sourceFiles": [
+        {
+          "path": "tasks/recurring-calendar-repair/private/alternative/entry.mjs",
+          "sha256": "c3f0a990141546de7c223172106a902742736a1c8ab57dafe87c79f654624389"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/alternative/src/changes.mjs",
+          "sha256": "9642b689e4aaecc8ed4f9603f584456e49e9c769292b6b1df12ae3bad4cb89ac"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/alternative/src/expand.mjs",
+          "sha256": "6c3d4db183d0d28f6678545ebf617e81a7bf03d151fc11a2d06a20d6282e77de"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/alternative/src/publication.mjs",
+          "sha256": "b0244208a95ee7523b0b7563c411f31371ec8b429a4796a58c0676fcc854ce57"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/alternative/src/service.mjs",
+          "sha256": "315603d548b9978ba0ab3c947e864c3b48e8af095a0d56208d30cb96d70f7a49"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/alternative/src/sync.mjs",
+          "sha256": "78dd3a72a0265d01413b658987dd28a77fa55860ac19f2662cdbeea019a46a29"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/alternative/src/time.mjs",
+          "sha256": "7b291e46627ce103b85cfd0db44b23bf7e711b4bc7c5a821b2f016b6b4e6ed0f"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/checker-required.json",
+          "sha256": "f295d2e6cf13e9fddf6f81e2e9b8bc08e64243f4dd04269bd5b9bb84fcf17de7"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/control-manifest.json",
+          "sha256": "8f6008bcc62ccc911eff2f913fd581a964f3f727239cf2dbf9a6cd816a19b1ee"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/append-bookings-v3.mjs",
+          "sha256": "a5c9d604fa09a9b83c3d835b3e3b459fa5d9221096cb3cd1e9b7a1302463578f"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/arrival-order-v3.mjs",
+          "sha256": "898a8d3b071e61319ecd00035df03ef4cbcd5f196a5969903edce0f50bb23c12"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/booking-display-key.mjs",
+          "sha256": "ea903b5bca0d42eb38f383d09ad4fd793b6da95128d49710711eafb3a6da4dd4"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/display-time-identity.mjs",
+          "sha256": "9642b689e4aaecc8ed4f9603f584456e49e9c769292b6b1df12ae3bad4cb89ac"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/display-window-v3.mjs",
+          "sha256": "d42746aecb014d834c088fc23cdb51b39b896714a7295e024425b8b573b0c7ca"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/drop-external-bookings.mjs",
+          "sha256": "9ee1194859845394ff7285f2ee00a20bde1ab246bb5ba600ce33f4ac987924ab"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/drop-foreign-v3.mjs",
+          "sha256": "b6fd917251d48cc4f1c46058000d6778a86fc02ed759a4b4473e0a38eda754bf"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/erase-cancelled-history.mjs",
+          "sha256": "9a93859498e04af7dc17de55c19e871809fde5124a9f61d3491f24cd833193ea"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/fixed-zone-offset.mjs",
+          "sha256": "7b291e46627ce103b85cfd0db44b23bf7e711b4bc7c5a821b2f016b6b4e6ed0f"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/forged-completion.mjs",
+          "sha256": "9b6ca5fe17341cefd04a0f860e844e06aed65cab70070ef8ed5673326ace6366"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/global-series-change.mjs",
+          "sha256": "01543d5434d88b44081b5314be3dc39df8a5c088608133542f6a9557d81fb250"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/isolation.mjs",
+          "sha256": "5cb0fe8d8addd65dc72cbf04795ca088df98e5bb7b20a87c16b3c01463d9066b"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/missing-acknowledgement.mjs",
+          "sha256": "bfb566ef0eb062d1c8ddc24787ede131880bff29d6150465ed008f93b4606c39"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/no-work.mjs",
+          "sha256": "1a13543eb23501e77da041735b1ec2d65398a46ac89b54f7d20b9d337ab31336"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/repaired-booking-deletion.mjs",
+          "sha256": "435f75775fffd1ded6b18d86d0735e24f2ca3e097c92c6ad172e003f5a0c9881"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/repaired-event-corruption.mjs",
+          "sha256": "9008689014e832179846c1f79f551ea2dc7f6f0c0732281a96f411517ca44390"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/repaired-source-corruption.mjs",
+          "sha256": "934cb7ef9ffaeecf18d5b8dba30e7fa1326aa6c3f2ad3e8561cd3c51017c921d"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/reset-attendee-responses.mjs",
+          "sha256": "cd451ccec34bdd7dda9a8f2593dd2755777a82954f36360426dd6b9085f9a640"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/controls/wall-clock-duration.mjs",
+          "sha256": "c53743f9e15fd6ad54387df43148e2528cfa242bf7651a2973c98949a07d34e2"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/domain.mjs",
+          "sha256": "3749c212ec676c9fdc2073c2b8020104869a34f28b3c842b70f89038bf07eb9d"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/publication-shape.mjs",
+          "sha256": "62b5e443ca017d00417394f8cee2f1863079253695aa3742f72642c0774e8670"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/reference/checker-utils.mjs",
+          "sha256": "9eb8005fd21cc8df4a86c254f3c49805416b7b38d4fa28f3b92087e870dfb30b"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/reference/checker.mjs",
+          "sha256": "4c98eeffacb465028c04fee437a483c6c1c05ed04217089771ea869c07fe1a5c"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/reference/entry.mjs",
+          "sha256": "6a3aebc000d1aa658f7a3bcad31c771ad83e2e8ae7244bb000e70b004faed371"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/reference/src/changes.mjs",
+          "sha256": "1aa61f6e5fb04ff0dfef8d027231c2f06052fd81bb22332067e07dc2bbe34d01"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/reference/src/expand.mjs",
+          "sha256": "6c3d4db183d0d28f6678545ebf617e81a7bf03d151fc11a2d06a20d6282e77de"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/reference/src/publication.mjs",
+          "sha256": "b0244208a95ee7523b0b7563c411f31371ec8b429a4796a58c0676fcc854ce57"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/reference/src/service.mjs",
+          "sha256": "56ecc796cb50d87001468fb967499daf25f3e20fe6f9dc97715efd0edad935d6"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/reference/src/sync.mjs",
+          "sha256": "78dd3a72a0265d01413b658987dd28a77fa55860ac19f2662cdbeea019a46a29"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/reference/src/time.mjs",
+          "sha256": "979c20fb00810bcb60948c78445a43c8aa0bbab262d81a8e01eb0408c469747b"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/restart.mjs",
+          "sha256": "c87842964b7fb3d9eb17645c40bf370f6d1138d72f808f8dadfef41960141a72"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/scenarios.mjs",
+          "sha256": "6186ce08f31e3d7b6b2fbc2e0677e17e8344cce158bd5db129adc3eb25f81a9f"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/variants/republish-and-reack/checker-utils.mjs",
+          "sha256": "9eb8005fd21cc8df4a86c254f3c49805416b7b38d4fa28f3b92087e870dfb30b"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/variants/republish-and-reack/checker.mjs",
+          "sha256": "4c98eeffacb465028c04fee437a483c6c1c05ed04217089771ea869c07fe1a5c"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/variants/republish-and-reack/entry.mjs",
+          "sha256": "da083771aa5777f99ec672e7ec5acae255838d15f60ed1080f777951ca852189"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/variants/republish-and-reack/src/changes.mjs",
+          "sha256": "1aa61f6e5fb04ff0dfef8d027231c2f06052fd81bb22332067e07dc2bbe34d01"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/variants/republish-and-reack/src/expand.mjs",
+          "sha256": "6c3d4db183d0d28f6678545ebf617e81a7bf03d151fc11a2d06a20d6282e77de"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/variants/republish-and-reack/src/publication.mjs",
+          "sha256": "b0244208a95ee7523b0b7563c411f31371ec8b429a4796a58c0676fcc854ce57"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/variants/republish-and-reack/src/service.mjs",
+          "sha256": "56ecc796cb50d87001468fb967499daf25f3e20fe6f9dc97715efd0edad935d6"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/variants/republish-and-reack/src/sync.mjs",
+          "sha256": "83aba397a601c40e128656efd2f0fa241912b09a2bdf8b584931b00d64b5c378"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/private/variants/republish-and-reack/src/time.mjs",
+          "sha256": "979c20fb00810bcb60948c78445a43c8aa0bbab262d81a8e01eb0408c469747b"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/public/api.d.ts",
+          "sha256": "8e72f6b8fa0fedbfd586a6c3bbe2dfedb173156f982f032dbab3fee05de52e26"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/public/CHECKER-INPUT.md",
+          "sha256": "efe056e49d2481267acee634e1f86c9b065b9de570fe64397ccd58d3facf9a5c"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/public/entry.mjs",
+          "sha256": "65d1804c2d43ada53fbec3229f66083c212a66d18f8914fe1ea43e9d2a416876"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/public/instruction.md",
+          "sha256": "4047d78ac001af779d6e07d23bd4a193a3ec03885d31f7d08d1e9209ffc9230d"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/public/package.json",
+          "sha256": "24ea07a7a2496ab366b29eaf5e22b44a274a58f49ce6e4ba8e0e09fdc7ae00ff"
+        },
+        {
+          "path": "tasks/recurring-calendar-repair/public/SEMANTICS.md",
+          "sha256": "d4ede68331f5f0b78e161076b254159c77adc9f07f6d95b653be516a05dc058c"
+        }
+      ],
+      "foundry": {
+        "directory": ".local/next-five-hardening-2026-09-10/release-calendar-shapes/recurring-calendar-repair/export",
+        "digest": "8f438cc74fc23c4357caa4c2a6ce64edd068eb899b5c335bdecd81884444fde3",
+        "pointer": {
+          "path": ".local/next-five-hardening-2026-09-10/release-calendar-shapes/recurring-calendar-repair/export/package.json",
+          "sha256": "28e5ed6240626ee18395f480b4e4acf6a1b8d28c0a035e09b6c68aeacd41ec01",
+          "bytes": 103
+        },
+        "assurance": {
+          "path": ".local/next-five-hardening-2026-09-10/release-calendar-shapes/recurring-calendar-repair/validation/assurance.json",
+          "sha256": "26c8cb45d7001a5c749473ae4ceabacb17453cd90d293516137ab042420bed86",
+          "bytes": 143367
+        },
+        "checkerEvidence": {
+          "path": ".local/next-five-hardening-2026-09-10/release-calendar-shapes/recurring-calendar-repair/oracle-checker/grade-summary.json",
+          "sha256": "38d1914a46351e6689fd292303e881753c59908acb9efcd49d5cd2df20e4b569",
+          "bytes": 3900
+        },
+        "recipientEvidence": {
+          "path": ".local/next-five-hardening-2026-09-10/release-calendar-shapes/recipient/result.json",
+          "sha256": "92bbb8508b89db463c7f01d54cbcba9367ca85f476ffa33eced8e3394fac9ffe",
+          "bytes": 577
+        },
+        "recipient": {
+          "packageId": "recurring-calendar-repair",
+          "packageDigest": "8f438cc74fc23c4357caa4c2a6ce64edd068eb899b5c335bdecd81884444fde3",
+          "operations": 19,
+          "scenarioCount": 37,
+          "browserTraces": 0,
+          "invalidExecutionExcluded": true,
+          "artifactDriftRejected": true,
+          "evidenceDriftRejected": true,
+          "sourceCheckoutRequired": false,
+          "providerCallsMade": 0
+        },
+        "reproducible": true
+      },
+      "native": {
+        "directory": ".local/next-five-hardening-2026-09-10/harbor-frozen-v2/recurring-calendar-repair",
+        "digest": "409ca52a6f5086d4e31e604d7cf5466cfe8d00641830c9c6174b40eb9fb99dc2",
+        "manifest": {
+          "path": ".local/next-five-hardening-2026-09-10/harbor-frozen-v2/recurring-calendar-repair/export-manifest.json",
+          "sha256": "771c26285cc874f344876e76512eb250de360be570f6cc59d1b253e8652fe468",
+          "bytes": 19727
+        },
+        "reproduction": {
+          "path": ".local/next-five-hardening-2026-09-10/harbor-reproduction-v2/recurring-calendar-repair/export-manifest.json",
+          "sha256": "771c26285cc874f344876e76512eb250de360be570f6cc59d1b253e8652fe468",
+          "bytes": 19727
+        },
+        "reproducible": true,
+        "oracle": {
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "infrastructureError": false,
+          "reason": null,
+          "result": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-calendar-shapes-oracle/recurring-calendar-repair__Lc8iqoS/result.json",
+            "sha256": "e16d4937ac0b44d73786f9c4216e9c66bfab3f252426b784c80a9e6ee415b93d",
+            "bytes": 4255
+          },
+          "summary": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-calendar-shapes-oracle/recurring-calendar-repair__Lc8iqoS/verifier/summary.json",
+            "sha256": "39104ec0ce0b0878ab46618203b77e65b955811d818cbe4e95996c4eec3f95a8",
+            "bytes": 1642
+          }
+        },
+        "nop": {
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "infrastructureError": false,
+          "reason": "Error: missing required deliverable\n    at file:///tests/harbor-grade.mjs:168:105\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:643:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)",
+          "result": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-calendar-shapes-nop/recurring-calendar-repair__aYBvVR8/result.json",
+            "sha256": "4dec11e76244073f77134e6d352e842190244e232920797969ef41e984d4de9b",
+            "bytes": 4243
+          },
+          "summary": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-calendar-shapes-nop/recurring-calendar-repair__aYBvVR8/verifier/summary.json",
+            "sha256": "d816ea2b8a1f61abad610620b48434e9d6a3e6795c59fc19c22390be48b5ed8b",
+            "bytes": 460
+          }
+        },
+        "integrity": [
+          {
+            "name": "missing-verdicts",
+            "passed": true
+          },
+          {
+            "name": "always-accept",
+            "passed": true
+          },
+          {
+            "name": "always-reject",
+            "passed": true
+          },
+          {
+            "name": "mutated-input",
+            "passed": true
+          },
+          {
+            "name": "mutation-restored-before-return",
+            "passed": true
+          },
+          {
+            "name": "mutation-hidden-by-json-hook",
+            "passed": true
+          },
+          {
+            "name": "private-read-and-reward-write-denied",
+            "passed": true
+          },
+          {
+            "name": "detached-descendant-reaped",
+            "passed": true
+          },
+          {
+            "name": "forged-reward-and-output-symlink-rejected",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "workflow-authority-repair",
+      "version": "3.0.0",
+      "reference": {
+        "total": 36,
+        "passes": 36,
+        "failures": 0,
+        "infrastructureErrors": 0
+      },
+      "alternative": {
+        "total": 36,
+        "passes": 36,
+        "failures": 0,
+        "infrastructureErrors": 0
+      },
+      "starter": {
+        "total": 36,
+        "passes": 1,
+        "failures": 35,
+        "infrastructureErrors": 0
+      },
+      "positiveVariants": [
+        {
+          "id": "variant-replacement-and-retry",
+          "total": 36,
+          "passes": 36,
+          "failures": 0,
+          "infrastructureErrors": 0
+        }
+      ],
+      "assuranceChecks": 18,
+      "checker": {
+        "correct": 15,
+        "total": 15,
+        "reasonPolicy": "diagnostic-only",
+        "scenarioCoverage": "all"
+      },
+      "addedControls": [
+        {
+          "id": "superseded-path",
+          "check": "policy_at_effect"
+        },
+        {
+          "id": "superseded-origin",
+          "check": "origin_identity"
+        },
+        {
+          "id": "superseded-payload",
+          "check": "effect_payload"
+        },
+        {
+          "id": "wrong-delivery-association",
+          "check": "completion"
+        }
+      ],
+      "localControlResults": [
+        {
+          "candidate": "reference",
+          "scenarios": 36,
+          "maxPayloadBytes": 1924,
+          "maxCalls": 115,
+          "pass": true
+        },
+        {
+          "candidate": "alternative",
+          "scenarios": 36,
+          "maxPayloadBytes": 1926,
+          "maxCalls": 117,
+          "pass": true
+        },
+        {
+          "candidate": "variant-replacement-and-retry",
+          "scenarios": 36,
+          "maxPayloadBytes": 1944,
+          "maxCalls": 142,
+          "pass": true
+        },
+        {
+          "candidate": "starter",
+          "scenarios": 36,
+          "maxPayloadBytes": 1922,
+          "maxCalls": 0,
+          "pass": true
+        },
+        {
+          "candidate": "pending-complete",
+          "scenarios": 36,
+          "maxPayloadBytes": 1931,
+          "maxCalls": 97,
+          "pass": true
+        },
+        {
+          "candidate": "wrong-origin",
+          "scenarios": 36,
+          "maxPayloadBytes": 1927,
+          "maxCalls": 115,
+          "pass": true
+        },
+        {
+          "candidate": "deny-all",
+          "scenarios": 36,
+          "maxPayloadBytes": 1923,
+          "maxCalls": 67,
+          "pass": true
+        },
+        {
+          "candidate": "wrong-payload",
+          "scenarios": 36,
+          "maxPayloadBytes": 1928,
+          "maxCalls": 115,
+          "pass": true
+        },
+        {
+          "candidate": "empty-path",
+          "scenarios": 36,
+          "maxPayloadBytes": 1925,
+          "maxCalls": 115,
+          "pass": true
+        },
+        {
+          "candidate": "admission-only",
+          "scenarios": 36,
+          "maxPayloadBytes": 1929,
+          "maxCalls": 67,
+          "pass": true
+        },
+        {
+          "candidate": "no-work",
+          "scenarios": 36,
+          "maxPayloadBytes": 1922,
+          "maxCalls": 0,
+          "pass": true
+        },
+        {
+          "candidate": "superseded-path",
+          "scenarios": 36,
+          "maxPayloadBytes": 1930,
+          "maxCalls": 115,
+          "pass": true
+        },
+        {
+          "candidate": "superseded-origin",
+          "scenarios": 36,
+          "maxPayloadBytes": 1932,
+          "maxCalls": 115,
+          "pass": true
+        },
+        {
+          "candidate": "superseded-payload",
+          "scenarios": 36,
+          "maxPayloadBytes": 1933,
+          "maxCalls": 115,
+          "pass": true
+        },
+        {
+          "candidate": "wrong-delivery-association",
+          "scenarios": 36,
+          "maxPayloadBytes": 1941,
+          "maxCalls": 115,
+          "pass": true
+        }
+      ],
+      "sourceFiles": [
+        {
+          "path": "tasks/workflow-authority-repair/private/alternative/entry.mjs",
+          "sha256": "611500615eb265ba5a7d34f7b41cb0d0cdb3131c2af772711720c6a3b4d22540"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/alternative/src/admission.mjs",
+          "sha256": "683f2a8f4a3fe37070b3142d34dc79d430ff71fe6a85ab01ebae5104d1072da8"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/alternative/src/context.mjs",
+          "sha256": "2f1acf1594f3571808d3b39d22c74cf9450e639d98344fc7afff8e2f63613438"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/alternative/src/dispatcher.mjs",
+          "sha256": "e761f60aa9ddfef5cf06aedae5b9e0dc22735c4b07c659d7444d47584304b6be"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/alternative/src/grants.mjs",
+          "sha256": "f447c09ca3e552bee4f502bbb4567da2281975c6d8c192ff57a17ad12a338317"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/alternative/src/service.mjs",
+          "sha256": "e20d016af3c98d92a86b661b3c106a42adfd0e56e1c6bab9f114aa4e3cf482f9"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/checker-required.json",
+          "sha256": "f295d2e6cf13e9fddf6f81e2e9b8bc08e64243f4dd04269bd5b9bb84fcf17de7"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/control-manifest.json",
+          "sha256": "9db9e912eac429ac78068c1dcbbeb40a69010eb901d6bba9f5fa9adec734a075"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/abandon-stale-admission.mjs",
+          "sha256": "72a2028d64363f0418008946b2adc93e16df0ec86f845c156ab106869f9557e2"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/admission-only.mjs",
+          "sha256": "7d9051c40487f7524eaa292a9ed03fa9a4417ae1e087be1b8443123dfa40ad4b"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/crash-unsafe-memoization.mjs",
+          "sha256": "04afd94006a4baae39f3d38c126acfa62035aeaf69429e1c278b0fd9321f3ac3"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/deny-all.mjs",
+          "sha256": "2b903da310bf126d073da001af17abe78d8d0bbb2b097f2c4ea9627678cd7229"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/deny-v3.mjs",
+          "sha256": "36f1b9ec0228da0142dbd8a164cf70e160e4cef5deaaf4e4fea9a0a2e491f7ac"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/forged-completion.mjs",
+          "sha256": "9b6ca5fe17341cefd04a0f860e844e06aed65cab70070ef8ed5673326ace6366"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/ignore-action-attenuation.mjs",
+          "sha256": "102921fbb62205cc7f3411d04ec1ea1fbc1fa99ccb8c6210f9b56a421087f0dd"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/immediate-parent-origin.mjs",
+          "sha256": "f8be4ab1db84ac7775b39ae1afefa86617718e39b3cf160a3793b13856b583d5"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/isolation.mjs",
+          "sha256": "5cb0fe8d8addd65dc72cbf04795ca088df98e5bb7b20a87c16b3c01463d9066b"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/misattribute-delivery.mjs",
+          "sha256": "8986937b64cd308203f9c06738e8e33a3162e0e0d2ba5386ece6e7525d268f59"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/no-work.mjs",
+          "sha256": "1a13543eb23501e77da041735b1ec2d65398a46ac89b54f7d20b9d337ab31336"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/path-v3.mjs",
+          "sha256": "cf841d4caf1ab7d05978bede024fc557e155669823d0e50845ee8d6e4a044a47"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/payload-v3.mjs",
+          "sha256": "75b3d3d4a032402f69bd8db74573ef90f2dfe8f0e88bf5240df550090628bf8e"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/pending-complete.mjs",
+          "sha256": "4c030bbf85b78c400210d425207ca46681612e1f7f063c9cb578e7ae95aba971"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/reactivate-revoked-path.mjs",
+          "sha256": "4f9487d8ae323a2b64d95b6dc350531f4fa5fcdf932a5edfa1860529b5142752"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/redecide-terminal-job.mjs",
+          "sha256": "e761f60aa9ddfef5cf06aedae5b9e0dc22735c4b07c659d7444d47584304b6be"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/superseded-origin.mjs",
+          "sha256": "cde4c051d2b0394e90a4f0e386b5ac4777067980b71ac0717ecdb9beb4871341"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/superseded-path.mjs",
+          "sha256": "6ff7af0e6b6c41c7fc6a03032090c9d788a5a8ba9268bb097698c14818192fa3"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/superseded-payload.mjs",
+          "sha256": "7710c8cc51322a73de7df4fc9c5b1be757091f886e2ffad501e768230641d092"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/wrong-delivery-association.mjs",
+          "sha256": "5885e9d6809f6cd5365f95ba41b147121ef3a442f4bdcacf6d234bdda033341b"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/wrong-effect-payload.mjs",
+          "sha256": "7e52fde944aa43278692f2c19c5d1cde35e00db5ce1f9bc773f8d3c8741655fe"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/controls/wrong-origin-v3.mjs",
+          "sha256": "44624d0154e7afd89392e9b43d49b64bfea3e3e3ff9cf2544875417fff6c919f"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/domain.mjs",
+          "sha256": "efb27fc1507cd7c002cfd8f557f8ba931fe240e76ba51b03f9a59377651ce314"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/reference/checker-utils.mjs",
+          "sha256": "9eb8005fd21cc8df4a86c254f3c49805416b7b38d4fa28f3b92087e870dfb30b"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/reference/checker.mjs",
+          "sha256": "da91a84d9589605357c77ed32ee465718b7e335f765305604759d002d664a669"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/reference/entry.mjs",
+          "sha256": "6a3aebc000d1aa658f7a3bcad31c771ad83e2e8ae7244bb000e70b004faed371"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/reference/src/admission.mjs",
+          "sha256": "683f2a8f4a3fe37070b3142d34dc79d430ff71fe6a85ab01ebae5104d1072da8"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/reference/src/context.mjs",
+          "sha256": "6136c7388a24e1ffc5e2c0221ad35e3846f4d35fee40e0ea14655ff808551589"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/reference/src/dispatcher.mjs",
+          "sha256": "603ac9391dd06bb3ed7ec09b72bebeea0b5a08df77d9e6d4c4b517d216e92d6b"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/reference/src/grants.mjs",
+          "sha256": "f447c09ca3e552bee4f502bbb4567da2281975c6d8c192ff57a17ad12a338317"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/reference/src/service.mjs",
+          "sha256": "e20d016af3c98d92a86b661b3c106a42adfd0e56e1c6bab9f114aa4e3cf482f9"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/restart.mjs",
+          "sha256": "dcd5b1ac17ae4a79e7ad86f202a48502626c6bb9a24f647468f03f886e89898d"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/scenarios.mjs",
+          "sha256": "f2f5cb4bc7cd69e54dc9fc767972679e22d1d14f0a3cc274e3ee1112a2b2d4e7"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/variants/replacement-and-retry/checker-utils.mjs",
+          "sha256": "9eb8005fd21cc8df4a86c254f3c49805416b7b38d4fa28f3b92087e870dfb30b"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/variants/replacement-and-retry/checker.mjs",
+          "sha256": "da91a84d9589605357c77ed32ee465718b7e335f765305604759d002d664a669"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/variants/replacement-and-retry/entry.mjs",
+          "sha256": "9c14dfa51e73f7b4dd1c039723d2283bea544ec4cbbf714f99edf3bfacaf9e25"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/variants/replacement-and-retry/src/admission.mjs",
+          "sha256": "683f2a8f4a3fe37070b3142d34dc79d430ff71fe6a85ab01ebae5104d1072da8"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/variants/replacement-and-retry/src/context.mjs",
+          "sha256": "6136c7388a24e1ffc5e2c0221ad35e3846f4d35fee40e0ea14655ff808551589"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/variants/replacement-and-retry/src/dispatcher.mjs",
+          "sha256": "603ac9391dd06bb3ed7ec09b72bebeea0b5a08df77d9e6d4c4b517d216e92d6b"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/variants/replacement-and-retry/src/grants.mjs",
+          "sha256": "f447c09ca3e552bee4f502bbb4567da2281975c6d8c192ff57a17ad12a338317"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/private/variants/replacement-and-retry/src/service.mjs",
+          "sha256": "e20d016af3c98d92a86b661b3c106a42adfd0e56e1c6bab9f114aa4e3cf482f9"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/public/api.d.ts",
+          "sha256": "131d6b42e0cc3b4b0628db8533535e8266fa7b59cfff2449714367150f365cbe"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/public/CHECKER-INPUT.md",
+          "sha256": "61088e7d680b9d3ec7a305b99edfb57ffbdbac15416b1f02e430516f6140d980"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/public/entry.mjs",
+          "sha256": "65d1804c2d43ada53fbec3229f66083c212a66d18f8914fe1ea43e9d2a416876"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/public/instruction.md",
+          "sha256": "f43148f22aac9518f914daf95c951d388462ba32c5e50c35fc599c2913ca0dba"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/public/package.json",
+          "sha256": "24ea07a7a2496ab366b29eaf5e22b44a274a58f49ce6e4ba8e0e09fdc7ae00ff"
+        },
+        {
+          "path": "tasks/workflow-authority-repair/public/SEMANTICS.md",
+          "sha256": "1629deccac6b64d1137ac1dcbde496ae49a29e9eb3d62c358ca5dc5e36977242"
+        }
+      ],
+      "foundry": {
+        "directory": ".local/next-five-hardening-2026-09-10/release-four/workflow-authority-repair/export",
+        "digest": "f7e8ebedfb12bad0fa67e7841e213d78991620e5266cc115a01f98b79bf8cdd0",
+        "pointer": {
+          "path": ".local/next-five-hardening-2026-09-10/release-four/workflow-authority-repair/export/package.json",
+          "sha256": "48f019f13963abd822721b3366e7928188d847c6c8d2ecf56dbd8a2ec936aa4f",
+          "bytes": 103
+        },
+        "assurance": {
+          "path": ".local/next-five-hardening-2026-09-10/release-four/workflow-authority-repair/validation/assurance.json",
+          "sha256": "44aa3d4209c19da9133253453a146f9d33816a9c545bff735ef005067a060686",
+          "bytes": 120176
+        },
+        "checkerEvidence": {
+          "path": ".local/next-five-hardening-2026-09-10/release-four/workflow-authority-repair/oracle-checker/grade-summary.json",
+          "sha256": "3ded08c29ba87255495ada78054a8e384f7949da362acbf011f0ea5393c88b70",
+          "bytes": 3250
+        },
+        "recipientEvidence": {
+          "path": ".local/next-five-hardening-2026-09-10/release-four/recipient/result.json",
+          "sha256": "1acd3052c9676394caed208567b6bedc88a4a144264d8bf8c006f010b36c7130",
+          "bytes": 1802
+        },
+        "recipient": {
+          "packageId": "workflow-authority-repair",
+          "packageDigest": "f7e8ebedfb12bad0fa67e7841e213d78991620e5266cc115a01f98b79bf8cdd0",
+          "operations": 18,
+          "scenarioCount": 36,
+          "browserTraces": 0,
+          "invalidExecutionExcluded": true,
+          "artifactDriftRejected": true,
+          "evidenceDriftRejected": true,
+          "sourceCheckoutRequired": false,
+          "providerCallsMade": 0
+        },
+        "reproducible": true
+      },
+      "native": {
+        "directory": ".local/next-five-hardening-2026-09-10/harbor-frozen-v2/workflow-authority-repair",
+        "digest": "09350245104dbac12c6675b328cd38a8c063854daffa720ae89c15ea7450d19b",
+        "manifest": {
+          "path": ".local/next-five-hardening-2026-09-10/harbor-frozen-v2/workflow-authority-repair/export-manifest.json",
+          "sha256": "e69d0b89d9d8cdc174064281191f1a1fd6bd470695c65bd1835bd69569c5db7a",
+          "bytes": 19268
+        },
+        "reproduction": {
+          "path": ".local/next-five-hardening-2026-09-10/harbor-reproduction-v2/workflow-authority-repair/export-manifest.json",
+          "sha256": "e69d0b89d9d8cdc174064281191f1a1fd6bd470695c65bd1835bd69569c5db7a",
+          "bytes": 19268
+        },
+        "reproducible": true,
+        "oracle": {
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "infrastructureError": false,
+          "reason": null,
+          "result": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-five-final-oracle/workflow-authority-repair__UeoNKdq/result.json",
+            "sha256": "0cfd331a64d3220aabd50e6aa4c04376e7783fcb6d10069653ac7d3d277185f8",
+            "bytes": 4233
+          },
+          "summary": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-five-final-oracle/workflow-authority-repair__UeoNKdq/verifier/summary.json",
+            "sha256": "8482a580a1f45d030ca9ea635d1d0c039bd8fbc18c04349fde1c6b785ee4030c",
+            "bytes": 1510
+          }
+        },
+        "nop": {
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "infrastructureError": false,
+          "reason": "Error: missing required deliverable\n    at file:///tests/harbor-grade.mjs:168:105\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:643:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)",
+          "result": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-five-final-nop/workflow-authority-repair__oP2nPj6/result.json",
+            "sha256": "e02c0cbf9bc805a17e3b8ebfd97ffe29d68e4fa978d6e01be95621b588dee913",
+            "bytes": 4221
+          },
+          "summary": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-five-final-nop/workflow-authority-repair__oP2nPj6/verifier/summary.json",
+            "sha256": "d816ea2b8a1f61abad610620b48434e9d6a3e6795c59fc19c22390be48b5ed8b",
+            "bytes": 460
+          }
+        },
+        "integrity": [
+          {
+            "name": "missing-verdicts",
+            "passed": true
+          },
+          {
+            "name": "always-accept",
+            "passed": true
+          },
+          {
+            "name": "always-reject",
+            "passed": true
+          },
+          {
+            "name": "mutated-input",
+            "passed": true
+          },
+          {
+            "name": "mutation-restored-before-return",
+            "passed": true
+          },
+          {
+            "name": "mutation-hidden-by-json-hook",
+            "passed": true
+          },
+          {
+            "name": "private-read-and-reward-write-denied",
+            "passed": true
+          },
+          {
+            "name": "detached-descendant-reaped",
+            "passed": true
+          },
+          {
+            "name": "forged-reward-and-output-symlink-rejected",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "delegated-budget-repair",
+      "version": "3.0.0",
+      "reference": {
+        "total": 21,
+        "passes": 21,
+        "failures": 0,
+        "infrastructureErrors": 0
+      },
+      "alternative": {
+        "total": 21,
+        "passes": 21,
+        "failures": 0,
+        "infrastructureErrors": 0
+      },
+      "starter": {
+        "total": 21,
+        "passes": 0,
+        "failures": 21,
+        "infrastructureErrors": 0
+      },
+      "positiveVariants": [
+        {
+          "id": "variant-idempotent-settlement",
+          "total": 21,
+          "passes": 21,
+          "failures": 0,
+          "infrastructureErrors": 0
+        }
+      ],
+      "assuranceChecks": 20,
+      "checker": {
+        "correct": 17,
+        "total": 17,
+        "reasonPolicy": "diagnostic-only",
+        "scenarioCoverage": "all"
+      },
+      "addedControls": [
+        {
+          "id": "reuse-reservation",
+          "check": "aggregate_budget"
+        },
+        {
+          "id": "over-settlement",
+          "check": "aggregate_budget"
+        },
+        {
+          "id": "wrong-owner-admission",
+          "check": "aggregate_budget"
+        },
+        {
+          "id": "wrong-delegate-admission",
+          "check": "aggregate_budget"
+        },
+        {
+          "id": "reject-valid-reservation",
+          "check": "aggregate_budget"
+        },
+        {
+          "id": "wrong-report-receipt",
+          "check": "decisions"
+        }
+      ],
+      "localControlResults": [
+        {
+          "candidate": "reference",
+          "scenarios": 21,
+          "maxPayloadBytes": 3225,
+          "maxCalls": 98,
+          "pass": true
+        },
+        {
+          "candidate": "alternative",
+          "scenarios": 21,
+          "maxPayloadBytes": 3225,
+          "maxCalls": 117,
+          "pass": true
+        },
+        {
+          "candidate": "variant-idempotent-settlement",
+          "scenarios": 21,
+          "maxPayloadBytes": 3225,
+          "maxCalls": 135,
+          "pass": true
+        },
+        {
+          "candidate": "starter",
+          "scenarios": 21,
+          "maxPayloadBytes": 1677,
+          "maxCalls": 0,
+          "pass": true
+        },
+        {
+          "candidate": "ignore-holds",
+          "scenarios": 21,
+          "maxPayloadBytes": 3367,
+          "maxCalls": 98,
+          "pass": true
+        },
+        {
+          "candidate": "settle-current-version",
+          "scenarios": 21,
+          "maxPayloadBytes": 2768,
+          "maxCalls": 98,
+          "pass": true
+        },
+        {
+          "candidate": "release-captured",
+          "scenarios": 21,
+          "maxPayloadBytes": 3477,
+          "maxCalls": 98,
+          "pass": true
+        },
+        {
+          "candidate": "cross-wallet",
+          "scenarios": 21,
+          "maxPayloadBytes": 2771,
+          "maxCalls": 98,
+          "pass": true
+        },
+        {
+          "candidate": "stale-reserve-version",
+          "scenarios": 21,
+          "maxPayloadBytes": 3225,
+          "maxCalls": 98,
+          "pass": true
+        },
+        {
+          "candidate": "uncertain-abandon",
+          "scenarios": 21,
+          "maxPayloadBytes": 3225,
+          "maxCalls": 76,
+          "pass": true
+        },
+        {
+          "candidate": "no-work",
+          "scenarios": 21,
+          "maxPayloadBytes": 1677,
+          "maxCalls": 0,
+          "pass": true
+        },
+        {
+          "candidate": "reuse-reservation",
+          "scenarios": 21,
+          "maxPayloadBytes": 3225,
+          "maxCalls": 98,
+          "pass": true
+        },
+        {
+          "candidate": "over-settlement",
+          "scenarios": 21,
+          "maxPayloadBytes": 3225,
+          "maxCalls": 98,
+          "pass": true
+        },
+        {
+          "candidate": "wrong-owner-admission",
+          "scenarios": 21,
+          "maxPayloadBytes": 3374,
+          "maxCalls": 98,
+          "pass": true
+        },
+        {
+          "candidate": "wrong-delegate-admission",
+          "scenarios": 21,
+          "maxPayloadBytes": 3225,
+          "maxCalls": 98,
+          "pass": true
+        },
+        {
+          "candidate": "reject-valid-reservation",
+          "scenarios": 21,
+          "maxPayloadBytes": 3160,
+          "maxCalls": 98,
+          "pass": true
+        },
+        {
+          "candidate": "wrong-report-receipt",
+          "scenarios": 21,
+          "maxPayloadBytes": 3225,
+          "maxCalls": 98,
+          "pass": true
+        }
+      ],
+      "sourceFiles": [
+        {
+          "path": "tasks/delegated-budget-repair/private/alternative/entry.mjs",
+          "sha256": "cc4c42ea795651eba3f9130a2d96712e45a36106d229daef0f281ce01ea57b68"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/alternative/src/allocation.mjs",
+          "sha256": "264355bdfa043dd2f1f88f8ca826fd4af1f991bb1d90f620951d6560e5fce786"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/alternative/src/authority.mjs",
+          "sha256": "98b38e47fddcc942640de7302dc889c779bffa5f16b7770dc000ee5ef8636571"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/alternative/src/dispatcher.mjs",
+          "sha256": "99a1195643734e9f0a521dc2cb5371417f468d1651d82aabc8d5f3b202ec09a8"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/alternative/src/journal.mjs",
+          "sha256": "fb7e55bb54cd223000fef60c5bf51a3ec94631e0542735ba40c75cd998e3c3e3"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/alternative/src/queue.mjs",
+          "sha256": "65ab96365852373e4b51962cc814d9182030e8ee1d66725a1a72a225e10b203c"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/alternative/src/transport.mjs",
+          "sha256": "ae07895123f437bf6e742d54a188b1abce3ec030391407b6c7120def5b24f57a"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/checker-required.json",
+          "sha256": "f295d2e6cf13e9fddf6f81e2e9b8bc08e64243f4dd04269bd5b9bb84fcf17de7"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/control-manifest.json",
+          "sha256": "faa1f50f0e4baf61624559c31310ae303d8f0e68117eccb066b092816d8f0832"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/cross-wallet-v3.mjs",
+          "sha256": "944695b43d0cf00f37150b4c44ab3817ca76ea3bfe6942e0770daabb4fdb8033"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/ignore-holds-v3.mjs",
+          "sha256": "1ec50f0ba2015485944b64ef6b0853b4879d514ca67ae65c8020b322208b3505"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/isolation.mjs",
+          "sha256": "9bd5957425f71c6907bb631474f4bd24913f78b37e665b31c051e0ec35b48a01"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/local-receipt-only.mjs",
+          "sha256": "0399aa51a570a8fe592c0faa67e94883c0da69f961fd2ca8d24bc3cf49e03ced"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/no-work.mjs",
+          "sha256": "1ac4cbde8de585d096fd075e5da491f0d03161c65844cd5884ebd53452049ee3"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/over-settlement.mjs",
+          "sha256": "6e5b0eafb36709fdcf2c62902870dd6430bcb924bb1b0870d76a6f3ec17160ca"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/owner-blind.mjs",
+          "sha256": "ede2b39a888571f7b2869beaebfb35a3e3f31670484285b6a198e0933270e81a"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/per-request-budget.mjs",
+          "sha256": "239a38007f8faece6cb459f35640bda44a56d7c195e0686f33f04c087cb3051b"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/receipt-claim.mjs",
+          "sha256": "45ad5eb586c3b6ca93bc8673f835391784c5352fa195767a5fcd447e69d738c2"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/reject-valid-reservation.mjs",
+          "sha256": "7a6416fb5af8935611f90495755639ec5fed437e3c64d4338e5a2c19a5040629"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/release-captured-v3.mjs",
+          "sha256": "60a2bdd8520cea0d80611b392aaf5778fc4d353b2b84acf850d386dbec16975b"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/reuse-reservation.mjs",
+          "sha256": "6da1c070e38d2fc1d06d7dcd1d7370ed32ce312afd6cb5e5b93314263a003a51"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/settle-current-version-v3.mjs",
+          "sha256": "582379735ae00cf9f029ca92e4484ba0a1225ac4990dd1ea7a02780d3176c2d6"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/stale-reserve-version-v3.mjs",
+          "sha256": "93f3a296e5ceec36d21a731b12763aa29ad78f790d13a5dd2bc42fa570186494"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/stale-version.mjs",
+          "sha256": "58aad90d99bae2be471889a7590d036db5f0b667336a62fd55de4bb6fe53d6b4"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/uncertain-abandon-v3.mjs",
+          "sha256": "bf0047d034ed82fac62cf7bdd27a7e9e3e4125e280eb7acc2d4409ed31a4a0ad"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/unknown-abandon.mjs",
+          "sha256": "5fb0c1c0608e54c12245a2e6e13ac75343cb5af08c5c4d3db26f9f59d2557f7f"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/wrong-delegate-admission.mjs",
+          "sha256": "36b78a46107fadf9c04813416eee99d675eb5e2e43e50fbe7222210c025c8e1d"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/wrong-owner-admission.mjs",
+          "sha256": "eb9e8795459cd9495ecf7758e0d24da837145ca4b0c5190745a53bcafb318510"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/controls/wrong-report-receipt.mjs",
+          "sha256": "8e306d12d45ad4ae295d12986fd2af27852f7693c8c4ccc83922cf5586257791"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/domain.mjs",
+          "sha256": "e016677f423f1f6fce6e39720cc915140fa98675e9f4f5507888473bea902d45"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/reference/checker-utils.mjs",
+          "sha256": "9eb8005fd21cc8df4a86c254f3c49805416b7b38d4fa28f3b92087e870dfb30b"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/reference/checker.mjs",
+          "sha256": "1f25e4cff820dc4eaa8299e823aa6babbdb9707d815bd1c22841781d0ff5a907"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/reference/entry.mjs",
+          "sha256": "223821d48a4626a9638c23f931c0a435afb4d555c7d91c650eb7cdcd847a9c39"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/reference/src/allocation.mjs",
+          "sha256": "b20b4f8a05e6086c9d8fd34100631dd868abb464b5283a8ab3bd1ca3c35b647c"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/reference/src/authority.mjs",
+          "sha256": "24a9db16689a61894e7394067145a0f95f3dd5aa060552ce3d7e2ccdf1a5697b"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/reference/src/dispatcher.mjs",
+          "sha256": "99a1195643734e9f0a521dc2cb5371417f468d1651d82aabc8d5f3b202ec09a8"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/reference/src/journal.mjs",
+          "sha256": "fb7e55bb54cd223000fef60c5bf51a3ec94631e0542735ba40c75cd998e3c3e3"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/reference/src/queue.mjs",
+          "sha256": "65ab96365852373e4b51962cc814d9182030e8ee1d66725a1a72a225e10b203c"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/reference/src/transport.mjs",
+          "sha256": "747ffe4191400581ba7645e998c34d6c0ff836638b58756eabf36cff06fa16bc"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/restart.mjs",
+          "sha256": "c87842964b7fb3d9eb17645c40bf370f6d1138d72f808f8dadfef41960141a72"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/scenarios.mjs",
+          "sha256": "0ae20674cdd7e0cff69c3f559f95c157d05d9fff904af66ad86120e661739708"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/variants/idempotent-settlement/checker-utils.mjs",
+          "sha256": "9eb8005fd21cc8df4a86c254f3c49805416b7b38d4fa28f3b92087e870dfb30b"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/variants/idempotent-settlement/checker.mjs",
+          "sha256": "1f25e4cff820dc4eaa8299e823aa6babbdb9707d815bd1c22841781d0ff5a907"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/variants/idempotent-settlement/entry.mjs",
+          "sha256": "a3869cecee831cde89a33f15071c2a7603884b0bfd033bcbc5317fe103ea7731"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/variants/idempotent-settlement/src/allocation.mjs",
+          "sha256": "b20b4f8a05e6086c9d8fd34100631dd868abb464b5283a8ab3bd1ca3c35b647c"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/variants/idempotent-settlement/src/authority.mjs",
+          "sha256": "24a9db16689a61894e7394067145a0f95f3dd5aa060552ce3d7e2ccdf1a5697b"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/variants/idempotent-settlement/src/dispatcher.mjs",
+          "sha256": "99a1195643734e9f0a521dc2cb5371417f468d1651d82aabc8d5f3b202ec09a8"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/variants/idempotent-settlement/src/journal.mjs",
+          "sha256": "fb7e55bb54cd223000fef60c5bf51a3ec94631e0542735ba40c75cd998e3c3e3"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/variants/idempotent-settlement/src/queue.mjs",
+          "sha256": "65ab96365852373e4b51962cc814d9182030e8ee1d66725a1a72a225e10b203c"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/private/variants/idempotent-settlement/src/transport.mjs",
+          "sha256": "747ffe4191400581ba7645e998c34d6c0ff836638b58756eabf36cff06fa16bc"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/public/api.d.ts",
+          "sha256": "18e3edef2c70e733f85805eb077d1ec96b9198c6a531cc186649ae86686ae86f"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/public/CHECKER-INPUT.md",
+          "sha256": "08d9922934abc96eb4a72718004910d02d02006e385e7d9766855b1c99a51152"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/public/entry.mjs",
+          "sha256": "65d1804c2d43ada53fbec3229f66083c212a66d18f8914fe1ea43e9d2a416876"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/public/instruction.md",
+          "sha256": "dd1af402e9b9df6f9e2270b54de1a8db9e9057141fc6d53ea3e345758635e1a8"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/public/package.json",
+          "sha256": "24ea07a7a2496ab366b29eaf5e22b44a274a58f49ce6e4ba8e0e09fdc7ae00ff"
+        },
+        {
+          "path": "tasks/delegated-budget-repair/public/SEMANTICS.md",
+          "sha256": "060e600e403bc74bbad295155335082cff345c2cad322dd2b91101b3437166f0"
+        }
+      ],
+      "foundry": {
+        "directory": ".local/next-five-hardening-2026-09-10/release-four/delegated-budget-repair/export",
+        "digest": "db688724f5b932b9e0ee619e1202da3de81a636a37ef90976490702fb24c5f66",
+        "pointer": {
+          "path": ".local/next-five-hardening-2026-09-10/release-four/delegated-budget-repair/export/package.json",
+          "sha256": "e34f5f7e0369b72886179ad9849e9944c176ac1ecf9f6f9f09848ea07d0d7c33",
+          "bytes": 103
+        },
+        "assurance": {
+          "path": ".local/next-five-hardening-2026-09-10/release-four/delegated-budget-repair/validation/assurance.json",
+          "sha256": "990b7b0e0523e5d2db19ce2c18f200489bb15ec6f81fc217145f89d6c78ea6b4",
+          "bytes": 116939
+        },
+        "checkerEvidence": {
+          "path": ".local/next-five-hardening-2026-09-10/release-four/delegated-budget-repair/oracle-checker/grade-summary.json",
+          "sha256": "9699908f8f2a27de9259cdbe14c69702d83848c9244b4b83a8b2942544d654b2",
+          "bytes": 3748
+        },
+        "recipientEvidence": {
+          "path": ".local/next-five-hardening-2026-09-10/release-four/recipient/result.json",
+          "sha256": "1acd3052c9676394caed208567b6bedc88a4a144264d8bf8c006f010b36c7130",
+          "bytes": 1802
+        },
+        "recipient": {
+          "packageId": "delegated-budget-repair",
+          "packageDigest": "db688724f5b932b9e0ee619e1202da3de81a636a37ef90976490702fb24c5f66",
+          "operations": 20,
+          "scenarioCount": 21,
+          "browserTraces": 0,
+          "invalidExecutionExcluded": true,
+          "artifactDriftRejected": true,
+          "evidenceDriftRejected": true,
+          "sourceCheckoutRequired": false,
+          "providerCallsMade": 0
+        },
+        "reproducible": true
+      },
+      "native": {
+        "directory": ".local/next-five-hardening-2026-09-10/harbor-frozen-v2/delegated-budget-repair",
+        "digest": "ef15605caab0378c5f113bf6ea8fb393c88ffc892f5389050ac7b30e4e0eb772",
+        "manifest": {
+          "path": ".local/next-five-hardening-2026-09-10/harbor-frozen-v2/delegated-budget-repair/export-manifest.json",
+          "sha256": "b38268045eac0a1609446a83cac59fe032ffdec95f2a2aa7dc77c5997521d663",
+          "bytes": 19782
+        },
+        "reproduction": {
+          "path": ".local/next-five-hardening-2026-09-10/harbor-reproduction-v2/delegated-budget-repair/export-manifest.json",
+          "sha256": "b38268045eac0a1609446a83cac59fe032ffdec95f2a2aa7dc77c5997521d663",
+          "bytes": 19782
+        },
+        "reproducible": true,
+        "oracle": {
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "infrastructureError": false,
+          "reason": null,
+          "result": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-five-final-oracle/delegated-budget-repair__YamwE3t/result.json",
+            "sha256": "8c1019af071d3138e453981550c2656a07804b4ba1144be38d2cf8c61d6ca041",
+            "bytes": 4221
+          },
+          "summary": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-five-final-oracle/delegated-budget-repair__YamwE3t/verifier/summary.json",
+            "sha256": "97da2de68c5bd3a6b7279acc8374d42722cd8bb0c19a07e1067c90b047a28204",
+            "bytes": 1732
+          }
+        },
+        "nop": {
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "infrastructureError": false,
+          "reason": "Error: missing required deliverable\n    at file:///tests/harbor-grade.mjs:168:105\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:643:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)",
+          "result": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-five-final-nop/delegated-budget-repair__yLnkuKD/result.json",
+            "sha256": "d4a0b59f8b2624ddacb8b9bc3796bd74f3a2cc92f519561d9c79b9f2e9997049",
+            "bytes": 4209
+          },
+          "summary": {
+            "path": ".local/next-five-hardening-2026-09-10/jobs/hardened-five-final-nop/delegated-budget-repair__yLnkuKD/verifier/summary.json",
+            "sha256": "d816ea2b8a1f61abad610620b48434e9d6a3e6795c59fc19c22390be48b5ed8b",
+            "bytes": 460
+          }
+        },
+        "integrity": [
+          {
+            "name": "missing-verdicts",
+            "passed": true
+          },
+          {
+            "name": "always-accept",
+            "passed": true
+          },
+          {
+            "name": "always-reject",
+            "passed": true
+          },
+          {
+            "name": "mutated-input",
+            "passed": true
+          },
+          {
+            "name": "mutation-restored-before-return",
+            "passed": true
+          },
+          {
+            "name": "mutation-hidden-by-json-hook",
+            "passed": true
+          },
+          {
+            "name": "private-read-and-reward-write-denied",
+            "passed": true
+          },
+          {
+            "name": "detached-descendant-reaped",
+            "passed": true
+          },
+          {
+            "name": "forged-reward-and-output-symlink-rejected",
+            "passed": true
+          }
+        ]
+      }
+    }
+  ],
+  "validation": {
+    "assuranceChecks": 88,
+    "checkerCandidates": 73,
+    "addedNegativeControls": 21,
+    "oraclePasses": 5,
+    "nopZeroes": 5,
+    "nativeIntegrityControls": 45,
+    "staticChecks": 110,
+    "regressionTests": 36,
+    "mutations": {
+      "total": 23,
+      "detected": 23,
+      "referencesPassed": 5,
+      "checkerExecution": "local replay of protected Docker captures",
+      "evidence": {
+        "path": ".local/next-five-hardening-2026-09-10/mutations-frozen/summary.json",
+        "sha256": "daba66979327de657f14d928c523c35d3093c6a4260cdc57a848483d73677cd8",
+        "bytes": 19439
+      },
+      "captures": [
+        {
+          "path": ".local/next-five-hardening-2026-09-10/native-integrity-final/route-policy-repair/logs/checker-cases.json",
+          "sha256": "69566c725695cbbb5fd986e25722c559768b4fc9da6fc2f606da072a2b2171e8",
+          "bytes": 9780832
+        },
+        {
+          "path": ".local/next-five-hardening-2026-09-10/native-integrity-final/browser-replay-repair/logs/checker-cases.json",
+          "sha256": "4e495abcb32d7fdbcb2b24f04faf6369b673712da97203101e1b867064c3d53c",
+          "bytes": 12904208
+        },
+        {
+          "path": ".local/next-five-hardening-2026-09-10/native-integrity-calendar-shapes/recurring-calendar-repair/logs/checker-cases.json",
+          "sha256": "dd48dc5b5f3f322231fcb8ed1c5c9aac06561a7167133d0998b13a936552ea41",
+          "bytes": 53717825
+        },
+        {
+          "path": ".local/next-five-hardening-2026-09-10/native-integrity-final/workflow-authority-repair/logs/checker-cases.json",
+          "sha256": "b48eb400452054e3ab8021b43fdb1950357e246fefae92f3c5bbbb2cb262aaab",
+          "bytes": 24812816
+        },
+        {
+          "path": ".local/next-five-hardening-2026-09-10/native-integrity-final/delegated-budget-repair/logs/checker-cases.json",
+          "sha256": "926a923b4cc550acb1cfa3d1c99155444902b3acaa4104f4f817df31209119fa",
+          "bytes": 75825748
+        }
+      ],
+      "results": [
+        {
+          "id": "route-policy-repair",
+          "mutation": "reference",
+          "candidates": 13,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/route-policy-repair/logs/checker-cases.json",
+          "correct": 13,
+          "errors": [],
+          "elapsedMs": 3112.7861249999996,
+          "pass": true
+        },
+        {
+          "id": "route-policy-repair",
+          "mutation": "sampled-routes-only",
+          "candidates": 13,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/route-policy-repair/logs/checker-cases.json",
+          "correct": 12,
+          "errors": [
+            {
+              "candidate": "8884af07-03f2-4518-9b41-17f31630e6e0",
+              "expected": false,
+              "actual": true
+            }
+          ],
+          "elapsedMs": 161.50520799999958,
+          "pass": true
+        },
+        {
+          "id": "route-policy-repair",
+          "mutation": "ignore-publish-after-success",
+          "candidates": 13,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/route-policy-repair/logs/checker-cases.json",
+          "correct": 12,
+          "errors": [
+            {
+              "candidate": "e33be354-c949-4d86-97cb-a75c8408608e",
+              "expected": false,
+              "actual": true
+            }
+          ],
+          "elapsedMs": 4183.755917,
+          "pass": true
+        },
+        {
+          "id": "route-policy-repair",
+          "mutation": "forbid-failed-publications",
+          "candidates": 13,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/route-policy-repair/logs/checker-cases.json",
+          "correct": 11,
+          "errors": [
+            {
+              "candidate": "25e51384-19fe-4e59-9657-865a3658a184",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "27f909ab-e527-4e08-af39-868cd5f0d31b",
+              "expected": true,
+              "actual": false
+            }
+          ],
+          "elapsedMs": 1202.0207499999997,
+          "pass": true
+        },
+        {
+          "id": "route-policy-repair",
+          "mutation": "forbid-corrected-api-errors",
+          "candidates": 13,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/route-policy-repair/logs/checker-cases.json",
+          "correct": 11,
+          "errors": [
+            {
+              "candidate": "25e51384-19fe-4e59-9657-865a3658a184",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "27f909ab-e527-4e08-af39-868cd5f0d31b",
+              "expected": true,
+              "actual": false
+            }
+          ],
+          "elapsedMs": 1267.121000000001,
+          "pass": true
+        },
+        {
+          "id": "browser-replay-repair",
+          "mutation": "reference",
+          "candidates": 12,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/browser-replay-repair/logs/checker-cases.json",
+          "correct": 12,
+          "errors": [],
+          "elapsedMs": 4.5396249999994325,
+          "pass": true
+        },
+        {
+          "id": "browser-replay-repair",
+          "mutation": "ignore-accepted-actions",
+          "candidates": 12,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/browser-replay-repair/logs/checker-cases.json",
+          "correct": 11,
+          "errors": [
+            {
+              "candidate": "0b3341e1-b16a-42e8-b9ed-e84501ac1131",
+              "expected": false,
+              "actual": true
+            }
+          ],
+          "elapsedMs": 5.5020409999997355,
+          "pass": true
+        },
+        {
+          "id": "browser-replay-repair",
+          "mutation": "ignore-report-content",
+          "candidates": 12,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/browser-replay-repair/logs/checker-cases.json",
+          "correct": 11,
+          "errors": [
+            {
+              "candidate": "66b0ec17-71c9-49d2-b689-c3b684fd45bc",
+              "expected": false,
+              "actual": true
+            }
+          ],
+          "elapsedMs": 4.3989999999994325,
+          "pass": true
+        },
+        {
+          "id": "browser-replay-repair",
+          "mutation": "forbid-idempotent-submissions",
+          "candidates": 12,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/browser-replay-repair/logs/checker-cases.json",
+          "correct": 11,
+          "errors": [
+            {
+              "candidate": "4c5aab54-3d33-4895-b29d-f3e0e6096015",
+              "expected": true,
+              "actual": false
+            }
+          ],
+          "elapsedMs": 3.4194169999991573,
+          "pass": true
+        },
+        {
+          "id": "browser-replay-repair",
+          "mutation": "forbid-corrected-api-errors",
+          "candidates": 12,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/browser-replay-repair/logs/checker-cases.json",
+          "correct": 10,
+          "errors": [
+            {
+              "candidate": "4c5aab54-3d33-4895-b29d-f3e0e6096015",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "d66a5b13-e968-4824-99ea-8b72fac8d684",
+              "expected": true,
+              "actual": false
+            }
+          ],
+          "elapsedMs": 2.3635419999991427,
+          "pass": true
+        },
+        {
+          "id": "recurring-calendar-repair",
+          "mutation": "reference",
+          "candidates": 16,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-calendar-shapes/recurring-calendar-repair/logs/checker-cases.json",
+          "correct": 16,
+          "errors": [],
+          "elapsedMs": 1371.9954579999994,
+          "pass": true
+        },
+        {
+          "id": "recurring-calendar-repair",
+          "mutation": "final-generation-only",
+          "candidates": 16,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-calendar-shapes/recurring-calendar-repair/logs/checker-cases.json",
+          "correct": 15,
+          "errors": [
+            {
+              "candidate": "df80b693-1b85-40ce-ab4f-03ee12f98268",
+              "expected": false,
+              "actual": true
+            }
+          ],
+          "elapsedMs": 1113.5264580000003,
+          "pass": true
+        },
+        {
+          "id": "recurring-calendar-repair",
+          "mutation": "ignore-source-records",
+          "candidates": 16,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-calendar-shapes/recurring-calendar-repair/logs/checker-cases.json",
+          "correct": 15,
+          "errors": [
+            {
+              "candidate": "df80b693-1b85-40ce-ab4f-03ee12f98268",
+              "expected": false,
+              "actual": true
+            }
+          ],
+          "elapsedMs": 893.5201249999991,
+          "pass": true
+        },
+        {
+          "id": "recurring-calendar-repair",
+          "mutation": "ignore-attendees",
+          "candidates": 16,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-calendar-shapes/recurring-calendar-repair/logs/checker-cases.json",
+          "correct": 15,
+          "errors": [
+            {
+              "candidate": "6817ea35-f138-47c0-95fd-03bd5bc1d830",
+              "expected": false,
+              "actual": true
+            }
+          ],
+          "elapsedMs": 1416.172958000001,
+          "pass": true
+        },
+        {
+          "id": "recurring-calendar-repair",
+          "mutation": "forbid-republication",
+          "candidates": 16,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-calendar-shapes/recurring-calendar-repair/logs/checker-cases.json",
+          "correct": 15,
+          "errors": [
+            {
+              "candidate": "1a74c9e8-2a24-4f2c-b5f5-eb0b3b66e21f",
+              "expected": true,
+              "actual": false
+            }
+          ],
+          "elapsedMs": 1330.1993330000023,
+          "pass": true
+        },
+        {
+          "id": "recurring-calendar-repair",
+          "mutation": "forbid-corrected-api-errors",
+          "candidates": 16,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-calendar-shapes/recurring-calendar-repair/logs/checker-cases.json",
+          "correct": 15,
+          "errors": [
+            {
+              "candidate": "1a74c9e8-2a24-4f2c-b5f5-eb0b3b66e21f",
+              "expected": true,
+              "actual": false
+            }
+          ],
+          "elapsedMs": 823.4667079999999,
+          "pass": true
+        },
+        {
+          "id": "workflow-authority-repair",
+          "mutation": "reference",
+          "candidates": 15,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/workflow-authority-repair/logs/checker-cases.json",
+          "correct": 15,
+          "errors": [],
+          "elapsedMs": 13.243459000001167,
+          "pass": true
+        },
+        {
+          "id": "workflow-authority-repair",
+          "mutation": "ignore-superseded-admissions",
+          "candidates": 15,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/workflow-authority-repair/logs/checker-cases.json",
+          "correct": 12,
+          "errors": [
+            {
+              "candidate": "6656fd16-d85c-4ee3-af63-e9b84457ca84",
+              "expected": false,
+              "actual": true
+            },
+            {
+              "candidate": "7495a0b2-78be-4ce6-ad2b-c6e87f048141",
+              "expected": false,
+              "actual": true
+            },
+            {
+              "candidate": "901b74f4-fceb-4144-a50a-3a4cbf891da8",
+              "expected": false,
+              "actual": true
+            }
+          ],
+          "elapsedMs": 22.683458999999857,
+          "pass": true
+        },
+        {
+          "id": "workflow-authority-repair",
+          "mutation": "ignore-payload",
+          "candidates": 15,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/workflow-authority-repair/logs/checker-cases.json",
+          "correct": 13,
+          "errors": [
+            {
+              "candidate": "0b45c63f-d8ca-49c8-9635-b291ba6425dd",
+              "expected": false,
+              "actual": true
+            },
+            {
+              "candidate": "7495a0b2-78be-4ce6-ad2b-c6e87f048141",
+              "expected": false,
+              "actual": true
+            }
+          ],
+          "elapsedMs": 18.06658299999981,
+          "pass": true
+        },
+        {
+          "id": "workflow-authority-repair",
+          "mutation": "ignore-origin",
+          "candidates": 15,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/workflow-authority-repair/logs/checker-cases.json",
+          "correct": 13,
+          "errors": [
+            {
+              "candidate": "1ecdb828-c526-426e-94bb-12d6f7dcbed3",
+              "expected": false,
+              "actual": true
+            },
+            {
+              "candidate": "6656fd16-d85c-4ee3-af63-e9b84457ca84",
+              "expected": false,
+              "actual": true
+            }
+          ],
+          "elapsedMs": 22.00837500000125,
+          "pass": true
+        },
+        {
+          "id": "workflow-authority-repair",
+          "mutation": "forbid-corrected-api-errors",
+          "candidates": 15,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/workflow-authority-repair/logs/checker-cases.json",
+          "correct": 13,
+          "errors": [
+            {
+              "candidate": "557c49af-3169-44ee-933f-90a6a3bd2214",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "d344620a-c2a6-4e30-80fa-97619d4c9c73",
+              "expected": true,
+              "actual": false
+            }
+          ],
+          "elapsedMs": 6.215165999998135,
+          "pass": true
+        },
+        {
+          "id": "delegated-budget-repair",
+          "mutation": "reference",
+          "candidates": 17,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/delegated-budget-repair/logs/checker-cases.json",
+          "correct": 17,
+          "errors": [],
+          "elapsedMs": 149.13879099999758,
+          "pass": true
+        },
+        {
+          "id": "delegated-budget-repair",
+          "mutation": "ignore-owner",
+          "candidates": 17,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/delegated-budget-repair/logs/checker-cases.json",
+          "correct": 14,
+          "errors": [
+            {
+              "candidate": "3c2a6b95-7f93-4ae4-b2ec-6f0089becc5b",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "8d648185-0646-47ef-8ac9-ea6b5b7eb2d4",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "9bdb3d34-4c6a-4d17-93f5-e193770ad040",
+              "expected": true,
+              "actual": false
+            }
+          ],
+          "elapsedMs": 145.16008299999885,
+          "pass": true
+        },
+        {
+          "id": "delegated-budget-repair",
+          "mutation": "ignore-grant-version",
+          "candidates": 17,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/delegated-budget-repair/logs/checker-cases.json",
+          "correct": 13,
+          "errors": [
+            {
+              "candidate": "1c343cca-570f-4d02-a03a-e8f2fcf01b33",
+              "expected": false,
+              "actual": true
+            },
+            {
+              "candidate": "3c2a6b95-7f93-4ae4-b2ec-6f0089becc5b",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "8d648185-0646-47ef-8ac9-ea6b5b7eb2d4",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "9bdb3d34-4c6a-4d17-93f5-e193770ad040",
+              "expected": true,
+              "actual": false
+            }
+          ],
+          "elapsedMs": 41.82374999999956,
+          "pass": true
+        },
+        {
+          "id": "delegated-budget-repair",
+          "mutation": "ignore-delegate",
+          "candidates": 17,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/delegated-budget-repair/logs/checker-cases.json",
+          "correct": 13,
+          "errors": [
+            {
+              "candidate": "3c2a6b95-7f93-4ae4-b2ec-6f0089becc5b",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "8d648185-0646-47ef-8ac9-ea6b5b7eb2d4",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "9bdb3d34-4c6a-4d17-93f5-e193770ad040",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "c629d8af-1695-4e59-976a-e7c46cba61d0",
+              "expected": false,
+              "actual": true
+            }
+          ],
+          "elapsedMs": 145.98195900000064,
+          "pass": true
+        },
+        {
+          "id": "delegated-budget-repair",
+          "mutation": "allow-reservation-reuse",
+          "candidates": 17,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/delegated-budget-repair/logs/checker-cases.json",
+          "correct": 13,
+          "errors": [
+            {
+              "candidate": "3c2a6b95-7f93-4ae4-b2ec-6f0089becc5b",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "8d648185-0646-47ef-8ac9-ea6b5b7eb2d4",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "9a87376c-348b-488f-8558-6b1cfb34ee97",
+              "expected": false,
+              "actual": true
+            },
+            {
+              "candidate": "9bdb3d34-4c6a-4d17-93f5-e193770ad040",
+              "expected": true,
+              "actual": false
+            }
+          ],
+          "elapsedMs": 143.39549999999872,
+          "pass": true
+        },
+        {
+          "id": "delegated-budget-repair",
+          "mutation": "capture-frees-allowance",
+          "candidates": 17,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/delegated-budget-repair/logs/checker-cases.json",
+          "correct": 14,
+          "errors": [
+            {
+              "candidate": "3c2a6b95-7f93-4ae4-b2ec-6f0089becc5b",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "8d648185-0646-47ef-8ac9-ea6b5b7eb2d4",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "9bdb3d34-4c6a-4d17-93f5-e193770ad040",
+              "expected": true,
+              "actual": false
+            }
+          ],
+          "elapsedMs": 12.326624999997875,
+          "pass": true
+        },
+        {
+          "id": "delegated-budget-repair",
+          "mutation": "forbid-corrected-api-errors",
+          "candidates": 17,
+          "protectedTraceCapture": true,
+          "caseSource": ".local/next-five-hardening-2026-09-10/native-integrity-final/delegated-budget-repair/logs/checker-cases.json",
+          "correct": 15,
+          "errors": [
+            {
+              "candidate": "3c2a6b95-7f93-4ae4-b2ec-6f0089becc5b",
+              "expected": true,
+              "actual": false
+            },
+            {
+              "candidate": "8d648185-0646-47ef-8ac9-ea6b5b7eb2d4",
+              "expected": true,
+              "actual": false
+            }
+          ],
+          "elapsedMs": 97.22695899999962,
+          "pass": true
+        }
+      ]
+    },
+    "staticEvidence": {
+      "path": ".local/next-five-hardening-2026-09-10/static-frozen/summary.json",
+      "sha256": "0831b3e3dc9cddcf1fe3455b4278354b5074c39513f1466ff08ca56621c1a447",
+      "bytes": 26626
+    },
+    "integrityEvidence": [
+      {
+        "path": ".local/next-five-hardening-2026-09-10/native-integrity-final/summary.json",
+        "sha256": "d372a4388c875151751ac45645358d241fdabbc50850a8f639f25c463133d996",
+        "bytes": 22326
+      },
+      {
+        "path": ".local/next-five-hardening-2026-09-10/native-integrity-calendar-shapes/summary.json",
+        "sha256": "616ff4468011cedf364fd9dff10359ce8ebacf93b9e68dff99de299a1ae16724",
+        "bytes": 4506
+      }
+    ],
+    "regressionEvidence": {
+      "path": ".local/next-five-hardening-2026-09-10/regressions-final.json",
+      "sha256": "3105b6c2786778df08f3d8203376834611e6e915c5bed4594cdaa9b1917ab984",
+      "bytes": 12888
+    },
+    "browserIngress": {
+      "providerCallsMade": 0,
+      "unauthenticated": [
+        {
+          "path": "/",
+          "status": 401
+        },
+        {
+          "path": "/facts?path=/records/1",
+          "status": 401
+        },
+        {
+          "path": "/debug",
+          "status": 401
+        },
+        {
+          "path": "/submit",
+          "status": 401
+        },
+        {
+          "path": "/confirm",
+          "status": 401
+        },
+        {
+          "path": "/advance",
+          "status": 401
+        },
+        {
+          "path": "/renew",
+          "status": 401
+        },
+        {
+          "path": "/operation",
+          "status": 401
+        }
+      ],
+      "authenticatedStatus": 200,
+      "effects": 0,
+      "pass": true,
+      "evidence": {
+        "path": ".local/next-five-hardening-2026-09-10/browser-ingress.json",
+        "sha256": "4f98dff804c6b91d76d2d501280be9cacfc8a02a55a49cd0a805df453cf6e127",
+        "bytes": 362
+      }
+    },
+    "preservation": {
+      "checkedFiles": 14002,
+      "changed": [],
+      "pass": true,
+      "providerCallsMade": 0,
+      "evidence": {
+        "path": ".local/next-five-hardening-2026-09-10/preservation.json",
+        "sha256": "3e751f696498bfd6041c7e8e5158773dba5349eb5204ce582683af2bafbcdb37",
+        "bytes": 87
+      },
+      "analysisPrefixes": [
+        {
+          "path": "reports/screening/third-five/14-route-policy-repair.md",
+          "bytes": 27466,
+          "sha256": "3dfe08a8f19fc4fb32d595458a19dc13f1e041c6a987282ec0b6e1ac4ad6b08d"
+        },
+        {
+          "path": "reports/screening/original-five/03-browser-replay-repair.md",
+          "bytes": 17793,
+          "sha256": "18a07dedf9b89e46e07c79d6248df9ce1e8eb2b13c2f6ef9ebf06db796303f7b"
+        },
+        {
+          "path": "reports/screening/fourth-five/18-recurring-calendar-repair.md",
+          "bytes": 24992,
+          "sha256": "aa1e2f225c66cf590e120066adcba1e50d1d4eaf980b804257300e4cc0f98bff"
+        },
+        {
+          "path": "reports/screening/fourth-five/20-workflow-authority-repair.md",
+          "bytes": 23280,
+          "sha256": "28a77f441f47d006332f36facdac567eb0f87fcce6d9fe82dab982f900e87f12"
+        },
+        {
+          "path": "reports/screening/original-five/04-delegated-budget-repair.md",
+          "bytes": 16418,
+          "sha256": "104754b8cf33996997e7121cce7c41bdf75df3fad887c37243cf10c16daf3140"
+        }
+      ]
+    }
+  },
+  "implementationFiles": [
+    {
+      "path": "src/packages/portfolio.ts",
+      "sha256": "31fc7eae348cd8456878055e62f299575779a1dcdb302e33a82e5c8c6a724831",
+      "bytes": 55472
+    },
+    {
+      "path": "tasks/portfolio-runtime/harbor-grade.mjs",
+      "sha256": "14281244b7349cc58df47bc13f26abd64b0d65e57616e54521c94839524ea1e6",
+      "bytes": 15436
+    },
+    {
+      "path": "scripts/build-harbor-portfolio.mjs",
+      "sha256": "1a0d4875ffcea5e8362f0c7d0e3bc587a7b3a6d50c6aed3c4b69dd00f5d08f03",
+      "bytes": 8668
+    },
+    {
+      "path": "scripts/audit-next-five-checkers.mjs",
+      "sha256": "f53cb3a20d2797d629d137ae15dac190c8d3e9eb04274e245005f006642988b7",
+      "bytes": 5485
+    },
+    {
+      "path": "scripts/audit-browser-ingress.mjs",
+      "sha256": "1f207e0f17b15ca0d216dddcfeed01ab6703b38f559bc4feb9c1c62fbc605f43",
+      "bytes": 1353
+    },
+    {
+      "path": "scripts/verify-harbor-integrity.mjs",
+      "sha256": "cbaa72243d5217199bf1c3191d752b7a998da1076a9df9b1b66c964f82c9422c",
+      "bytes": 3686
+    }
+  ],
+  "developmentCorrections": [
+    {
+      "evidence": {
+        "path": ".local/next-five-hardening-2026-09-10/calendar-shape-before.json",
+        "sha256": "6305e95246bc3e15e7d11fccecb492363889b81ec396386d0e68ea902d79553f",
+        "bytes": 219
+      },
+      "explanation": "Final contract audit reproduced an unknown source-record kind being stored instead of returning a recoverable shape error. Added structural validation matching the documented types and a correct recovery variant that requires the documented error. Revalidated Calendar exports; the other four package digests are unchanged."
+    },
+    {
+      "evidence": {
+        "path": ".local/next-five-hardening-2026-09-10/mutations/summary.json",
+        "sha256": "ad39629a672d2a630f7b5fb413e24cb56076b139987a63bb62fb45a519fe8138",
+        "bytes": 11215
+      },
+      "explanation": "Initial audit left two mutations undetected. Added an isolated owner mismatch and a valid Calendar malformed-request recovery trace; all 23 are now detected."
+    },
+    {
+      "evidence": {
+        "path": ".local/next-five-hardening-2026-09-10/native-integrity/route-policy-repair/logs/summary.json",
+        "sha256": "433fa5d08a4fe9bd61eb182227667461e8461944de73a50a8756add0b0ab31f3",
+        "bytes": 5480
+      },
+      "explanation": "Detached-child probe spawned during the first of two checker calls. Its marker could be written during a legitimate live invocation. Corrected the probe to confirm child startup only after the second call, then test post-exit cleanup."
+    }
+  ],
+  "limitations": [
+    "Finite controls are not a proof against every possible implementation or attack.",
+    "No model hardness result or paid cheat qualification is claimed by these engineering checks.",
+    "Human-authored submission material and benchmark qualification remain separate from exploratory trial readiness."
+  ]
+}

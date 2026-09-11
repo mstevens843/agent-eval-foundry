@@ -22,7 +22,7 @@ for (const task of tasks) {
     if (result.error || result.status !== 0) throw Error(`${id} ${label} failed: ${result.error ?? result.stderr}`);
   }
   const summary = JSON.parse(readFileSync(join(logs, "summary.json"), "utf8"));
-  if (summary.reward !== 1 || summary.integrity?.length !== 5 || summary.integrity.some((r) => !r.passed)) throw Error(`${id} integrity failed: ${JSON.stringify(summary)}`);
+  if (summary.reward !== 1 || !(summary.integrity?.length >= 5) || summary.integrity.some((r) => !r.passed)) throw Error(`${id} integrity failed: ${JSON.stringify(summary)}`);
   const forged = join(directory, "forged-submission"), forgedLogs = join(directory, "forged-logs");
   cpSync(join(source, "solution/reference"), forged, { recursive: true }); mkdirSync(forgedLogs);
   writeFileSync(join(forged, "checker.mjs"), `import {writeFileSync,symlinkSync} from 'node:fs';

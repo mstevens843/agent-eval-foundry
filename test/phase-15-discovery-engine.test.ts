@@ -1,5 +1,7 @@
 import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import {
@@ -56,7 +58,10 @@ describe("Phase 15 frozen corpus and adapters", () => {
       ]),
     );
     expect(registration.schema).toBe("agent-eval-foundry/phase-15-discovery-preregistration@1");
-    expect(corpus.sources.every((source) => auditPhase15Source(ROOT, source).valid)).toBe(true);
+    for (const source of corpus.sources) {
+      const audit = auditPhase15Source(ROOT, source);
+      expect(audit.valid, `${source.sourceUnitId}: ${audit.checks.join("; ")}`).toBe(true);
+    }
     const trialAudits = corpus.sources
       .filter((source) => source.adapter === "trial-directory-snapshot")
       .map((source) => auditPhase15Source(ROOT, source));
@@ -64,6 +69,27 @@ describe("Phase 15 frozen corpus and adapters", () => {
       "ui-replay-live-dom",
       "checker-required-memory-poisoning",
     ]);
+  });
+
+  it("audits retained local documents in a fresh checkout without falling back to the author's files", () => {
+    const root = mkdtempSync(join(tmpdir(), "foundry-corpus-"));
+    const sources = loadPhase15SourceCorpus(ROOT).sources.filter(
+      (s) => s.adapter === "local-document-snapshot",
+    );
+    try {
+      for (const source of sources) expect(auditPhase15Source(root, source).valid).toBe(false);
+      mkdirSync(join(root, "data"));
+      cpSync(join(ROOT, "data/phase-15-source-snapshots"), join(root, "data/phase-15-source-snapshots"), {
+        recursive: true,
+      });
+      for (const source of sources) {
+        expect(auditPhase15Source(root, source).valid).toBe(true);
+        writeFileSync(join(root, `data/phase-15-source-snapshots/${source.sourceUnitId}.md`), "changed");
+        expect(auditPhase15Source(root, source).valid).toBe(false);
+      }
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 
   it("rejects stale local and incident evidence snapshots", () => {

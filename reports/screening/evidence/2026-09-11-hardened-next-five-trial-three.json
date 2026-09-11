@@ -1,0 +1,477 @@
+{
+  "schemaVersion": 1,
+  "campaign": "2026-09-11-hardened-next-five-trial-three",
+  "evidenceClass": "real-provider-screening",
+  "label": "Trial 5",
+  "limitations": [
+    "One exploratory attempt per package under coverage-v2 (third attempt on the public 3.0.0 contract); not a replicated failure rate or final qualification.",
+    "Requested model/effort are separate from observed CLI metadata; observed model/effort/scaffold were not exposed by either CLI's event stream this run.",
+    "browser-replay-repair's attempt was infrastructure-interrupted (container exit 134/SIGABRT after ~31m39s of authoring, before grading began) and is excluded from scored results; countsAsModelFailure is false and reward/service/checker fields are null for this package.",
+    "Checker defects varied across packages and did not uniformly recur from Trial 4: route-policy-repair independently reproduced Trial 4's opaque-token shape-gate bug, while recurring-calendar-repair, workflow-authority-repair and delegated-budget-repair each hit a different defect than their own Trial 4 attempt.",
+    "Raw captures and submissions remain private; this publication retains allowlisted fields and artifact hashes."
+  ],
+  "sourceDigest": "b9c99108fbd1d23f1b8c8c92ff059b1f6d9dcdfe5fe245f9565d5923f90bbfe8",
+  "authorImage": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+  "actualScheduling": "Five dispatch events within a 250ms spread (2026-09-11T05:07:22.328Z-05:07:22.578Z); the trial operator observed concurrent solver containers for all five packages.",
+  "concurrencyRequestFulfilled": true,
+  "concurrencyObservation": {
+    "count": 5,
+    "packageIds": [
+      "route-policy-repair",
+      "browser-replay-repair",
+      "recurring-calendar-repair",
+      "workflow-authority-repair",
+      "delegated-budget-repair"
+    ],
+    "firstLaunch": "2026-09-11T05:07:22.328Z",
+    "lastLaunch": "2026-09-11T05:07:22.578Z",
+    "launchSpreadMs": 250,
+    "containerObservationSource": "trial operator docker ps observation during the run"
+  },
+  "automaticRetries": 0,
+  "extraModelCallsBeyondFive": 0,
+  "counts": {
+    "attemptsLaunched": 5,
+    "completedScoredAttempts": 4,
+    "infrastructureInterruptedAttempts": 1,
+    "recordedZeroRewards": 4,
+    "solverPasses": 0,
+    "servicePassesWithFailedChecker": 4,
+    "checkerShapeGateFailures": 1,
+    "checkerContentLevelFailures": 2,
+    "checkerWrongOutputShapeFailures": 1
+  },
+  "browserReplayIncident": {
+    "error": "process-error: exit 134, signal null",
+    "dockerInspect": {
+      "exitCode": 134,
+      "oomKilled": false,
+      "error": ""
+    },
+    "captureLogicCleared": "src/execution/capture.ts's control flow confirms neither its 4 MiB event-line-limit nor its overall byte-quota guard fired before the child's natural close event; the process died on its own.",
+    "plausibleUnconfirmedCause": "Container memory cap is 2048 MiB; task runs a real Chromium instance alongside a long, thinking-heavy session (163,301 cached input tokens at crash time). No stderr diagnostic was captured (0 bytes), so this is plausible but not proven.",
+    "retryStatus": "Not retried within this campaign; a separately-authorized single Browser/Claude retry is being prepared."
+  },
+  "packages": [
+    {
+      "id": "route-policy-repair",
+      "target": "claude",
+      "runId": "route-policy-repair-attempt-1",
+      "analysis": "reports/screening/third-five/14-route-policy-repair.md",
+      "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "infrastructureInterrupted": false,
+      "captureStatus": "completed",
+      "captureError": null,
+      "serviceOutcome": "semantic-pass",
+      "reward": 0,
+      "authoringMilliseconds": 3342295,
+      "dispatchedAt": "2026-09-11T05:07:22.328Z",
+      "service": {
+        "scenarios": 33,
+        "failedScenarios": 0,
+        "invalidScenarios": 0
+      },
+      "checker": {
+        "checkerRequired": true,
+        "checkerPassed": false,
+        "expectedTokenCount": 13,
+        "opaqueTokensUsed": [
+          "__proto__",
+          "constructor",
+          "toString",
+          "",
+          "0",
+          "01",
+          "token/λ",
+          "candidate-H",
+          "candidate-I",
+          "candidate-J",
+          "candidate-K",
+          "candidate-L",
+          "candidate-M"
+        ],
+        "summary": {
+          "note": "gradeChecker() did not produce a valid per-candidate score; see finding/findingDetail."
+        },
+        "finding": "shape-gate-failure-recurrence",
+        "findingDetail": "Submitted checker builds its verdicts object as a plain {} keyed by opaque per-run tokens via bracket assignment (verdicts[token] = ...). Assigning to the literal key \"__proto__\" on a plain object does not create an enumerable own property (hits Object.prototype's inherited accessor instead), so the checker's own JSON output is missing that one key, failing completeVerdicts()'s exact-key-count shape check and falling through to gradeChecker()'s synthetic all-failed fallback. This is the same defect class this package's own Trial 4 attempt exhibited, independently reproduced by a fresh, blind submission -- a recurrence of the defect class, not the same code."
+      },
+      "usage": {
+        "cachedInputTokens": 19538758,
+        "costUsd": 18.213399000000003,
+        "inputTokens": 19810010,
+        "outputTokens": 229254,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "3925a7db136230f4c285bab935877dd19969e2d994d2422c335d20bc555fac30",
+      "resultSha256": "c9d807a3f5f1e71cc0ea0013e9c575325c6b2ab56a9aca07bc859973c242a3e5",
+      "manifestFilesVerified": 960,
+      "manifestBytesVerified": 31758826,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "required-checker-failed"
+    },
+    {
+      "id": "browser-replay-repair",
+      "target": "claude",
+      "runId": "browser-replay-repair-attempt-1",
+      "analysis": "reports/screening/original-five/03-browser-replay-repair.md",
+      "packageDigest": "712f97575821006724eef7f3b3161c97512019897af62e46ab32b9c32dcddf31",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "invalid-execution",
+      "infrastructureInterrupted": true,
+      "captureStatus": "process-error",
+      "captureError": "exit 134, signal null",
+      "serviceOutcome": null,
+      "reward": null,
+      "authoringMilliseconds": 1898868,
+      "dispatchedAt": "2026-09-11T05:07:22.390Z",
+      "service": null,
+      "checker": null,
+      "usage": null,
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "faf6c620d1511b68d61ca33e19769488eeb3a5571925c3f3b88d1a8ea7228268",
+      "resultSha256": "c5e294fb303dc72002f1e1f9cb2584b6ab924459cfb92d461628169e0f35d924",
+      "manifestFilesVerified": 102,
+      "manifestBytesVerified": 2318947,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "infrastructure-interrupted"
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "target": "codex",
+      "runId": "recurring-calendar-repair-attempt-1",
+      "analysis": "reports/screening/fourth-five/18-recurring-calendar-repair.md",
+      "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "infrastructureInterrupted": false,
+      "captureStatus": "completed",
+      "captureError": null,
+      "serviceOutcome": "semantic-pass",
+      "reward": 0,
+      "authoringMilliseconds": 1211819,
+      "dispatchedAt": "2026-09-11T05:07:22.454Z",
+      "service": {
+        "scenarios": 37,
+        "failedScenarios": 0,
+        "invalidScenarios": 0
+      },
+      "checker": {
+        "checkerRequired": true,
+        "checkerPassed": false,
+        "expectedTokenCount": 16,
+        "opaqueTokensUsed": [
+          "__proto__",
+          "constructor",
+          "toString",
+          "",
+          "0",
+          "01",
+          "token/λ",
+          "candidate-H",
+          "candidate-I",
+          "candidate-J",
+          "candidate-K",
+          "candidate-L",
+          "candidate-M",
+          "candidate-N",
+          "candidate-O",
+          "candidate-P"
+        ],
+        "summary": {
+          "reasonPolicy": "diagnostic-only",
+          "deterministic": true,
+          "total": 16,
+          "correct": 13,
+          "falsePositives": 3,
+          "missed": 0,
+          "pass": false,
+          "falsePositiveCandidates": [
+            "reference",
+            "alternative",
+            "variant-republish-and-reack"
+          ],
+          "gradeSummarySha256": "8b2fd05e50a8b9cc23b25d6ccc99297984b8578fb2444cae3c7b921d0141b343"
+        },
+        "finding": "content-level-false-positives",
+        "findingDetail": "Submitted checker reaches full, valid per-candidate scoring (a real grade-summary.json, not a shape-gate fallback) but genuinely misjudges reference and/or alternative and one additional legitimate variant as false positives -- a real content-level accuracy defect, distinct from this package's own Trial 4 defect."
+      },
+      "usage": {
+        "cachedInputTokens": 1089664,
+        "costUsd": null,
+        "inputTokens": 1158604,
+        "outputTokens": 39977,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "d9e6d1a7e931ac71ac8dedbf04b62bb8ee201a0d12a9fb9360a1718cdda44677",
+      "resultSha256": "f4955e4b89808b72adb49d1535a761d95c12df651a30d2db537a50d72824f907",
+      "manifestFilesVerified": 978,
+      "manifestBytesVerified": 119085671,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "required-checker-failed"
+    },
+    {
+      "id": "workflow-authority-repair",
+      "target": "codex",
+      "runId": "workflow-authority-repair-attempt-1",
+      "analysis": "reports/screening/fourth-five/20-workflow-authority-repair.md",
+      "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "infrastructureInterrupted": false,
+      "captureStatus": "completed",
+      "captureError": null,
+      "serviceOutcome": "semantic-pass",
+      "reward": 0,
+      "authoringMilliseconds": 959906,
+      "dispatchedAt": "2026-09-11T05:07:22.516Z",
+      "service": {
+        "scenarios": 36,
+        "failedScenarios": 0,
+        "invalidScenarios": 0
+      },
+      "checker": {
+        "checkerRequired": true,
+        "checkerPassed": false,
+        "expectedTokenCount": 16,
+        "opaqueTokensUsed": [
+          "__proto__",
+          "constructor",
+          "toString",
+          "",
+          "0",
+          "01",
+          "token/λ",
+          "candidate-H",
+          "candidate-I",
+          "candidate-J",
+          "candidate-K",
+          "candidate-L",
+          "candidate-M",
+          "candidate-N",
+          "candidate-O",
+          "candidate-P"
+        ],
+        "summary": {
+          "note": "gradeChecker() did not produce a valid per-candidate score; see finding/findingDetail."
+        },
+        "finding": "wrong-output-shape",
+        "findingDetail": "Submitted checker's run({cases}) returns a flat array of {token, accept} objects, never attempting the required {verdicts: {token: {ok, reasons}}} object shape at all. Every verdict is accept:false (100% rejection). A more fundamental defect than this package's own Trial 4 content-level false-positive problem -- this checker does not implement the required output contract."
+      },
+      "usage": {
+        "cachedInputTokens": 1973504,
+        "costUsd": null,
+        "inputTokens": 2039072,
+        "outputTokens": 46910,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "417302d110d509079003ef438cfdff87c52968cf40a423fa86b11cd281eafadc",
+      "resultSha256": "c76ef49d410167c378a597ef799d4f9ecd5854dd2fc834b1ee837ba4645b0006",
+      "manifestFilesVerified": 896,
+      "manifestBytesVerified": 60030607,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "required-checker-failed"
+    },
+    {
+      "id": "delegated-budget-repair",
+      "target": "codex",
+      "runId": "delegated-budget-repair-attempt-1",
+      "analysis": "reports/screening/original-five/04-delegated-budget-repair.md",
+      "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "infrastructureInterrupted": false,
+      "captureStatus": "completed",
+      "captureError": null,
+      "serviceOutcome": "semantic-pass",
+      "reward": 0,
+      "authoringMilliseconds": 1027879,
+      "dispatchedAt": "2026-09-11T05:07:22.578Z",
+      "service": {
+        "scenarios": 21,
+        "failedScenarios": 0,
+        "invalidScenarios": 0
+      },
+      "checker": {
+        "checkerRequired": true,
+        "checkerPassed": false,
+        "expectedTokenCount": 17,
+        "opaqueTokensUsed": [
+          "__proto__",
+          "constructor",
+          "toString",
+          "",
+          "0",
+          "01",
+          "token/λ",
+          "candidate-H",
+          "candidate-I",
+          "candidate-J",
+          "candidate-K",
+          "candidate-L",
+          "candidate-M",
+          "candidate-N",
+          "candidate-O",
+          "candidate-P",
+          "candidate-Q"
+        ],
+        "summary": {
+          "reasonPolicy": "diagnostic-only",
+          "deterministic": true,
+          "total": 17,
+          "correct": 14,
+          "falsePositives": 3,
+          "missed": 0,
+          "pass": false,
+          "falsePositiveCandidates": [
+            "variant-idempotent-settlement",
+            "alternative",
+            "reference"
+          ],
+          "gradeSummarySha256": "84ff89782888dc7d8a733f35b7d8b03271acb3f52cb01fe57753a1306d420c66"
+        },
+        "finding": "content-level-false-positives",
+        "findingDetail": "Submitted checker reaches full, valid per-candidate scoring (a real grade-summary.json, not a shape-gate fallback) but genuinely misjudges reference and/or alternative and one additional legitimate variant as false positives -- a real content-level accuracy defect, distinct from this package's own Trial 4 defect."
+      },
+      "usage": {
+        "cachedInputTokens": 1162368,
+        "costUsd": null,
+        "inputTokens": 1233417,
+        "outputTokens": 36568,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "0ad884b60c9d45c77600f3ac99c8120420d46024e603d020458bac6eddd6bc71",
+      "resultSha256": "b12afe20efa00046a4e7cb88a1941c79b75d3ab2749ec2b648f0b00134f5a929",
+      "manifestFilesVerified": 1309,
+      "manifestBytesVerified": 173703896,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "required-checker-failed"
+    }
+  ]
+}

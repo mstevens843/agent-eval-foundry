@@ -22,6 +22,14 @@ function markdown(dir: string): string[] {
 describe("reviewable source and honest screening publication", () => {
   it("uses the same portable evidence and navigation gate as report verification", () => {
     expect(verifyPublication()).toMatchObject({
+      hardenedPreRoundFiveCountedZeroes: 17,
+      hardenedPreRoundFiveCountedTrials: 18,
+      hardenedContinuationMaxFurtherCalls: 7,
+      hardenedRoundFourCountedTrials: 4,
+      hardenedRoundFourCountedZeroes: 3,
+      hardenedRoundFourRetainedPasses: 1,
+      hardenedRoundFourGradingVoids: 1,
+      hardenedRoundFivePreparedAttempts: 5,
       screenedPackages: batches.length * 5,
       manifestListedFilesVerifiedAtPublication: batches
         .flatMap((path) => read(path).packages)
@@ -36,12 +44,16 @@ describe("reviewable source and honest screening publication", () => {
       successorEffectivePasses: 22,
       successorCountedTrials: 50,
       successorGradingVoids: 3,
-      completedFinalistsMeetingTarget: 5,
+      completedFinalistsMeetingTarget: 9,
       pendingFinalists: 0,
-      finalistCountedTrials: 30,
-      finalistZeroRewards: 28,
-      finalistsAtSixOfSix: 3,
+      finalistCountedTrials: 54,
+      finalistZeroRewards: 52,
+      finalistsAtSixOfSix: 7,
       finalistsAtFiveOfSix: 2,
+      newlyQualifiedFinalists: 4,
+      latestCampaignAttempts: 11,
+      latestCampaignZeroRewards: 10,
+      latestContinuationAttempts: 6,
       publishedScreeningCampaignEntries: 79,
       preparedReplacementAttempts: 3,
       threeReplacementsAttemptsMade: 3,

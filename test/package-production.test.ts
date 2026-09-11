@@ -1,6 +1,7 @@
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { gunzipSync } from "node:zlib";
 import { afterAll, describe, expect, it } from "vitest";
 import { enumerateSpace } from "../src/families/delegated-wallet-scope-reconciliation/scenarios.js";
 import {
@@ -195,6 +196,27 @@ describe("reusable package production", () => {
     await expect(localProcess(process.execPath, ["-e", ""], { limitBytes: 0 })).rejects.toThrow(
       /INVALID_LIMIT/,
     );
+  });
+  it("gzip-compresses process logs without dropping stdout or stderr bytes", async () => {
+    const gzipLog = join(temporary(), "compressed.log");
+    const stdoutText = "same-line-repeated ".repeat(4000);
+    const stderrText = "diagnostic-stderr-only-content";
+    const result = await localProcess(
+      process.execPath,
+      [
+        "-e",
+        `process.stdout.write(${JSON.stringify(stdoutText)}); process.stderr.write(${JSON.stringify(stderrText)})`,
+      ],
+      { log: gzipLog, logCompression: "gzip" },
+    );
+    expect(result.stdout).toBe(stdoutText);
+    expect(result.stderr).toBe(stderrText);
+    expect(existsSync(gzipLog)).toBe(false);
+    const decompressed = gunzipSync(readFileSync(`${gzipLog}.gz`)).toString("utf8");
+    // Interleaved capture order is not guaranteed, but every byte from both streams must survive.
+    expect(decompressed).toHaveLength(stdoutText.length + stderrText.length);
+    expect(decompressed.includes(stderrText)).toBe(true);
+    expect(statSync(`${gzipLog}.gz`).size).toBeLessThan(stdoutText.length / 4);
   });
   it("binds local native receipts to exact controls and evidence, never a green flag alone", () => {
     const { input, plan } = fixture();

@@ -4,6 +4,8 @@ import { createHash } from "node:crypto";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { makeContinuationPlan } from "./hardened-continuation-policy.mjs";
+import { buildFinalResults } from "./final-screening-results.mjs";
 
 export const SCREENING_BATCHES = [
   ["original-five", "2026-09-07-original-five"],
@@ -16,6 +18,36 @@ export const SCREENING_BATCHES = [
 // Versioned follow-ups reuse the original per-package analysis files. They are
 // additional trials or engineering evidence, not additional distinct packages.
 export const SCREENING_FOLLOWUPS = [
+  "final-results-2026-09-11.md",
+  "evidence/2026-09-11-final-results.json",
+  "route-trial-seven-pass-audit-2026-09-11.md",
+  "evidence/2026-09-11-route-trial-seven-pass-audit.json",
+  "hardened-six-continuation-preparation-2026-09-11.md",
+  "evidence/2026-09-11-hardened-six-counting-ledger.json",
+  "evidence/2026-09-11-hardened-six-continuation-preparation.json",
+  "browser-coverage-v3-2026-09-11.md",
+  "evidence/2026-09-11-browser-coverage-v3.json",
+  "evidence/2026-09-11-browser-coverage-v3-generators.json",
+  "evidence/2026-09-11-browser-round-four-disposition.json",
+  "evidence/2026-09-11-hardened-next-five-trial-five-preparation.json",
+  "hardened-round-four-pass-audit-2026-09-11.md",
+  "evidence/2026-09-11-hardened-round-four-pass-audit.json",
+  "browser-runtime-reliability-2026-09-11.md",
+  "evidence/2026-09-11-browser-runtime-reliability.json",
+  "evidence/2026-09-11-hardened-next-five-trial-four-preparation.json",
+  "evidence/2026-09-11-hardened-next-five-trial-three-preparation.json",
+  "evidence/2026-09-11-next-five-generators.json",
+  "next-five-coverage-v2-2026-09-11.md",
+  "evidence/2026-09-11-next-five-coverage-v2.json",
+  "evidence/2026-09-11-hardened-next-five-trial-two-preparation.json",
+  "next-five-successor-implementation-2026-09-10.md",
+  "evidence/2026-09-10-next-five-successors.json",
+  "evidence/2026-09-10-next-five-generators.json",
+  "next-five-hardening-2026-09-10.md",
+  "next-five-hardening-coverage-2026-09-10.md",
+  "evidence/2026-09-10-next-five-hardening.json",
+  "evidence/2026-09-10-next-five-hardening-generators.json",
+  "evidence/2026-09-10-hardened-next-five-trial-one-preparation.json",
   "final-results-2026-09-09.md",
   "evidence/2026-09-09-final-results.json",
   "second-trial-priority-2026-09-09.md",
@@ -75,6 +107,16 @@ export const SCREENING_FOLLOWUPS = [
   "evidence/2026-09-09-three-replacements-preparation.json",
   "three-replacements-2026-09-09.md",
   "evidence/2026-09-09-three-replacements.json",
+  "hardened-next-five-trial-one-2026-09-10.md",
+  "evidence/2026-09-10-hardened-next-five-trial-one.json",
+  "hardened-next-five-trial-two-2026-09-11.md",
+  "evidence/2026-09-11-hardened-next-five-trial-two.json",
+  "hardened-next-five-trial-three-2026-09-11.md",
+  "evidence/2026-09-11-hardened-next-five-trial-three.json",
+  "hardened-next-five-trial-four-2026-09-11.md",
+  "evidence/2026-09-11-hardened-next-five-trial-four.json",
+  "hardened-six-continuation-2026-09-11.md",
+  "evidence/2026-09-11-hardened-six-continuation.json",
 ];
 
 export function verifyPublication(root = process.cwd()) {
@@ -1060,6 +1102,135 @@ export function verifyPublication(root = process.cwd()) {
   const scoredPackageIds = new Set(successorRecords.filter((p) => p.reward !== null).map((p) => p.id));
   assert.deepEqual([...successorPackageIds].sort(), [...ids].sort(), "every package has a Trial 2 record");
   assert.deepEqual([...scoredPackageIds].sort(), [...ids].sort(), "every package has a scored Trial 2 result");
+  // The later public 3.0.0 campaign is separate from the completed finalist sets.
+  // Preserve raw grades while enforcing the explicitly authorized Browser void.
+  const browserDisposition = read("reports/screening/evidence/2026-09-11-browser-round-four-disposition.json");
+  const browserCoverage = read("reports/screening/evidence/2026-09-11-browser-coverage-v3.json");
+  const hardenedRoundFour = read("reports/screening/evidence/2026-09-11-hardened-next-five-trial-four.json");
+  const hardenedRoundFive = read("reports/screening/evidence/2026-09-11-hardened-next-five-trial-five-preparation.json");
+  assert.equal(browserDisposition.rows.length, 5);
+  assert.equal(hardenedRoundFive.packages.length, 5);
+  assert.equal(hardenedRoundFive.concurrency, 5);
+  assert.equal(hardenedRoundFive.maxProviderCalls, 5);
+  assert.equal(hardenedRoundFive.providerCallsMade, 0);
+  assert.equal(hardenedRoundFive.runtimeRebuilt, false);
+  assert.equal(hardenedRoundFive.providerAssignmentsChanged, false);
+  assert.deepEqual(hardenedRoundFive.changedPackages, ["browser-replay-repair"]);
+  for (const row of browserDisposition.rows) {
+    const original = hardenedRoundFour.packages.find((p) => p.id === row.id);
+    const prepared = hardenedRoundFive.packages.find((p) => p.id === row.id);
+    assert(original && prepared);
+    assert.equal(row.recordedReward, original.reward);
+    assert.equal(row.originalCompletion.sha256, original.completionSha256);
+    assert.equal(row.provider, original.target);
+    assert.equal(prepared.target, original.target);
+    assert.equal(prepared.profileDigest, original.profileDigest);
+    assert.equal(prepared.historicalTrial, 7);
+    assert.equal(prepared.versionAttempt, 5);
+    if (row.id === "browser-replay-repair") {
+      assert.equal(row.countedReward, null);
+      assert.equal(row.recordedReward, 1);
+      assert.equal(row.diagnosticReward, 0);
+      assert.equal(row.disposition, "grading-void");
+      assert.equal(row.replacementHistoricalTrial, 7);
+      assert.equal(row.replacementProvider, "codex");
+      assert.equal(row.userAuthorizedVoid, true);
+      assert.equal(prepared.gradingRevision, "coverage-v3");
+      assert.notEqual(prepared.packageDigest, original.packageDigest);
+    } else {
+      assert.equal(row.countedReward, original.reward);
+      assert.equal(row.disposition, "retained");
+      assert.equal(prepared.packageDigest, original.packageDigest);
+    }
+  }
+  assert.equal(browserDisposition.separateUnscoredInterruption.historicalTrial, 5);
+  assert.equal(browserDisposition.separateUnscoredInterruption.provider, "claude");
+  assert.equal(browserDisposition.separateUnscoredInterruption.countedReward, null);
+  assert.equal(hardenedRoundFive.browserMissingClaudeSlotStillPending, true);
+  const integratedBrowser = browserCoverage.tasks.find((p) => p.id === "browser-replay-repair");
+  assert.equal(integratedBrowser.reference.passes, 22);
+  assert.equal(integratedBrowser.checker.correct, 14);
+  assert.equal(integratedBrowser.savedSubmissionReplay.checker.correct, 12);
+  assert.equal(integratedBrowser.savedSubmissionReplay.countedReward, null);
+  const hardenedLedger = read("reports/screening/evidence/2026-09-11-hardened-six-counting-ledger.json");
+  const hardenedContinuation = read("reports/screening/evidence/2026-09-11-hardened-six-continuation-preparation.json");
+  const continuationExpected = makeContinuationPlan(hardenedLedger, hardenedRoundFive);
+  for (const key of Object.keys(continuationExpected)) assert.deepEqual(hardenedContinuation[key], continuationExpected[key]);
+  const firstRoundReplay = read("reports/screening/evidence/2026-09-11-next-five-coverage-v2.json");
+  for (const p of hardenedLedger.packages) {
+    for (const row of p.history) {
+      assert.equal(createHash("sha256").update(readFileSync(join(root,row.source.path))).digest("hex"),row.source.sha256);
+      const original = read(row.source.path).packages.find(x=>x.id===p.id);assert(original);
+      assert.equal(original.reward,row.originalReward);assert.equal(original.target,row.provider);
+      assert.equal(original.completionSha256,row.completionSha256);
+      if (row.versionRound === 1) {
+        const replay=firstRoundReplay.tasks.find(x=>x.id===p.id).savedSubmissionReplay;
+        assert.equal(replay.originalCompletionSha256,row.completionSha256);
+        assert(replay.service.pass&&!replay.checker.pass);
+        assert.equal(row.countedReward,replay.replayReward);
+      } else if (row.versionRound === 4) {
+        assert.equal(row.countedReward,browserDisposition.rows.find(x=>x.id===p.id).countedReward);
+      } else assert.equal(row.countedReward,original.reward);
+    }
+  }
+  const allHardenedRows=hardenedLedger.packages.flatMap(p=>p.history);
+  assert.equal(allHardenedRows.filter(r=>r.countedReward===0).length,17);
+  assert.equal(allHardenedRows.filter(r=>r.countedReward!==null).length,18);
+  assert.equal(hardenedContinuation.providerCallsMade,0);
+  assert.equal(hardenedContinuation.alreadyRunningRound5Modified,false);
+  const routeAudit = read("reports/screening/evidence/2026-09-11-route-trial-seven-pass-audit.json");
+  assert.equal(routeAudit.id, "route-policy-repair");
+  assert.equal(routeAudit.historicalTrial, 7);
+  assert.equal(routeAudit.provider, "codex");
+  assert.equal(routeAudit.recordedReward, 1);
+  assert.equal(routeAudit.countedReward, 1);
+  assert.equal(routeAudit.disposition, "retain-pass");
+  assert.equal(routeAudit.providerCallsMade, 0);
+  assert.equal(routeAudit.confirmedAdditionalDefects, 0);
+  assert.equal(routeAudit.packageDigest, hardenedRoundFive.packages.find(p=>p.id===routeAudit.id).packageDigest);
+  const priorRoute = hardenedLedger.packages.find(p=>p.id===routeAudit.id).history.filter(r=>r.countedReward!==null);
+  assert.equal(routeAudit.counting.failures, priorRoute.filter(r=>r.countedReward===0).length);
+  assert.equal(routeAudit.counting.scored, priorRoute.length + 1);
+  assert.equal(routeAudit.counting.passes, routeAudit.counting.scored - routeAudit.counting.failures);
+  assert.equal(routeAudit.counting.maximumFailuresInSix, routeAudit.counting.failures + 6 - routeAudit.counting.scored);
+  assert.equal(routeAudit.counting.canReachFiveOfSix, routeAudit.counting.maximumFailuresInSix >= 5);
+  for (const provider of ["codex", "claude"])
+    assert.equal(routeAudit.counting.providers[provider], priorRoute.filter(r=>r.provider===provider).length + Number(provider===routeAudit.provider));
+  for (const script of routeAudit.reproduction.scripts) assert.equal(script.sha256, sha(script.path));
+  const generatedRoute = routeAudit.audit.generated, targetedRoute = routeAudit.audit.targeted;
+  assert.deepEqual(generatedRoute.failures, []);
+  assert.deepEqual(targetedRoute.failures, []);
+  assert.equal(routeAudit.audit.additionalServiceConfigurations, generatedRoute.serviceChecks + targetedRoute.serviceChecks);
+  assert.equal(routeAudit.audit.checkerClassifications, generatedRoute.checkerPositive + generatedRoute.checkerNegative + targetedRoute.checkerCases);
+  assert.equal(targetedRoute.classifications.length, targetedRoute.checkerCases);
+  assert(targetedRoute.classifications.every(c=>c.correct && c.accepted===c.expectedAccept));
+  assert.equal(targetedRoute.isolatedService.passed, targetedRoute.serviceChecks);
+  assert.equal(targetedRoute.isolatedChecker.correct, targetedRoute.checkerCases);
+  assert(targetedRoute.isolatedChecker.shapeValid && targetedRoute.isolatedChecker.deterministic && targetedRoute.isolatedChecker.inputUnchanged);
+  const completedContinuation = read("reports/screening/evidence/2026-09-11-hardened-six-continuation.json");
+  const currentFinalResults = read("reports/screening/evidence/2026-09-11-final-results.json");
+  assert.deepEqual(currentFinalResults.target, { minimumFailures: 5, countedTrials: 6, codexTrials: 3, claudeTrials: 3 });
+  assert.deepEqual(currentFinalResults.sources.map(s => s.path), [
+    "reports/screening/evidence/2026-09-09-final-results.json",
+    "reports/screening/evidence/2026-09-11-hardened-six-counting-ledger.json",
+    "reports/screening/evidence/2026-09-11-hardened-six-continuation.json",
+  ]);
+  for (const source of currentFinalResults.sources) assert.equal(source.sha256, sha(source.path));
+  const combined = buildFinalResults(finalResults, hardenedLedger, completedContinuation);
+  for (const key of Object.keys(combined)) assert.deepEqual(currentFinalResults[key], combined[key], `current results: ${key}`);
+  assert.equal(completedContinuation.counts.totalNewModelCallsThisSession, combined.latestCampaign.totalAttempts);
+  assert.equal(completedContinuation.counts.zeroRewards, combined.latestCampaign.zeroRewards);
+  assert.equal(completedContinuation.counts.oneRewards, combined.latestCampaign.oneRewards);
+  for (const [id, p] of Object.entries(completedContinuation.packages)) {
+    const prepared = hardenedRoundFive.packages.find(p => p.id === id);
+    for (const row of p.trials) {
+      assert.equal(row.packageDigest, prepared.packageDigest);
+      for (const key of ["completionSha256", "resultSha256", "packageDigest", "profileDigest"]) assert.match(row[key], hash);
+      assert(row.manifestFilesVerified > 0 && row.manifestBytesVerified > 0);
+      assert.equal(row.serviceOutcome, "semantic-pass");
+      assert.equal(row.reward, row.checkerPassed ? 1 : 0);
+    }
+  }
   const walk = (dir, prefix = "") =>
     readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
       assert.ok(!entry.isSymbolicLink(), "publication symlink");
@@ -1081,6 +1252,14 @@ export function verifyPublication(root = process.cwd()) {
     "docs/final-six-handoff.md",
     "docs/post-final-five-handoff.md",
     "docs/three-replacements-handoff.md",
+    "docs/hardened-next-five-trial-one-handoff.md",
+    "docs/hardened-next-five-trial-two-handoff.md",
+    "docs/hardened-next-five-trial-three-handoff.md",
+    "docs/hardened-next-five-trial-four-handoff.md",
+    "docs/hardened-next-five-trial-five-handoff.md",
+    "docs/hardened-six-continuation-handoff.md",
+    "docs/hardened-next-five-trial-three-browser-retry-handoff.md",
+    "docs/next-five-implementation.md",
     "docs/engineering-progress.md",
     "docs/artifact-lifecycle.md",
     "reports/PORTFOLIO-PUBLICATION.md",
@@ -1108,6 +1287,14 @@ export function verifyPublication(root = process.cwd()) {
     assert.ok(!p.path.startsWith("/") && !p.path.split("/").includes(".."));
   }
   return {
+    hardenedPreRoundFiveCountedZeroes: 17,
+    hardenedPreRoundFiveCountedTrials: 18,
+    hardenedContinuationMaxFurtherCalls: hardenedContinuation.maxNewProviderCalls,
+    hardenedRoundFourCountedTrials: browserDisposition.rows.filter((r) => r.countedReward !== null).length,
+    hardenedRoundFourCountedZeroes: browserDisposition.rows.filter((r) => r.countedReward === 0).length,
+    hardenedRoundFourRetainedPasses: browserDisposition.rows.filter((r) => r.countedReward === 1).length,
+    hardenedRoundFourGradingVoids: browserDisposition.rows.filter((r) => r.countedReward === null).length,
+    hardenedRoundFivePreparedAttempts: hardenedRoundFive.packages.length,
     screenedPackages: ids.size,
     trialTwoAttempts: trialTwoCounts.attempts,
     trialTwoScored: trialTwoCounts.scored,
@@ -1148,12 +1335,16 @@ export function verifyPublication(root = process.cwd()) {
     successorCountedTrials: disposition.totals.countedTrials + threeReplacementsAttempts,
     successorGradingVoids: disposition.totals.gradingVoids,
     remainingAuditAdditionalFalsePasses: remainingAudit.correctedPasses.length,
-    completedFinalistsMeetingTarget: finalSummary.sixOfSix + finalSummary.fiveOfSix,
-    pendingFinalists: finalResults.packages.filter((p) => p.scored < 6).length,
-    finalistCountedTrials: finalSummary.countedTrials,
-    finalistZeroRewards: finalSummary.zeroRewards,
-    finalistsAtSixOfSix: finalSummary.sixOfSix,
-    finalistsAtFiveOfSix: finalSummary.fiveOfSix,
+    completedFinalistsMeetingTarget: combined.summary.packages,
+    pendingFinalists: combined.summary.pendingFinalistTrials,
+    finalistCountedTrials: combined.summary.countedTrials,
+    finalistZeroRewards: combined.summary.zeroRewards,
+    finalistsAtSixOfSix: combined.summary.sixOfSix,
+    finalistsAtFiveOfSix: combined.summary.fiveOfSix,
+    newlyQualifiedFinalists: combined.summary.newlyQualifiedPackages,
+    latestCampaignAttempts: combined.latestCampaign.totalAttempts,
+    latestCampaignZeroRewards: combined.latestCampaign.zeroRewards,
+    latestContinuationAttempts: combined.latestCampaign.continuationAttempts,
     publishedScreeningCampaignEntries: finalCampaignTotals.publishedCampaignEntries,
     preparedReplacementAttempts: replacements.slots.length,
     threeReplacementsAttemptsMade: threeReplacementsAttempts,

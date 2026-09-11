@@ -2,6 +2,14 @@
 
 The goal is a portfolio of fair, useful tasks that agents genuinely fail—not a large pile of generated exercises or zero rewards caused by bad measurement. Progress includes discovering that a candidate is easy, identifying our own mistakes, and making the next decision better informed.
 
+## September 11: nine completed finalists, seven at 6/6 and two at 5/6
+
+Browser replay, Recurring calendar, Workflow authority and Delegated budget each completed a balanced 6/6 reward-zero set. Together with the first five finalists, that makes **nine qualifying tasks, 52 failures in 54 counted trials, and 27 trials per provider**.
+
+The new group also retained a negative selection result: Route policy stopped at 3/5 failures after two Codex passes survived additional audits. Browser's interrupted and grading-void attempts remain excluded; fresh trials completed its provider balance. Calendar and Budget's already-graded first attempts were recovered after a publication storage incident without another model call.
+
+The [combined results](../reports/screening/final-results-2026-09-11.md) connect each total to the original trial history. The latest campaign executed 11 new attempts, not 12: five initial plus six of seven authorized continuation slots. This arithmetic correction changes no task reward or standing.
+
 ## September 9: five completed finalists, three at 6/6 and two at 5/6
 
 All five finalists meet the reported standard-trial target. Incremental build, issued report, and variant cache finished at 6/6 reward=0; snapshot recovery and temporal capacity finished at 5/6. Each has three counted trials per provider. The 30-trial result contains 28 failures and two retained agent passes.
@@ -126,14 +134,6 @@ The historical outbox case must be read with its [qualified evidence and correct
 
 ## Next steps after the completed screening campaign
 
-1. Carry incremental build's unchanged 6/6 package and complete evidence into the final
-   submission review and required cheat checks.
-2. Keep the four stopped finalists' passing submissions and per-trial analyses available
-   for future engineering decisions. No further screening slot is needed for their settled
-   current sets.
-3. Preserve raw grades separately from the temporal/snapshot coverage regrades. Any later
-   task revision needs its own version and clearly identified evidence.
+Carry the nine completed task sets and their evidence into submission review and the required destination checks. Keep Route's passing submissions and unsuccessful selection result available when considering a future successor. Preserve original rewards, grading corrections and excluded attempts; a new public task version needs its own clearly identified trial set.
 
-No new model attempts, package edits, commits or pushes are authorized by this document.
-The [trial index](../reports/screening/README.md), [portfolio](project-status.md) and
-[publication report](../reports/PORTFOLIO-PUBLICATION.md) link the detailed evidence.
+The [trial index](../reports/screening/README.md), [portfolio](project-status.md) and [combined results](../reports/screening/final-results-2026-09-11.md) link the detailed evidence. No new model attempts are launched by documentation or local verification.

@@ -6,7 +6,7 @@ export const checkIds = [
   "terminal_history",
   "effect_payload",
 ];
-export function scenarios() {
+function baseScenarios() {
   const rows = [];
   for (let seed = 0; seed < 24; seed++) {
     const suffix = String(seed),
@@ -194,7 +194,14 @@ export function scenarios() {
         revision: 1,
         owners: { doc: "owner" },
         grants: [
-          { id: "a", from: "owner", to: "team", resources: ["doc"], actions: ["read", "write"], active: true },
+          {
+            id: "a",
+            from: "owner",
+            to: "team",
+            resources: ["doc"],
+            actions: ["read", "write"],
+            active: true,
+          },
           { id: "b", from: "team", to: "user", resources: ["doc"], actions: ["read", "write"], active: true },
           { id: "direct", from: "owner", to: "user", resources: ["doc"], actions: ["write"], active: true },
         ],
@@ -203,7 +210,14 @@ export function scenarios() {
         revision: 2,
         owners: { doc: "owner" },
         grants: [
-          { id: "a", from: "owner", to: "team", resources: ["doc"], actions: ["read", "write"], active: false },
+          {
+            id: "a",
+            from: "owner",
+            to: "team",
+            resources: ["doc"],
+            actions: ["read", "write"],
+            active: false,
+          },
           { id: "b", from: "team", to: "user", resources: ["doc"], actions: ["read", "write"], active: true },
           { id: "direct", from: "owner", to: "user", resources: ["doc"], actions: ["write"], active: true },
         ],
@@ -251,13 +265,90 @@ export function scenarios() {
       revision,
       owners: { doc: "team" },
       grants: [
-        { id: "cycle", from: "team", to: "owner", resources: ["doc"], actions: ["read", "write"], active: true },
+        {
+          id: "cycle",
+          from: "team",
+          to: "owner",
+          resources: ["doc"],
+          actions: ["read", "write"],
+          active: true,
+        },
         { id: "a", from: "owner", to: "team", resources: ["doc"], actions: ["read", "write"], active: true },
-        { id: "reach", from: "owner", to: "admin", resources: ["doc"], actions: ["read", "write"], active: true },
-        { id: "guard", from: "phantom", to: "team", resources: ["doc"], actions: ["read", "write"], active: true },
+        {
+          id: "reach",
+          from: "owner",
+          to: "admin",
+          resources: ["doc"],
+          actions: ["read", "write"],
+          active: true,
+        },
+        {
+          id: "guard",
+          from: "phantom",
+          to: "team",
+          resources: ["doc"],
+          actions: ["read", "write"],
+          active: true,
+        },
       ],
     })),
     races: [],
   });
+  return rows;
+}
+
+export function scenarios() {
+  const rows = baseScenarios();
+  for (const [i, s] of rows.entries()) {
+    // Three revision slots per delivery leave room for both documented fences.
+    s.policies = s.policies.map((p, n) => ({ ...p, revision: 3 * n + 1 }));
+    s.dispatchRaces = i < 24 && i % 3 === 0 ? [0, 2] : [];
+    s.receiptLag = i % 3;
+    if (s.crashDeliveries?.length)
+      s.interrupt = { method: i === 26 ? "api.dispatch" : "api.admit", count: 1 };
+    delete s.crashDeliveries;
+  }
+  for (let variant = 0; variant < 6; variant++) {
+    const s = structuredClone(rows[variant]);
+    s.id = "boundary-" + variant;
+    const parent = s.jobs[2];
+    for (let depth = 3; depth <= 6; depth++)
+      s.jobs.push({
+        ...parent,
+        id: "depth-" + depth,
+        parent: depth === 3 ? parent.id : "depth-" + (depth - 1),
+        principal: "worker-" + depth,
+      });
+    s.deliveries.splice(
+      2,
+      0,
+      ...s.jobs.slice(-4).map((j) => ({ id: "delivery-" + j.id, jobId: j.id, worker: "owner" })),
+    );
+    const base = s.policies[0];
+    base.grants.push(
+      {
+        id: "alternate-a",
+        from: "owner",
+        to: "branch",
+        resources: ["doc"],
+        actions: ["write"],
+        active: true,
+      },
+      { id: "alternate-b", from: "branch", to: "user", resources: ["doc"], actions: ["write"], active: true },
+    );
+    s.policies = s.deliveries.map((_, i) => ({
+      ...structuredClone(base),
+      revision: i * 3 + 1,
+      grants: base.grants.map((g) => ({ ...g, active: g.active && !(g.id === "a" && i > 4) })),
+    }));
+    s.races = [1];
+    s.dispatchRaces = [0, 2, 3];
+    s.receiptLag = 2;
+    s.interrupt = {
+      method: ["api.admit", "api.dispatch", "api.outcome", "api.finish"][variant % 4],
+      count: (variant % 2) + 1,
+    };
+    rows.push(s);
+  }
   return rows;
 }

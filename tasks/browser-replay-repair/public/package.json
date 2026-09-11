@@ -1,1 +1,13 @@
-{ "private": true, "type": "module" }
+{
+  "name": "browser-replay-repair",
+  "version": "3.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "app": "node dev.mjs",
+    "replay": "node replay.mjs"
+  },
+  "dependencies": {
+    "playwright": "1.62.1"
+  }
+}

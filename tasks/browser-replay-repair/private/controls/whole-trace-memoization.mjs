@@ -9,7 +9,10 @@ export function replay(view, api) {
     const node = resolveTarget(event, api);
     if (!submitForm(node, event, api)) throw Error("submission incomplete");
   }
-  const result = { traceId: view.traceId, steps: view.events.map((e) => ({ step: e.step, status: "completed" })) };
+  const result = {
+    traceId: view.traceId,
+    steps: view.events.map((e) => ({ step: e.step, status: "completed" })),
+  };
   writeFileSync(file, JSON.stringify(result));
   return result;
 }

@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { expect, it } from "vitest";
 
-it("exports all five successors reproducibly with complete private oracles and a Chromium-only verifier dependency", async () => {
+it("exports all five successors reproducibly with complete private oracles and a public Chromium application", async () => {
   const root = process.cwd();
   const { buildHarborTask, nextFive } = await import(
     pathToFileURL(join(root, "scripts/build-harbor-portfolio.mjs")).href
@@ -35,6 +35,13 @@ it("exports all five successors reproducibly with complete private oracles and a
       expect(docker.includes("playwright@1.62.1")).toBe(id === "browser-replay-repair");
       expect(readFileSync(join(directory, "environment/Dockerfile"), "utf8")).not.toContain("/tests");
       if (id === "browser-replay-repair") {
+        expect(readFileSync(join(directory, "environment/Dockerfile"), "utf8")).toContain(
+          "playwright@1.62.1",
+        );
+        for (const name of ["server.mjs", "page.mjs", "driver.mjs"])
+          expect(readFileSync(join(directory, "environment/submission/app", name), "utf8")).toBe(
+            readFileSync(join(directory, "tests/application", name), "utf8"),
+          );
         expect(docker).toContain("@sha256:");
         expect(readFileSync(join(directory, "tests/docker-compose.yaml"), "utf8")).toContain("init: true");
         const grader = readFileSync(join(directory, "tests/harbor-grade.mjs"), "utf8");

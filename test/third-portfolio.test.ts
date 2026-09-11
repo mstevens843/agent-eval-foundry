@@ -115,6 +115,9 @@ it("provides checker stimulus data without leaking maintenance invariant verdict
 it("preserves generator hashes through post-selection validation", () => {
   const ledger = JSON.parse(readFileSync("data/third-portfolio-selection-ledger.json", "utf8"));
   const successors = [
+    ...JSON.parse(
+      readFileSync("reports/screening/evidence/2026-09-10-next-five-hardening-generators.json", "utf8"),
+    ),
     ...JSON.parse(readFileSync("reports/screening/evidence/2026-09-09-next-five-generators.json", "utf8")),
     ...JSON.parse(
       readFileSync("reports/screening/evidence/2026-09-09-third-ranked-five-generators.json", "utf8"),
@@ -152,7 +155,7 @@ it("does not invent a mandatory change when requested routing behavior already h
   s.request.preference = 100;
   expect((await run(ids[3], s)).failures).toEqual([]);
 });
-it("permits the documented 1024 routing terms without counting fallback actions as terms", async () => {
+it("enforces the flat deployment rule capacity at 512 rules", async () => {
   const f = await get("route-policy-repair");
   const original = { egresses: { e: "p" }, policies: { p: { terms: [], fallback: { kind: "accept" } } } };
   const scenario = {
@@ -160,14 +163,14 @@ it("permits the documented 1024 routing terms without counting fallback actions 
     request: { egresses: [], match: {}, preference: 42 },
     routes: [{ egress: "e", route: { prefix: "0.0.0.0/0", preference: 100, communities: [] } }],
   };
-  for (const count of [1024, 1025]) {
+  for (const count of [512, 513]) {
     const config = {
-      egresses: original.egresses,
-      policies: {
-        p: {
-          terms: Array.from({ length: count }, () => ({ match: {}, action: { kind: "continue" } })),
-          fallback: { kind: "accept" },
-        },
+      format: "flat-v1",
+      egresses: {
+        e: Array.from({ length: count }, () => ({
+          when: { all: [], none: [] },
+          action: { decision: "accept", add: [], remove: [] },
+        })),
       },
     };
     const result = await f.domain.runScenario(
@@ -179,8 +182,8 @@ it("permits the documented 1024 routing terms without counting fallback actions 
       },
       f.root,
     );
-    expect(result.checks.completion).toBe(count === 1024);
-    if (count === 1024) expect(result.failures).toEqual([]);
+    expect(result.checks.completion).toBe(count === 512);
+    if (count === 512) expect(result.failures).toEqual([]);
   }
 });
 it("allows documented failed-publication recovery rather than grading an unstated prohibition", async () => {

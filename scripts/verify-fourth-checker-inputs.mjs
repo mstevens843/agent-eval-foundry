@@ -81,16 +81,17 @@ for (const id of ids) {
   } else if (id === "analytical-reconciliation-repair") {
     assert.deepEqual(bad.trace.tables, scenario.tables);
   } else if (id === "recurring-calendar-repair") {
-    assert.deepEqual(bad.trace.view, scenario.view);
+    assert.deepEqual(bad.trace.input.externalBookings, scenario.externalBookings);
+    assert.deepEqual(bad.trace.input.deliveries.map(d=>d.updates), scenario.deliveries.map(d=>d.updates));
   } else if (id === "variant-cache-repair") {
     assert.deepEqual(bad.trace.input.events, scenario.events);
     assert.deepEqual(bad.trace.input.initial, { "edge-a": [], "edge-b": [], shield: [] });
   } else {
     assert.deepEqual(bad.trace.deliveries, scenario.deliveries);
-    assert.equal(good.trace.admissionPolicies.length, good.trace.actual.decisions.length);
-    for (const admission of good.trace.admissionPolicies) {
-      assert.deepEqual(Object.keys(admission).sort(), ["jobId", "policy", "revision"]);
-      assert.equal(admission.policy.revision, admission.revision);
+    assert.equal(good.trace.boundaries.filter(b=>b.kind==="admission").length, good.trace.actual.authorizations.length);
+    for (const admission of good.trace.boundaries) {
+      assert.deepEqual(Object.keys(admission).sort(), ["id", "kind", "policy"]);
+      assert.equal(admission.policy.revision, good.trace.actual.authorizations.find(a=>a.id===admission.id).revision);
     }
   }
   await assertWitness(good.trace, true);

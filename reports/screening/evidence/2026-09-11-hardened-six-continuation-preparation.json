@@ -1,0 +1,739 @@
+{
+  "schemaVersion": 1,
+  "maxConcurrent": 5,
+  "maxNewProviderCalls": 7,
+  "adoptExistingAttempts": 5,
+  "automaticRetries": false,
+  "stopOnNextPass": true,
+  "maxCountedPerTask": 6,
+  "providersPerCompletedTask": {
+    "codex": 3,
+    "claude": 3
+  },
+  "packages": [
+    {
+      "id": "route-policy-repair",
+      "analysis": "reports/screening/third-five/14-route-policy-repair.md",
+      "history": [
+        {
+          "historicalTrial": 3,
+          "versionRound": 1,
+          "provider": "claude",
+          "originalReward": 1,
+          "countedReward": 0,
+          "disposition": "counted-after-documented-regrade",
+          "packageDigest": "c3ff40c39c331627595b3a5aa0a74f03d6777a26e9c34b5b27c042474fe0fd63",
+          "completionSha256": "5d744f38632971583d5116a979337a9e219b0f8057246ff229932526235cdd06",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-10-hardened-next-five-trial-one.json",
+            "sha256": "903aad6d7414430f6308e95a2683806961c21833c763bfe572f4efb80ed1b4de"
+          },
+          "diagnosticReward": 0,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-next-five-coverage-v2.json",
+            "sha256": "1fab5b71e7d3ffd81747442e1b75d98d5695912fc0f2b1a8bf62361911d2bbab"
+          }
+        },
+        {
+          "historicalTrial": 4,
+          "versionRound": 2,
+          "provider": "claude",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+          "completionSha256": "e30cd67128ab1985247da5c2ab6db43d8e11a8237e3b55239f27c40c14cd837a",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-two.json",
+            "sha256": "540c8d392eff72fc1da7c9e8cfb8418ed21189323663e0d1216b7e9f3e048140"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 5,
+          "versionRound": 3,
+          "provider": "claude",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+          "completionSha256": "3925a7db136230f4c285bab935877dd19969e2d994d2422c335d20bc555fac30",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-three.json",
+            "sha256": "f029d24edcb4715ae996e5a02f71e370c72821733168c9f703c38b92c830bb48"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 6,
+          "versionRound": 4,
+          "provider": "codex",
+          "originalReward": 1,
+          "countedReward": 1,
+          "disposition": "retained",
+          "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+          "completionSha256": "f529ec062e584f9fce0c96bd07dfbd8afb01235babe9cc6a4ede7a051bac9438",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-four.json",
+            "sha256": "b50f1d9ff46f91d81bbe6d1301f77b987d2e43ee4ea3e7db6463b06780eb108f"
+          },
+          "diagnosticReward": null,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-browser-round-four-disposition.json",
+            "sha256": "7ab8b7ad3f9684f73d5d623fcf89d1db854864e7c985a72b34978eacfa5b02eb"
+          }
+        }
+      ],
+      "failures": 3,
+      "scored": 4,
+      "providers": {
+        "codex": 1,
+        "claude": 3
+      },
+      "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+      "gradingRevision": "coverage-v2",
+      "slots": [
+        {
+          "id": "route-policy-repair",
+          "target": "codex",
+          "historicalTrial": 7,
+          "versionRound": 5,
+          "adoptExisting": true
+        },
+        {
+          "id": "route-policy-repair",
+          "target": "codex",
+          "historicalTrial": 8,
+          "versionRound": 6,
+          "adoptExisting": false
+        }
+      ]
+    },
+    {
+      "id": "browser-replay-repair",
+      "analysis": "reports/screening/original-five/03-browser-replay-repair.md",
+      "history": [
+        {
+          "historicalTrial": 3,
+          "versionRound": 1,
+          "provider": "claude",
+          "originalReward": 1,
+          "countedReward": 0,
+          "disposition": "counted-after-documented-regrade",
+          "packageDigest": "7511a91b15231268c3fe86e12e67b644805efc35e546edd83a5629eba2508ace",
+          "completionSha256": "c637ece78ff2c3f09cbf523cc5a99dd9297bd1ca4d1b79489c3a1b0848b3fa70",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-10-hardened-next-five-trial-one.json",
+            "sha256": "903aad6d7414430f6308e95a2683806961c21833c763bfe572f4efb80ed1b4de"
+          },
+          "diagnosticReward": 0,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-next-five-coverage-v2.json",
+            "sha256": "1fab5b71e7d3ffd81747442e1b75d98d5695912fc0f2b1a8bf62361911d2bbab"
+          }
+        },
+        {
+          "historicalTrial": 4,
+          "versionRound": 2,
+          "provider": "claude",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "712f97575821006724eef7f3b3161c97512019897af62e46ab32b9c32dcddf31",
+          "completionSha256": "c832ea154780be2c39357828f0d929532b5b2cd125a2fa9e624edc2db4bd1bf6",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-two.json",
+            "sha256": "540c8d392eff72fc1da7c9e8cfb8418ed21189323663e0d1216b7e9f3e048140"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 5,
+          "versionRound": 3,
+          "provider": "claude",
+          "originalReward": null,
+          "countedReward": null,
+          "disposition": "infrastructure-interrupted",
+          "packageDigest": "712f97575821006724eef7f3b3161c97512019897af62e46ab32b9c32dcddf31",
+          "completionSha256": "faf6c620d1511b68d61ca33e19769488eeb3a5571925c3f3b88d1a8ea7228268",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-three.json",
+            "sha256": "f029d24edcb4715ae996e5a02f71e370c72821733168c9f703c38b92c830bb48"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 6,
+          "versionRound": 4,
+          "provider": "codex",
+          "originalReward": 1,
+          "countedReward": null,
+          "disposition": "grading-void",
+          "packageDigest": "712f97575821006724eef7f3b3161c97512019897af62e46ab32b9c32dcddf31",
+          "completionSha256": "f22831aeb72abe95fb3efc43ee896001bdbd4b54ff6c6227505be3435f686fba",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-four.json",
+            "sha256": "b50f1d9ff46f91d81bbe6d1301f77b987d2e43ee4ea3e7db6463b06780eb108f"
+          },
+          "diagnosticReward": 0,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-browser-round-four-disposition.json",
+            "sha256": "7ab8b7ad3f9684f73d5d623fcf89d1db854864e7c985a72b34978eacfa5b02eb"
+          }
+        }
+      ],
+      "failures": 2,
+      "scored": 2,
+      "providers": {
+        "codex": 0,
+        "claude": 2
+      },
+      "packageDigest": "3968e17e770da1476aec1ec0a5f742f6d31e248fc295ad55d33ad8bce0f9b644",
+      "gradingRevision": "coverage-v3",
+      "slots": [
+        {
+          "id": "browser-replay-repair",
+          "target": "codex",
+          "historicalTrial": 7,
+          "versionRound": 5,
+          "adoptExisting": true
+        },
+        {
+          "id": "browser-replay-repair",
+          "target": "codex",
+          "historicalTrial": 8,
+          "versionRound": 6,
+          "adoptExisting": false
+        },
+        {
+          "id": "browser-replay-repair",
+          "target": "codex",
+          "historicalTrial": 9,
+          "versionRound": 7,
+          "adoptExisting": false
+        },
+        {
+          "id": "browser-replay-repair",
+          "target": "claude",
+          "historicalTrial": 10,
+          "versionRound": 8,
+          "adoptExisting": false
+        }
+      ]
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "analysis": "reports/screening/fourth-five/18-recurring-calendar-repair.md",
+      "history": [
+        {
+          "historicalTrial": 3,
+          "versionRound": 1,
+          "provider": "codex",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "counted-after-documented-regrade",
+          "packageDigest": "8f438cc74fc23c4357caa4c2a6ce64edd068eb899b5c335bdecd81884444fde3",
+          "completionSha256": "177125813859b1d49b355ca94b61467939421154e28a5784eee22e49c9344872",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-10-hardened-next-five-trial-one.json",
+            "sha256": "903aad6d7414430f6308e95a2683806961c21833c763bfe572f4efb80ed1b4de"
+          },
+          "diagnosticReward": 0,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-next-five-coverage-v2.json",
+            "sha256": "1fab5b71e7d3ffd81747442e1b75d98d5695912fc0f2b1a8bf62361911d2bbab"
+          }
+        },
+        {
+          "historicalTrial": 4,
+          "versionRound": 2,
+          "provider": "codex",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+          "completionSha256": "c256a18763fb2aa9c6928c2706d5933b1044ce847712e0da49d3b0148c56e4a2",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-two.json",
+            "sha256": "540c8d392eff72fc1da7c9e8cfb8418ed21189323663e0d1216b7e9f3e048140"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 5,
+          "versionRound": 3,
+          "provider": "codex",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+          "completionSha256": "d9e6d1a7e931ac71ac8dedbf04b62bb8ee201a0d12a9fb9360a1718cdda44677",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-three.json",
+            "sha256": "f029d24edcb4715ae996e5a02f71e370c72821733168c9f703c38b92c830bb48"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 6,
+          "versionRound": 4,
+          "provider": "claude",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+          "completionSha256": "b8b494040ea147088107cfe25a2ee4c66661a0042d9054f9be50934b902ce815",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-four.json",
+            "sha256": "b50f1d9ff46f91d81bbe6d1301f77b987d2e43ee4ea3e7db6463b06780eb108f"
+          },
+          "diagnosticReward": null,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-browser-round-four-disposition.json",
+            "sha256": "7ab8b7ad3f9684f73d5d623fcf89d1db854864e7c985a72b34978eacfa5b02eb"
+          }
+        }
+      ],
+      "failures": 4,
+      "scored": 4,
+      "providers": {
+        "codex": 3,
+        "claude": 1
+      },
+      "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+      "gradingRevision": "coverage-v2",
+      "slots": [
+        {
+          "id": "recurring-calendar-repair",
+          "target": "claude",
+          "historicalTrial": 7,
+          "versionRound": 5,
+          "adoptExisting": true
+        },
+        {
+          "id": "recurring-calendar-repair",
+          "target": "claude",
+          "historicalTrial": 8,
+          "versionRound": 6,
+          "adoptExisting": false
+        }
+      ]
+    },
+    {
+      "id": "workflow-authority-repair",
+      "analysis": "reports/screening/fourth-five/20-workflow-authority-repair.md",
+      "history": [
+        {
+          "historicalTrial": 3,
+          "versionRound": 1,
+          "provider": "codex",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "counted-after-documented-regrade",
+          "packageDigest": "f7e8ebedfb12bad0fa67e7841e213d78991620e5266cc115a01f98b79bf8cdd0",
+          "completionSha256": "3fb9aa8ddc8ce97f44ab4f80795c4a3684ea9f6301baf7c724c2b1c127c3b130",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-10-hardened-next-five-trial-one.json",
+            "sha256": "903aad6d7414430f6308e95a2683806961c21833c763bfe572f4efb80ed1b4de"
+          },
+          "diagnosticReward": 0,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-next-five-coverage-v2.json",
+            "sha256": "1fab5b71e7d3ffd81747442e1b75d98d5695912fc0f2b1a8bf62361911d2bbab"
+          }
+        },
+        {
+          "historicalTrial": 4,
+          "versionRound": 2,
+          "provider": "codex",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+          "completionSha256": "072d7295f3a2ad690e841f279c05dc17eaaf1f342fe928c44604393b1228f1e0",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-two.json",
+            "sha256": "540c8d392eff72fc1da7c9e8cfb8418ed21189323663e0d1216b7e9f3e048140"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 5,
+          "versionRound": 3,
+          "provider": "codex",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+          "completionSha256": "417302d110d509079003ef438cfdff87c52968cf40a423fa86b11cd281eafadc",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-three.json",
+            "sha256": "f029d24edcb4715ae996e5a02f71e370c72821733168c9f703c38b92c830bb48"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 6,
+          "versionRound": 4,
+          "provider": "claude",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+          "completionSha256": "bdc08536d55fae8c1dc2b9f53f460218ea2ddb96f24c8f369b80bf8f79ba49f1",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-four.json",
+            "sha256": "b50f1d9ff46f91d81bbe6d1301f77b987d2e43ee4ea3e7db6463b06780eb108f"
+          },
+          "diagnosticReward": null,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-browser-round-four-disposition.json",
+            "sha256": "7ab8b7ad3f9684f73d5d623fcf89d1db854864e7c985a72b34978eacfa5b02eb"
+          }
+        }
+      ],
+      "failures": 4,
+      "scored": 4,
+      "providers": {
+        "codex": 3,
+        "claude": 1
+      },
+      "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+      "gradingRevision": "coverage-v2",
+      "slots": [
+        {
+          "id": "workflow-authority-repair",
+          "target": "claude",
+          "historicalTrial": 7,
+          "versionRound": 5,
+          "adoptExisting": true
+        },
+        {
+          "id": "workflow-authority-repair",
+          "target": "claude",
+          "historicalTrial": 8,
+          "versionRound": 6,
+          "adoptExisting": false
+        }
+      ]
+    },
+    {
+      "id": "delegated-budget-repair",
+      "analysis": "reports/screening/original-five/04-delegated-budget-repair.md",
+      "history": [
+        {
+          "historicalTrial": 3,
+          "versionRound": 1,
+          "provider": "codex",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "counted-after-documented-regrade",
+          "packageDigest": "db688724f5b932b9e0ee619e1202da3de81a636a37ef90976490702fb24c5f66",
+          "completionSha256": "ce82994a2ef11ead1688a54ed2b1ef584fc9ea921ee2b2067aef8900a06b2442",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-10-hardened-next-five-trial-one.json",
+            "sha256": "903aad6d7414430f6308e95a2683806961c21833c763bfe572f4efb80ed1b4de"
+          },
+          "diagnosticReward": 0,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-next-five-coverage-v2.json",
+            "sha256": "1fab5b71e7d3ffd81747442e1b75d98d5695912fc0f2b1a8bf62361911d2bbab"
+          }
+        },
+        {
+          "historicalTrial": 4,
+          "versionRound": 2,
+          "provider": "codex",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+          "completionSha256": "fa527299e1806dbce5da9a0145f7535489cee8b56cc84ba177258a7b34dc0dbb",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-two.json",
+            "sha256": "540c8d392eff72fc1da7c9e8cfb8418ed21189323663e0d1216b7e9f3e048140"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 5,
+          "versionRound": 3,
+          "provider": "codex",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+          "completionSha256": "0ad884b60c9d45c77600f3ac99c8120420d46024e603d020458bac6eddd6bc71",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-three.json",
+            "sha256": "f029d24edcb4715ae996e5a02f71e370c72821733168c9f703c38b92c830bb48"
+          },
+          "diagnosticReward": null,
+          "basis": null
+        },
+        {
+          "historicalTrial": 6,
+          "versionRound": 4,
+          "provider": "claude",
+          "originalReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+          "completionSha256": "7435c5e182d55e4e239044160d8e3e63250fad5f9f2c1ca8e37d3b81a6bea5d3",
+          "source": {
+            "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-four.json",
+            "sha256": "b50f1d9ff46f91d81bbe6d1301f77b987d2e43ee4ea3e7db6463b06780eb108f"
+          },
+          "diagnosticReward": null,
+          "basis": {
+            "path": "reports/screening/evidence/2026-09-11-browser-round-four-disposition.json",
+            "sha256": "7ab8b7ad3f9684f73d5d623fcf89d1db854864e7c985a72b34978eacfa5b02eb"
+          }
+        }
+      ],
+      "failures": 4,
+      "scored": 4,
+      "providers": {
+        "codex": 3,
+        "claude": 1
+      },
+      "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+      "gradingRevision": "coverage-v2",
+      "slots": [
+        {
+          "id": "delegated-budget-repair",
+          "target": "claude",
+          "historicalTrial": 7,
+          "versionRound": 5,
+          "adoptExisting": true
+        },
+        {
+          "id": "delegated-budget-repair",
+          "target": "claude",
+          "historicalTrial": 8,
+          "versionRound": 6,
+          "adoptExisting": false
+        }
+      ]
+    }
+  ],
+  "date": "2026-09-11",
+  "purpose": "Adopt completed Round 5 results, then continue each task only after failures, up to six counted trials",
+  "ledger": {
+    "path": "reports/screening/evidence/2026-09-11-hardened-six-counting-ledger.json",
+    "sha256": "b607b93fe01efdf5ca6e80acfd7f89c9b1797fd240e74af4e0767657cae7adc3"
+  },
+  "round5": {
+    "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-five-preparation.json",
+    "sha256": "58fbab97430ca250247c99a863f4e6767c18b5f6c163c0dfb0ae84a1dc9ae72a"
+  },
+  "runtime": {
+    "directory": ".local/hardened-next-five-trial-five-2026-09-11/frozen-source",
+    "sourceDigest": "597df061330dad6fc300dc1bf12fdbc12d29817b1e6d58c80732fc4dea71accc",
+    "bundleSha256": "c0a422da75fbc5bac969fcd614a329458780205fc3dcd034cb9f287699fef8d8"
+  },
+  "runner": {
+    "path": "scripts/run-hardened-six-continuation.mjs",
+    "sha256": "a93100e53f403196f3a7d0141db592787a3969bb49d01965958d1d1d5c889fa2"
+  },
+  "policy": {
+    "path": "scripts/hardened-continuation-policy.mjs",
+    "sha256": "aa9ee452bf1bd2233d69eeecf6dc67321e9056d26db26d1413144bbf51449e46"
+  },
+  "slots": [
+    {
+      "id": "route-policy-repair",
+      "target": "codex",
+      "historicalTrial": 8,
+      "versionRound": 6,
+      "adoptExisting": false,
+      "directory": ".local/hardened-six-continuation-2026-09-11/slots/route-policy-repair/trial-8",
+      "packageDigest": "2145b82b5c06cafcdc3447510d1d5a02ba799d6cbea77e472eb9ae05be921acc",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "controller": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/route-policy-repair/trial-8/campaign.mjs",
+        "sha256": "88fe35d2e30d320472e7db4b7e1eb5a290a621c33a32f8e80f16a883096cc1a0"
+      },
+      "ready": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/route-policy-repair/trial-8/real-campaign-frozen/READY.json",
+        "sha256": "d3a7393cad850cab12e86aced27f9a407e06736d09b3dd8f89c18307b6f0bc9e"
+      },
+      "evidence": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/route-policy-repair/trial-8/evidence.json",
+        "sha256": "34300168e5858fae2b285309227dc2fed774d62611dbcd6bbff131f8eef1a6bc"
+      },
+      "diff": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/route-policy-repair/trial-8/controller.diff",
+        "sha256": "545859a78f325bebd40117aa9c1a62f28cd9f3e611f5c0d30475e791719111c9"
+      }
+    },
+    {
+      "id": "browser-replay-repair",
+      "target": "codex",
+      "historicalTrial": 8,
+      "versionRound": 6,
+      "adoptExisting": false,
+      "directory": ".local/hardened-six-continuation-2026-09-11/slots/browser-replay-repair/trial-8",
+      "packageDigest": "3968e17e770da1476aec1ec0a5f742f6d31e248fc295ad55d33ad8bce0f9b644",
+      "profileDigest": "552855d36d4339bb73a354a610053478e653297b2db17d5bcd85739318a0bfc3",
+      "controller": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/browser-replay-repair/trial-8/campaign.mjs",
+        "sha256": "417ff652a1cf7bcd6907e9ec31f229a6145222c7a7d303d4f9c7e50548775408"
+      },
+      "ready": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/browser-replay-repair/trial-8/real-campaign-frozen/READY.json",
+        "sha256": "847a04ca81ac9aa271a51e6fa6aadf0280bde9e9d8267893201332bbfc25d098"
+      },
+      "evidence": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/browser-replay-repair/trial-8/evidence.json",
+        "sha256": "1abf4a05c2e8b02c4a3024f18d57fb24515d7a12b4396d888974c3e56bedcada"
+      },
+      "diff": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/browser-replay-repair/trial-8/controller.diff",
+        "sha256": "bcc6b16774b95760b755590e7c5297d30f81fd0a94229b273357fba6c2d8eb9f"
+      }
+    },
+    {
+      "id": "browser-replay-repair",
+      "target": "codex",
+      "historicalTrial": 9,
+      "versionRound": 7,
+      "adoptExisting": false,
+      "directory": ".local/hardened-six-continuation-2026-09-11/slots/browser-replay-repair/trial-9",
+      "packageDigest": "3968e17e770da1476aec1ec0a5f742f6d31e248fc295ad55d33ad8bce0f9b644",
+      "profileDigest": "552855d36d4339bb73a354a610053478e653297b2db17d5bcd85739318a0bfc3",
+      "controller": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/browser-replay-repair/trial-9/campaign.mjs",
+        "sha256": "ca13b42e65b0a69e99e112efd8ae5f5ada0c769c69fb422d7743117d049e1d8d"
+      },
+      "ready": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/browser-replay-repair/trial-9/real-campaign-frozen/READY.json",
+        "sha256": "d1a44d4f4a4d6b803dd97296a4f9428fb0d35d0c92d74d7fc8a06d03d9fae0a2"
+      },
+      "evidence": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/browser-replay-repair/trial-9/evidence.json",
+        "sha256": "1abf4a05c2e8b02c4a3024f18d57fb24515d7a12b4396d888974c3e56bedcada"
+      },
+      "diff": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/browser-replay-repair/trial-9/controller.diff",
+        "sha256": "f00ca698c4f82461efffcb0ffddf56f8e8258178561b27d6b94199296f65da44"
+      }
+    },
+    {
+      "id": "browser-replay-repair",
+      "target": "claude",
+      "historicalTrial": 10,
+      "versionRound": 8,
+      "adoptExisting": false,
+      "directory": ".local/hardened-six-continuation-2026-09-11/slots/browser-replay-repair/trial-10",
+      "packageDigest": "3968e17e770da1476aec1ec0a5f742f6d31e248fc295ad55d33ad8bce0f9b644",
+      "profileDigest": "d71ffd4cecad05cd941f30bb8b3ba2dc377537b2a188b650f27ca233b0a01cfd",
+      "controller": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/browser-replay-repair/trial-10/campaign.mjs",
+        "sha256": "50ef7234e6b0d03c3dda619d05275788a80f1952c68c0eb172b0960401ba2692"
+      },
+      "ready": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/browser-replay-repair/trial-10/real-campaign-frozen/READY.json",
+        "sha256": "9a812be2c63ca1d2c9f7c6b82ffaf63b7415b2396890fa579d052c23909c8d02"
+      },
+      "evidence": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/browser-replay-repair/trial-10/evidence.json",
+        "sha256": "1abf4a05c2e8b02c4a3024f18d57fb24515d7a12b4396d888974c3e56bedcada"
+      },
+      "diff": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/browser-replay-repair/trial-10/controller.diff",
+        "sha256": "6e2d14a9b6c6d0c872e4a370c561bb6a38111e2b4dfea61c23ef7af736f58a7d"
+      }
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "target": "claude",
+      "historicalTrial": 8,
+      "versionRound": 6,
+      "adoptExisting": false,
+      "directory": ".local/hardened-six-continuation-2026-09-11/slots/recurring-calendar-repair/trial-8",
+      "packageDigest": "e36fc1f3bd8ac60f4a6dab0683513e42693ecea397693d536198a3a10772a467",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "controller": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/recurring-calendar-repair/trial-8/campaign.mjs",
+        "sha256": "98a865919901f07589f50700831d335bd918d786b8799cc39d0b24eab855c29f"
+      },
+      "ready": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/recurring-calendar-repair/trial-8/real-campaign-frozen/READY.json",
+        "sha256": "6ea90e6980815327374c787f95820ac1933c2647c22481333ef5d1fe4a2ea098"
+      },
+      "evidence": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/recurring-calendar-repair/trial-8/evidence.json",
+        "sha256": "15a184305238848c7f11c63da4a1513f4ac9776ed95fa2a9e00082e18cff31b9"
+      },
+      "diff": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/recurring-calendar-repair/trial-8/controller.diff",
+        "sha256": "ad3efb238f767511249104ff1462f98e81f42ceacfa8a923939f485c4fcfb9fc"
+      }
+    },
+    {
+      "id": "workflow-authority-repair",
+      "target": "claude",
+      "historicalTrial": 8,
+      "versionRound": 6,
+      "adoptExisting": false,
+      "directory": ".local/hardened-six-continuation-2026-09-11/slots/workflow-authority-repair/trial-8",
+      "packageDigest": "2a51be6fc49db809f3c59151526cd6fe97acd9c9a83216ab8842d55f390771f2",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "controller": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/workflow-authority-repair/trial-8/campaign.mjs",
+        "sha256": "a3a6170b9b425e57e13c3f465b5c2ba782ff7dccf9f5e5936d1bacf308ee92dc"
+      },
+      "ready": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/workflow-authority-repair/trial-8/real-campaign-frozen/READY.json",
+        "sha256": "7a76677325e2080acdc4a6e834772b1a78c38e88d8b26f3f51765ba90c9718e2"
+      },
+      "evidence": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/workflow-authority-repair/trial-8/evidence.json",
+        "sha256": "12f0673141957660c086646d9e62c8acde95d99583f2ca8b9179027b18d207f2"
+      },
+      "diff": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/workflow-authority-repair/trial-8/controller.diff",
+        "sha256": "44c9608292fb4f1062e6429aec72992033550c8ab56c9f5a634d3fce3dca10ce"
+      }
+    },
+    {
+      "id": "delegated-budget-repair",
+      "target": "claude",
+      "historicalTrial": 8,
+      "versionRound": 6,
+      "adoptExisting": false,
+      "directory": ".local/hardened-six-continuation-2026-09-11/slots/delegated-budget-repair/trial-8",
+      "packageDigest": "087aa9c0f84f0940202fd7c55ac9d042d6d689e09cc0b298e680c0d4ba00db7c",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "controller": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/delegated-budget-repair/trial-8/campaign.mjs",
+        "sha256": "7f0d53d43206c1c0e2deb3eab32e61c12fb5b5fc2657dc3f83e53efd59e043c6"
+      },
+      "ready": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/delegated-budget-repair/trial-8/real-campaign-frozen/READY.json",
+        "sha256": "646e47802693ca163948980258046425fbcaaf6f5db5503f6c8d8cfeb6cb04d1"
+      },
+      "evidence": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/delegated-budget-repair/trial-8/evidence.json",
+        "sha256": "dd8a5ced08b966df6f67bc8aade75a81044dc48b15093fef2ea60dc75e0c389c"
+      },
+      "diff": {
+        "path": ".local/hardened-six-continuation-2026-09-11/slots/delegated-budget-repair/trial-8/controller.diff",
+        "sha256": "43d3a8dfc365193a69deb5fcab061a9914a665995619eba1720cda2b71c24788"
+      }
+    }
+  ],
+  "outputRoot": ".local/hardened-six-continuation-2026-09-11",
+  "alreadyRunningRound5Modified": false,
+  "providerCallsMade": 0
+}

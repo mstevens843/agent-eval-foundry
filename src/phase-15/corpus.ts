@@ -403,7 +403,16 @@ const localDocumentAdapter: EvidenceSourceAdapter = {
   audit(root, source) {
     const base = snapshotAudit(source);
     const locator = source.provenance.locator.split("#", 1)[0] ?? source.provenance.locator;
-    const path = isAbsolute(locator) ? locator : join(root, locator);
+    // Preserve the frozen corpus's original provenance while auditing the exact
+    // retained bytes in a checkout. CI cannot read the author's sibling repo.
+    const retained: Readonly<Record<string, string>> = {
+      "/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/FINDINGS.md":
+        "data/phase-15-source-snapshots/outbox-verifier-repairs.md",
+      "/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/results/34-cc267-standard-matrix.md":
+        "data/phase-15-source-snapshots/outbox-self-check-trajectories.md",
+    };
+    const snapshot = retained[locator];
+    const path = snapshot ? join(root, snapshot) : isAbsolute(locator) ? locator : join(root, locator);
     const exists = existsSync(path);
     const digestMatches = exists && sha256(readFileSync(path)) === source.provenance.contentDigest;
     return {

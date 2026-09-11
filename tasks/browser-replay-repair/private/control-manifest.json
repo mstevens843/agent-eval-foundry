@@ -1,49 +1,37 @@
 [
   {
-    "id": "early-report",
+    "id": "tuple-identity",
     "overlay": {
-      "entry.mjs": "controls/early-report.mjs"
-    },
-    "check": "reports",
-    "clean": "case-000",
-    "selectionRole": "post-selection-validation"
-  },
-  {
-    "id": "first-candidate",
-    "overlay": {
-      "src/resolver.mjs": "controls/first-candidate.mjs",
-      "entry.mjs": "controls/incomplete-work.mjs"
-    },
-    "check": "exact_effects",
-    "clean": "case-000"
-  },
-  {
-    "id": "pre-fill-read",
-    "overlay": {
-      "src/form.mjs": "controls/pre-fill-read.mjs"
-    },
-    "check": "current_preconditions",
-    "clean": "case-000"
-  },
-  {
-    "id": "no-confirmation",
-    "overlay": {
-      "src/form.mjs": "controls/no-confirmation.mjs",
-      "entry.mjs": "controls/incomplete-work.mjs"
+      "src/replay.mjs": "controls/tuple-identity-v3.mjs"
     },
     "check": "completion",
     "clean": "case-000"
   },
   {
-    "id": "repeated-delivery",
+    "id": "pending-complete",
     "overlay": {
-      "src/replay.mjs": "controls/repeated-delivery.mjs"
+      "src/replay.mjs": "controls/pending-complete-v3.mjs"
     },
-    "check": "exact_effects",
+    "check": "completion"
+  },
+  {
+    "id": "competing-dialog",
+    "overlay": {
+      "src/replay.mjs": "controls/competing-dialog-v3.mjs"
+    },
+    "check": "preservation",
     "clean": "case-000"
   },
   {
-    "id": "claim-only",
+    "id": "skip-later-steps",
+    "overlay": {
+      "src/replay.mjs": "controls/skip-later-steps-v3.mjs"
+    },
+    "check": "completion",
+    "clean": "case-000"
+  },
+  {
+    "id": "no-work",
     "overlay": {
       "entry.mjs": "controls/claim-only.mjs"
     },
@@ -58,12 +46,39 @@
     "isolation": true
   },
   {
-    "id": "whole-trace-memoization",
+    "id": "incorrect-completion-report",
     "overlay": {
-      "src/replay.mjs": "controls/whole-trace-memoization.mjs"
+      "entry.mjs": "controls/incorrect-completion-report.mjs"
     },
-    "check": "exact_effects",
-    "clean": "case-015",
-    "selectionRole": "restart-regression"
+    "check": "reports"
+  },
+  {
+    "id": "out-of-order-effects",
+    "overlay": {
+      "entry.mjs": "controls/out-of-order-effects.mjs"
+    },
+    "check": "exact_effects"
+  },
+  {
+    "id": "wrong-action-after-effects",
+    "overlay": {
+      "entry.mjs": "controls/wrong-action-after-effects.mjs"
+    },
+    "check": "current_preconditions"
+  },
+  {
+    "id": "missing-report-after-interruption",
+    "overlay": {
+      "entry.mjs": "controls/missing-report-after-interruption.mjs"
+    },
+    "check": "reports",
+    "clean": "case-000"
+  },
+  {
+    "id": "wrapped-completion-report",
+    "overlay": {
+      "entry.mjs": "controls/wrapped-completion-report.mjs"
+    },
+    "check": "reports"
   }
 ]

@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-11",
+  "purpose": "Browser authoring infrastructure mitigation and opposite-provider round preparation; no task/grader changes",
+  "providerCallsMade": 0,
+  "incident": {
+    "historicalTrial": 5,
+    "target": "claude",
+    "countedReward": null,
+    "captureStatus": "process-error",
+    "exitCode": 134,
+    "milliseconds": 1898868,
+    "stdoutBytes": 817951,
+    "maximumEventLineBytes": 103522,
+    "stderrBytes": 0,
+    "oomKilled": false,
+    "confirmedCause": false,
+    "evidence": [
+      {
+        "path": ".local/hardened-next-five-trial-three-2026-09-11/real-campaign-frozen/jobs/real-provider/records/browser-replay-repair-attempt-1/capture.json",
+        "sha256": "b81d8cbb3a48529084ce4bf6e6523168d82fe78d8bab71d66d1846ef0a519fc0"
+      },
+      {
+        "path": ".local/hardened-next-five-trial-three-2026-09-11/real-campaign-frozen/jobs/real-provider/records/browser-replay-repair-attempt-1/result.json",
+        "sha256": "c5e294fb303dc72002f1e1f9cb2584b6ab924459cfb92d461628169e0f35d924"
+      },
+      {
+        "path": ".local/hardened-next-five-trial-three-2026-09-11/real-campaign-frozen/jobs/real-provider/records/browser-replay-repair-attempt-1/authoring-runtime.json",
+        "sha256": "f079ae02eee81b2816e5eb4915575663a8352677547f198f6bc8350c367f2d3d"
+      },
+      {
+        "path": ".local/hardened-next-five-trial-three-2026-09-11/real-campaign-frozen/jobs/real-provider/records/browser-replay-repair-attempt-1/capture/stdout.log",
+        "sha256": "1f35a6896c6432951d79016cc394b44bc9bd248b8f45b8b1d391974d3b4db408"
+      },
+      {
+        "path": ".local/hardened-next-five-trial-three-2026-09-11/real-campaign-frozen/jobs/real-provider/records/browser-replay-repair-attempt-1/capture/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  "mitigation": {
+    "browserAuthoringMemoryMiB": 4096,
+    "previousBrowserAuthoringMemoryMiB": 2048,
+    "otherTasksMemoryMiB": 2048,
+    "resourceSampleIntervalMs": 15000,
+    "maximumResourceSamples": 1440,
+    "maximumProbeOutputBytes": 8192,
+    "probeTimeoutMs": 5000,
+    "coreDumpsDisabled": true,
+    "resourcesCaptured": [
+      "memory.current",
+      "memory.peak",
+      "memory.max",
+      "memory.events",
+      "pids.current",
+      "pids.max",
+      "pids.events",
+      "temporary filesystem usage"
+    ],
+    "diagnosticsAreNonGrading": true,
+    "doesNotEstablishOriginalCrashCause": true
+  },
+  "offlineChecks": [
+    {
+      "case": "browser",
+      "status": "completed",
+      "exitCode": 0,
+      "eventCount": 5,
+      "bytesSeen": 6625585,
+      "milliseconds": 4384,
+      "peakMemoryBytes": 2594979840,
+      "capture": {
+        "path": ".local/browser-runtime-reliability-2026-09-11/offline-1789108391147/browser/capture.json",
+        "sha256": "9f047e0694ed365840f851149c278737e25d52bce27624fa87bfc500d4d82a27"
+      },
+      "resources": {
+        "path": ".local/browser-runtime-reliability-2026-09-11/offline-1789108391147/browser/resources.jsonl",
+        "sha256": "885b83b88c8219e9ec3a6202cacc196a5c902b323fc11e0095bb112ef49a9ebd"
+      },
+      "runtime": {
+        "path": ".local/browser-runtime-reliability-2026-09-11/offline-1789108391147/browser/runtime.json",
+        "sha256": "3845bc8be34b2a273b1c0cfcb534c659e2d17d1fa992fe4a3672f2f836db741c"
+      }
+    },
+    {
+      "case": "abort",
+      "status": "process-error",
+      "exitCode": 134,
+      "eventCount": 1,
+      "bytesSeen": 255,
+      "milliseconds": 2733,
+      "peakMemoryBytes": 14520320,
+      "capture": {
+        "path": ".local/browser-runtime-reliability-2026-09-11/offline-1789108391147/abort/capture.json",
+        "sha256": "6f4bf991251b81c6c99f8f5fdd558960da9b36720632e9f0622cdba94e75d8ec"
+      },
+      "resources": {
+        "path": ".local/browser-runtime-reliability-2026-09-11/offline-1789108391147/abort/resources.jsonl",
+        "sha256": "17377a9c14cc05baec55c92a2b7c39af1164ca289477ebff8186a4eee80029c0"
+      },
+      "runtime": {
+        "path": ".local/browser-runtime-reliability-2026-09-11/offline-1789108391147/abort/runtime.json",
+        "sha256": "e14d7b448bc3c9f8915c675e42a15a453f68f26412cc8aeda84967366ae4c9cd"
+      }
+    }
+  ],
+  "validation": {
+    "diagnosticsUnitTestsPassed": 4,
+    "existingLifecycleTestsPassed": 10,
+    "offlineDockerTestPassed": 1,
+    "lint": true,
+    "typecheck": true,
+    "frozenBuild": true,
+    "coverageV2ExportsVerified": 5
+  },
+  "storage": {
+    "method": "APFS copy-on-write cloning of SHA256-identical runtime archives; logical files, paths and hashes preserved; no hard links or evidence deletion",
+    "verifiedClones": 136,
+    "freeBeforeBytes": 6822494208,
+    "freeAfterBytes": 20181540864,
+    "receipts": [
+      {
+        "path": ".local/browser-runtime-reliability-2026-09-11/storage.json",
+        "sha256": "feaa20d3aeb395d18e92423751c7de75cc5b66d077b76869f0e043667487bd92"
+      },
+      {
+        "path": ".local/browser-runtime-reliability-2026-09-11/historical-storage.json",
+        "sha256": "591052b46144422528c5064bdc42abdf6a9d5ac3e2f62d800596aac7d2d0146b"
+      }
+    ]
+  },
+  "preparation": {
+    "path": "reports/screening/evidence/2026-09-11-hardened-next-five-trial-four-preparation.json",
+    "sha256": "1039386b77b3f2b03811e3b4317fb1e8319158c67e0caeadce41a6d1a19f55bc"
+  },
+  "remainingBrowserClaudeSlot": "Trial 5 interruption remains unscored; upcoming Codex trial does not fill missing Claude slot."
+}

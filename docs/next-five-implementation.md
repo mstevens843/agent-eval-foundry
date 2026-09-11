@@ -1,5 +1,26 @@
 # Next five implementation successors
 
+**Final screening status, September 11:** Browser replay, Recurring calendar, Workflow authority and Delegated budget each completed 6/6 reward-zero trials, balanced three per provider. Route stopped at 3/5 failures. See the [combined nine-task results](../reports/screening/final-results-2026-09-11.md). The preparation notes below describe the earlier implementation stages.
+
+## Historical preparation
+
+
+**Preparation status, September 10:** all five 3.0.0 successors are hardened and
+frozen for exploratory trials. Use the [hardening report](../reports/screening/next-five-hardening-2026-09-10.md)
+and [coverage map](../reports/screening/next-five-hardening-coverage-2026-09-10.md).
+The exact Foundry exports and native `harbor-frozen-v2/<id>/` exports live under
+`.local/next-five-hardening-2026-09-10/`; the report names each path and digest.
+All oracle/nop, 73 checker classifications, 23 checker mutations and 45 native
+integrity checks pass. `node scripts/verify-next-five-hardening.mjs` verifies the
+recorded exports before launch. No new model trials have run on these bytes.
+
+The [first hardened-version trial handoff](hardened-next-five-trial-one-handoff.md)
+now has a prepared, verified controller for all five concurrent attempts: three
+Codex and two Claude. Its frozen runtime includes the current hardening changes.
+Readiness is recorded; dispatch remains with the trial operator.
+
+The earlier paths and trial instructions below are retained version history.
+
 The next exploratory group is **14 → 03 → 18 → 20 → 04**. Selection rationale,
 engineering changes and validation results belong in
 [the implementation report](../reports/screening/next-five-implementation-plan-2026-09-09.md).
@@ -69,3 +90,20 @@ The earlier browser timeout remains retained development evidence.
 
 The [Trial 2 handoff](next-five-trial-2-handoff.md) contains the prepared controller,
 model assignments, exact launch command and per-task reporting instructions.
+
+
+## Successor 3.0.0 implementation — September 10, 2026
+
+The September 9 packages, Trial 2 results and launch instructions above describe
+historical versions. Maintained sources now implement the five 3.0.0 successors:
+flat-policy migration, accessible browser replay, persistent calendar generations,
+fenced multi-boundary workflow authorization and reservation/settlement accounting.
+The core starters remain empty. No new model/provider trials were launched.
+
+Use the [new implementation report](../reports/screening/next-five-successor-implementation-2026-09-10.md)
+and [evidence manifest](../reports/screening/evidence/2026-09-10-next-five-successors.json)
+for that implementation stage's artifacts and validation. Builds are isolated under
+`.local/next-five-successors-2026-09-10/`; frozen prior exports/campaign runtimes
+were not modified. The subsequent hardening review and frozen trial preparation
+are linked at the top of this page. Local validation does not establish model
+failure rates or add successful finalists.

@@ -1,58 +1,3 @@
-// Real mid-trace process death: `crashAfterSubmit: 2` kills the subject after its 2nd
-// `api.act` call has already landed server-side — with no confirmation, decoy or delay
-// in play, a correct implementation makes exactly one `fill` and one `submit` act call
-// per event, so this lands right after the first event's submission commits its receipt,
-// before the subject can see the response, move to the next event, or finish the trace.
-// The trace is then redelivered fresh (a new process, same storage/DOM), the real-world
-// response to an unconfirmed submission. A subject that does not consult `api.receipts()`
-// before redelivering will resubmit the already-committed first event — the DOM does not
-// disable a form after it commits, so a blind resubmission dispatches a second real click
-// and a second receipt — which the existing `exact_effects` (order- and count-exact) and
-// `completion` checks already catch. No crash-specific check dimension is needed, only a
-// genuine interruption those checks were never exercised against before.
-function crashCases() {
-  return Array.from({ length: 4 }, (_, seed) => ({
-    id: `case-crash-${String(seed).padStart(3, "0")}`,
-    seed: 1000 + seed,
-    remount: false,
-    delay: 0,
-    confirmation: false,
-    decoy: false,
-    attempts: 1,
-    crashAfterSubmit: 2,
-    // Three independent events in one trace, crash lands after the first commits: the
-    // redelivery must recognize that one via receipts and still complete the other two,
-    // in order, exactly once each.
-    events: Array.from({ length: 3 }, (_, step) => ({
-      step,
-      entity: `crash-record-${seed}-${step}`,
-      field: step % 2 ? "memo" : "title",
-      value: `crash value ${seed * 31 + step} ${step % 2 ? "é & <ok>" : "accepted"}`,
-      selector: `crash-control-${seed}-${step}`,
-    })),
-  }));
-}
-export function scenarios() {
-  return [
-    ...Array.from({ length: 16 }, (_, seed) => ({
-      id: `case-${String(seed).padStart(3, "0")}`,
-      seed,
-      remount: !!(seed & 1),
-      delay: (seed >> 1) & 1,
-      confirmation: !!(seed & 4),
-      decoy: !!(seed & 8),
-      attempts: seed === 0 ? 1 : 3,
-      events: Array.from({ length: seed === 0 ? 1 : 3 }, (_, step) => ({
-        step,
-        entity: `record-${seed * 17 + step}`,
-        field: step % 2 ? "memo" : "title",
-        value: seed === 0 ? "" : `value ${seed * 31 + step} ${step % 2 ? "é & <ok>" : "accepted"}`,
-        selector: `control-${step}`,
-      })),
-    })),
-    ...crashCases(),
-  ];
-}
 export const checkIds = [
   "completion",
   "exact_effects",
@@ -61,3 +6,50 @@ export const checkIds = [
   "reports",
   "preservation",
 ];
+export function scenarios() {
+  const rows = Array.from({ length: 18 }, (_, n) => ({
+    id: "case-" + String(n).padStart(3, "0"),
+    traceId: "replay-" + n,
+    attempts: n === 0 ? 1 : 2,
+    confirmation: n % 3 !== 0,
+    renew: n > 1,
+    decoy: n % 2 === 1,
+    competing: n > 3,
+    remount: n % 2 === 0,
+    remountAfterFill: n % 3 === 1,
+    delay: n % 2,
+    receiptLag: n % 3,
+    events: Array.from({ length: n === 0 ? 1 : 4 }, (_, step) => ({
+      step,
+      entity: "entity-" + Math.floor(step / 2),
+      field: step < 2 ? "title" : "memo",
+      value: step < 2 ? "repeated value" : "value é " + step,
+      selector: step < 2 ? "#old-title" : "#old-memo",
+      path: "/records/entity-" + Math.floor(step / 2),
+    })),
+    ...(n >= 6
+      ? {
+          interrupt: {
+            method: ["api.submit", "api.confirm", "api.settle", "api.navigate", "api.fill", "api.operation"][
+              n % 6
+            ],
+            count: (n % 2) + 1,
+          },
+        }
+      : {}),
+  }));
+  const exact=structuredClone(rows[7]);exact.id='identity-and-empty-values';exact.traceId='trace \"é\"';exact.events[0].value='';exact.events[1].step=10;exact.events[2].step=20;exact.events[3].step=30;rows.push(exact);
+  // Steps are unique integers. A dialog already bound to the requested operation
+  // can be confirmed without creating another submission first. The adjacent
+  // values distinguish operation matching from a blanket rule about old dialogs.
+  for (const first of [-1, -2, 0]) {
+    const scenario = structuredClone(rows.find((row) => row.confirmation && row.competing));
+    scenario.id = `signed-step-${first}`;
+    scenario.traceId = "signed-step";
+    scenario.events[0].step = first;
+    scenario.attempts = 2;
+    delete scenario.interrupt;
+    rows.push(scenario);
+  }
+  return rows;
+}

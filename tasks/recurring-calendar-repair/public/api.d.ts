@@ -54,13 +54,31 @@ export interface Booking {
   startUTC: number;
   endUTC: number;
 }
-export interface View {
-  series: Series[];
-  zones: Zone[];
-  changes: Change[];
+export interface SourceRecord {
+  kind: "series" | "zone" | "changes" | "window";
+  id: string;
+  revision: number;
+  value: Series | Zone | Change[] | { from: string; through: string } | null;
+}
+export interface State {
+  generation: number;
+  records: SourceRecord[];
+  events: Event[];
+  bookings: Booking[];
   externalBookings: Booking[];
+}
+export interface View {
+  deliveryId: string;
+  updates: SourceRecord[];
   storage: string;
 }
 export interface API {
-  commit(r: { events: Event[]; bookings: Booking[] }): Promise<{ stored: true } | { error: "shape" }>;
+  read(r: {}): Promise<State>;
+  publish(r: {
+    baseGeneration: number;
+    records: SourceRecord[];
+    events: Event[];
+    bookings: Booking[];
+  }): Promise<{ stored: true; generation: number } | { stale: true } | { error: "shape" }>;
+  ack(r: { deliveryId: string; generation: number }): Promise<{ stored: true } | { error: "request" }>;
 }

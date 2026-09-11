@@ -1,118 +1,164 @@
+import { session, checks, equal } from "./adapter.mjs";
 import { deliver } from "./restart.mjs";
-import { session, equal, checks } from "./adapter.mjs";
+function eligible(r, s) {
+  const wallet = s.wallets.find((w) => w.id === r.wallet),
+    grant = wallet?.grants.find((g) => g.id === r.grant);
+  const reservation = s.reservations.find((x) => x.wallet === r.wallet && x.id === r.reservation);
+  if (r.kind !== "reserve") {
+    if (
+      !reservation ||
+      reservation.grant !== r.grant ||
+      reservation.owner !== r.owner ||
+      reservation.delegate !== r.delegate
+    )
+      return false;
+    let remaining = reservation.credits;
+    for (const x of s.settlements)
+      if (x.wallet === r.wallet && x.reservation === r.reservation) remaining -= x.credits;
+    return r.credits <= remaining;
+  }
+  if (
+    reservation ||
+    wallet?.owner !== r.owner ||
+    !grant ||
+    !grant.allowed ||
+    grant.delegate !== r.delegate ||
+    grant.version !== r.grantVersion
+  )
+    return false;
+  let captured = 0,
+    outstanding = 0;
+  for (const h of s.reservations.filter((h) => h.wallet === r.wallet && h.grant === r.grant)) {
+    let rest = h.credits;
+    for (const x of s.settlements.filter((x) => x.wallet === h.wallet && x.reservation === h.id)) {
+      rest -= x.credits;
+      if (x.kind === "capture") captured += x.credits;
+    }
+    outstanding += rest;
+  }
+  return captured + outstanding + r.credits <= grant.limit;
+}
 export async function runScenario(s, execute, storage) {
-  const actual = new Map(s.wallets.map((w) => [w.id, structuredClone(w)])),
-    expectedState = new Map(s.wallets.map((w) => [w.id, structuredClone(w)]));
-  const effects = [],
-    calls = [],
+  const state = {
+    revision: 1,
+    wallets: structuredClone(s.wallets),
+    reservations: structuredClone(s.reservations ?? []),
+    settlements: structuredClone(s.settlements ?? []),
+  };
+  const decisions = [],
+    mutations = [],
     observations = [],
     reports = [],
-    expected = [],
-    expectedReports = [],
-    pending = new Map(),
-    attempted = new Set(),
     prefixes = [],
-    interruptions = [];
-  const describe = ({ wallet }) => structuredClone(actual.get(wallet) ?? null);
-  const lookup = ({ key }) => {
-    const p = pending.get(key);
-    if (p && p.left-- > 0) return { status: "PENDING" };
-    const receipt = effects.find((e) => e.key === key);
-    return receipt ? { status: "ACCEPTED", receipt: structuredClone(receipt) } : { status: "ABSENT" };
-  };
-  const debit = (request) => {
-    calls.push(structuredClone(request));
-    const known = effects.find((e) => e.key === request.key);
-    if (known) return { status: "ACCEPTED", receipt: structuredClone(known) };
-    const first = !attempted.has(request.key);
-    attempted.add(request.key);
-    // One documented lost/unexecuted attempt is resolved by ABSENT, then a legal same-key retry.
-    if (first && s.unknown === 2) {
-      pending.set(request.key, { left: 1 });
-      return { status: "UNKNOWN" };
+    interruptions = [],
+    pending = new Map();
+  let correct = true,
+    ordered = true,
+    index = 0,
+    requests = [],
+    raced = false;
+  function update(updates) {
+    for (const u of updates) {
+      const g = state.wallets.find((w) => w.id === u.wallet).grants.find((g) => g.id === u.id);
+      const { wallet, ...fields } = u;
+      Object.assign(g, fields);
     }
-    const receipt = structuredClone(request);
-    effects.push(receipt);
-    const wallet = actual.get(request.wallet),
-      grant = wallet?.grants.find((g) => g.id === request.grant);
-    if (grant) grant.spent += request.credits;
-    if (first && s.unknown === 1) {
-      pending.set(request.key, { left: 1 });
-      return { status: "UNKNOWN" };
-    }
-    return { status: "ACCEPTED", receipt };
-  };
-  for (const [job, input] of s.jobs.entries()) {
-    for (const update of input.grants)
-      for (const state of [actual, expectedState]) {
-        const grant = state.get(update.wallet).grants.find((g) => g.id === update.id);
-        const spent = grant.spent;
-        Object.assign(grant, update, { spent });
-        delete grant.wallet;
+    if (updates.length) state.revision++;
+  }
+  const operations = {
+    snapshot: () => {
+      const value = structuredClone(state);
+      if (!raced) {
+        raced = true;
+        update(s.jobs[index].race ?? []);
       }
-    const decisions = [];
-    for (const r of input.requests) {
-      let receipt = expected.find((e) => e.id === r.id) ?? null;
-      const w = expectedState.get(r.wallet),
-        g = w?.grants.find((g) => g.id === r.grant);
-      if (
-        !receipt &&
-        w?.owner === r.owner &&
-        g?.delegate === r.delegate &&
-        g.version === r.grantVersion &&
-        g.allowed &&
-        g.spent + r.credits <= g.limit
-      ) {
-        receipt = { ...r, key: r.id };
-        expected.push(receipt);
-        g.spent += r.credits;
+      return value;
+    },
+    lookup: ({ id }) => {
+      if ((pending.get(id) ?? 0) > 0) {
+        pending.set(id, pending.get(id) - 1);
+        return { status: "PENDING" };
       }
-      decisions.push({ id: r.id, status: receipt ? "accepted" : "rejected", receipt });
-    }
-    expectedReports.push({ job, decisions });
+      const d = decisions.find((d) => d.id === id);
+      return d ? { status: "TERMINAL", decision: d } : { status: "ABSENT" };
+    },
+    resolve: ({ request: r, revision, outcome }) => {
+      if (!r || typeof r.id !== "string" || !["accepted", "rejected"].includes(outcome))
+        return { error: "request" };
+      const known = decisions.find((d) => d.id === r.id);
+      if (known) return { status: "UNKNOWN" };
+      const position = requests.findIndex((q) => !decisions.some((d) => d.id === q.id));
+      if (position < 0 || !equal(r, requests[position])) return { error: "request" };
+      if (revision !== state.revision) return { stale: true };
+      const before = structuredClone(state),
+        allow = eligible(r, state);
+      correct &&= (outcome === "accepted") === allow;
+      const receipt = outcome === "accepted" ? structuredClone(r) : null;
+      if (receipt) {
+        if (r.kind === "reserve")
+          state.reservations.push({
+            id: r.reservation,
+            requestId: r.id,
+            wallet: r.wallet,
+            grant: r.grant,
+            grantVersion: r.grantVersion,
+            owner: r.owner,
+            delegate: r.delegate,
+            credits: r.credits,
+          });
+        else
+          state.settlements.push({
+            id: r.id,
+            wallet: r.wallet,
+            grant: r.grant,
+            reservation: r.reservation,
+            kind: r.kind,
+            credits: r.credits,
+          });
+      }
+      const decision = { id: r.id, status: outcome, receipt };
+      decisions.push(decision);
+      mutations.push({ job: index, request: r, revision, before, decision });
+      state.revision++;
+      pending.set(r.id, s.lag ?? 2);
+      return { status: "UNKNOWN" };
+    },
+  };
+  for (index = 0; index < s.jobs.length; index++) {
+    const job = s.jobs[index];
+    requests = job.requests;
+    raced = false;
+    update(job.grants);
     await deliver(
-      execute, () => session(
-        { job, storage, requests: input.requests },
-        { describe, lookup, debit },
-        (r) => reports.push(r),
-        observations,
-      ),
-      input.crashAfterDebit ? { method: "api.debit", count: input.crashAfterDebit, observations } : null,
-      interruptions, { job },
+      execute,
+      () => session({ job: index, requests, storage }, operations, (r) => reports.push(r), observations),
+      job.interrupt ? { ...job.interrupt, observations } : null,
+      interruptions,
+      { job: index },
     );
-    prefixes.push({
-      actual: structuredClone(effects),
-      expected: structuredClone(expected),
-      calls: structuredClone(calls),
-      actualState: structuredClone([...actual]),
-      expectedState: structuredClone([...expectedState]),
-    });
+    const required = requests.map((r) => decisions.find((d) => d.id === r.id));
+    ordered &&= required.every(Boolean) && equal(reports.at(-1), { job: index, decisions: required });
+    prefixes.push({ job: index, state: structuredClone(state), decisions: structuredClone(decisions) });
   }
   return {
     ...checks({
-      completion: expected.every((e) => effects.some((a) => a.id === e.id)),
-      ownership: effects.every((e) =>
-        expected.some(
-          (a) =>
-            a.id === e.id &&
-            a.owner === e.owner &&
-            a.delegate === e.delegate &&
-            a.grantVersion === e.grantVersion,
-        ),
-      ),
-      aggregate_budget: prefixes.every((p) => equal(p.actualState, p.expectedState)),
-      payload: prefixes.every((p) => p.calls.every((c) => p.expected.some((e) => equal(c, e)))),
-      receipt_history: prefixes.every((p) => equal(p.actual, p.expected)),
-      decisions: equal(reports, expectedReports),
-      preservation: effects.every((e) => expected.some((a) => a.id === e.id && a.wallet === e.wallet)),
+      completion: ordered && reports.length === s.jobs.length,
+      aggregate_budget: correct,
+      receipt_history: new Set(decisions.map((d) => d.id)).size === decisions.length,
+      decisions: ordered,
     }),
-    effects,
-    calls,
+    input: {
+      wallets: s.wallets,
+      reservations: s.reservations ?? [],
+      settlements: s.settlements ?? [],
+      jobs: s.jobs.map(({ grants, requests, race }) => ({ grants, requests, race: race ?? [] })),
+    },
+    actual: state,
+    decisions,
+    mutations,
+    prefixes,
     reports,
     observations,
-    input: { wallets: s.wallets, jobs: s.jobs.map(({ grants, requests }) => ({ grants, requests })) },
     interruptions,
-    actual: [...actual],
-    prefixes: prefixes.map(({ actual, calls, actualState }) => ({ actual, calls, actualState })),
   };
 }

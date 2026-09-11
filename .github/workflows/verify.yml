@@ -15,7 +15,7 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 20
     env:
       FOUNDRY_REQUIRE_CONTAINER: "1"
     steps:
@@ -34,6 +34,33 @@ jobs:
       - run: pnpm build
       - name: Fast pure tier
         run: pnpm test:pure
+
+  runtime:
+    needs: verify
+    name: runtime (${{ matrix.suite }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [tests, integration, reproduction]
+    env:
+      FOUNDRY_REQUIRE_CONTAINER: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Free unused hosted-runner SDKs for package archives
+        if: matrix.suite == 'integration'
+        run: |
+          # Only disposable GitHub-hosted SDKs; keep Docker and all project data.
+          sudo rm -rf -- /usr/local/lib/android /usr/share/dotnet /usr/local/.ghcup /usr/local/swift /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h .
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
       - name: Required local runtime setup
         run: |
           docker pull node:22-alpine
@@ -41,21 +68,30 @@ jobs:
           docker build --provenance=false -t foundry-portfolio-runtime:v1 tasks/portfolio-runtime
           docker run --rm --pull=never --network=none node:22-alpine true
       - name: All maintained tests, no silent skips
+        if: matrix.suite == 'tests'
         run: pnpm test
       - name: Required native and browser production, inert execution and recipient proof
-        run: pnpm test:integration .local/ci-integration
+        if: matrix.suite == 'integration'
+        run: |
+          mkdir -p .local
+          pnpm test:integration .local/ci-integration
       - name: Registry and report reproduction
+        if: matrix.suite == 'reproduction'
         run: pnpm verify
       - name: Build and inspect intended source snapshot without ambient dist
+        if: matrix.suite == 'reproduction'
         run: pnpm verify:candidate .local/ci-candidate
       - name: Preserve test results and diagnostics
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: local-verification-summaries
+          name: local-verification-${{ matrix.suite }}
           path: |
             .local/test-runs/*/summary.json
             .local/test-runs/*/tests.json
             .local/test-runs/*/runtime.log
             .local/ci-integration/progress.json
+            .local/ci-integration/result.json
+            .local/ci-integration/*.log
+            .local/ci-candidate/candidate-verification.json
           if-no-files-found: warn

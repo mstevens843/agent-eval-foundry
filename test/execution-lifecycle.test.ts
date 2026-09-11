@@ -15,7 +15,9 @@ import { pathToFileURL } from "node:url";
 import { Worker } from "node:worker_threads";
 import { describe, expect, it } from "vitest";
 import {
+  EVIDENCE_PUBLICATION_BUDGET_BYTES,
   publishEvidence,
+  regularTree,
   reserveDirectory,
   verifyEvidence,
   writeEvidence,
@@ -665,6 +667,33 @@ describe("bounded captures and immutable files", () => {
     expect(() => reserveDirectory(root, "../escape")).toThrow();
     writeFileSync(join(r.destination, "result.json"), "changed");
     expect(() => verifyEvidence(r.destination)).toThrow(/CONTENT_MISMATCH/);
+  });
+  it("bounds aggregate evidence publication independently of regularTree's generic default", () => {
+    expect(EVIDENCE_PUBLICATION_BUDGET_BYTES).toBe(512 * 1024 * 1024);
+    // regularTree's own default (used by copyArtifactTree and solver-submission checks) is
+    // untouched: a tree exceeding the small maxBytes passed here fails on that value alone.
+    const small = temporary();
+    writeFileSync(join(small, "big.bin"), Buffer.alloc(200));
+    expect(() => regularTree(small, 100)).toThrow(/EVIDENCE_BYTE_LIMIT/);
+    expect(regularTree(small, 1024)).toHaveLength(1);
+
+    const root = temporary();
+    const oversized = reserveDirectory(root, "oversized");
+    writeFileSync(join(oversized.stage, "result.json"), Buffer.alloc(200));
+    expect(() => publishEvidence(oversized.stage, oversized.destination, { id: "oversized" }, 100)).toThrow(
+      /EVIDENCE_BYTE_LIMIT/,
+    );
+    // The rejected publish must not have moved anything: stage still holds the original bytes.
+    expect(existsSync(oversized.destination)).toBe(false);
+    expect(readFileSync(join(oversized.stage, "result.json")).length).toBe(200);
+
+    const fits = reserveDirectory(root, "fits");
+    writeFileSync(join(fits.stage, "result.json"), Buffer.alloc(200));
+    publishEvidence(fits.stage, fits.destination, { id: "fits" }, 1024);
+    expect(verifyEvidence(fits.destination, 1024).complete).toBe(true);
+    expect(() => verifyEvidence(fits.destination, 100)).toThrow(/EVIDENCE_BYTE_LIMIT/);
+    // No explicit budget falls back to the 512 MiB publication budget, not regularTree's 128 MiB.
+    expect(verifyEvidence(fits.destination).complete).toBe(true);
   });
   it("read-only CLI inspection does not dispatch or modify the database", async () => {
     const f = fixture();

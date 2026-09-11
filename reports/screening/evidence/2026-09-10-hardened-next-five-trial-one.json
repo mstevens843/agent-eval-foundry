@@ -1,0 +1,1077 @@
+{
+  "schemaVersion": 1,
+  "campaign": "2026-09-10-hardened-next-five-trial-one",
+  "evidenceClass": "real-provider-screening",
+  "label": "Trial 3",
+  "limitations": [
+    "One exploratory attempt per package on the hardened 3.0.0 packages; not a replicated failure rate or final qualification.",
+    "Requested model/effort are separate from observed CLI metadata; observed model/effort/scaffold were not exposed by either CLI's event stream this run.",
+    "Two of five attempts hit an EVIDENCE_BYTE_LIMIT publication-infrastructure incident after capture, grading and checker evaluation had already completed; their evidence was recovered and published by a separate, hash-identified recovery tool (see publicationRecovery on each affected package below), not by resuming the frozen executor or by any additional model call.",
+    "Raw captures and submissions remain private; this publication retains allowlisted fields and artifact hashes."
+  ],
+  "sourceDigest": "153bdf9d0675e7d4ca59a7fe9b21430e887d24e889db7bbfb134e5dc4d7fa41d",
+  "authorImage": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+  "actualScheduling": "Five dispatch events within a 264ms spread (2026-09-11T01:13:36.917Z-01:13:37.181Z); the trial operator observed concurrent solver containers for all five packages.",
+  "concurrencyRequestFulfilled": true,
+  "concurrencyObservation": {
+    "count": 5,
+    "packageIds": [
+      "route-policy-repair",
+      "browser-replay-repair",
+      "recurring-calendar-repair",
+      "workflow-authority-repair",
+      "delegated-budget-repair"
+    ],
+    "firstLaunch": "2026-09-11T01:13:36.917Z",
+    "lastLaunch": "2026-09-11T01:13:37.181Z",
+    "launchSpreadMs": 264,
+    "containerObservationSource": "trial operator docker ps observation during the run"
+  },
+  "automaticRetries": 0,
+  "extraModelCallsBeyondFive": 0,
+  "counts": {
+    "attemptsLaunched": 5,
+    "completedScoredAttempts": 5,
+    "recordedZeroRewards": 3,
+    "solverPasses": 2,
+    "infrastructureInterruptedAttempts": 0,
+    "publicationIncidentsRecovered": 2
+  },
+  "publicationIncident": {
+    "error": "EVIDENCE_BYTE_LIMIT",
+    "affected": [
+      "delegated-budget-repair",
+      "recurring-calendar-repair"
+    ],
+    "cause": "publishEvidence/verifyEvidence called regularTree() with no explicit maxBytes, defaulting to regularTree's generic 128 MiB walk limit. The hardened 3.0.0 packages' larger checker-grade candidate banks (21 and 37 candidates, versus roughly 14-15 pre-hardening) pushed each attempt's staged evidence to 283-296 MiB and 175-182 MiB, both over that default, because each candidate's execute() call writes a near-duplicate process.log/result.json pair several megabytes each.",
+    "fix": {
+      "description": "Added an explicit EVIDENCE_PUBLICATION_BUDGET_BYTES constant (512 MiB) in src/execution/artifacts.ts, threaded only into publishEvidence/verifyEvidence as an optional parameter defaulting to that constant. regularTree's own default (128 MiB) and every solver-submission size limit (copyArtifactTree, package-route.ts, real-provider.ts) are unchanged -- this is not a global regularTree limit increase. For future runs, runPortfolioSubmission's per-candidate process.log is gzip-compressed at write time (src/packages/local-process.ts, opt-in logCompression:'gzip'), losslessly preserving stdout and stderr -- including diagnostics not present in result.json -- while removing the near-total duplication that drove the growth.",
+      "files": [
+        "src/execution/artifacts.ts",
+        "src/packages/local-process.ts",
+        "src/packages/portfolio.ts",
+        "src/index.ts"
+      ],
+      "tests": [
+        "test/execution-lifecycle.test.ts",
+        "test/package-production.test.ts"
+      ]
+    },
+    "recovery": {
+      "description": "The frozen executor (source digest 153bdf9d0675e7d4ca59a7fe9b21430e887d24e889db7bbfb134e5dc4d7fa41d) predates the fix, and its own executor-version guard (EXECUTION_EXECUTOR_VERSION_DRIFT) correctly refuses to resume a job under a different source identity, so recovery did not resume the frozen campaign in place. A separate, explicitly non-executor recovery tool independently re-verified each attempt's already-complete capture/grade/checker evidence (byte budget, package/profile/executor identity, checker false-positive detail, all read from the stage's own files, never reconstructed) before publishing it, unchanged, with the corrected budget.",
+      "tool": "publication-recovery-2026-09-11/recover.mjs",
+      "manifest": ".local/hardened-next-five-trial-one-2026-09-10/publication-recovery-2026-09-11/manifest.json"
+    }
+  },
+  "packages": [
+    {
+      "id": "route-policy-repair",
+      "target": "claude",
+      "runId": "route-policy-repair-attempt-1",
+      "analysis": "reports/screening/third-five/14-route-policy-repair.md",
+      "packageDigest": "c3ff40c39c331627595b3a5aa0a74f03d6777a26e9c34b5b27c042474fe0fd63",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "serviceOutcome": "semantic-pass",
+      "reward": 1,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 3173465,
+      "dispatchedAt": "2026-09-11T01:13:36.917Z",
+      "completedAt": "2026-09-11T02:06:52.584Z",
+      "service": {
+        "scenarios": 33,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "total": 13,
+        "correct": 13,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "lost-return",
+            "expectedFailingCheck": "translation",
+            "observedFailingChecks": [
+              "positive_change",
+              "preservation",
+              "scoped_behavior",
+              "translation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "publish-after-success",
+            "expectedFailingCheck": "legal_config",
+            "observedFailingChecks": [
+              "legal_config",
+              "translation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "legal_config",
+              "positive_change",
+              "preservation",
+              "scoped_behavior",
+              "translation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "drop-mutation",
+            "expectedFailingCheck": "translation",
+            "observedFailingChecks": [
+              "positive_change",
+              "preservation",
+              "scoped_behavior",
+              "translation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "changed-unrequested-egress",
+            "expectedFailingCheck": "translation",
+            "observedFailingChecks": [
+              "preservation",
+              "translation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "legal_config",
+              "positive_change",
+              "preservation",
+              "scoped_behavior",
+              "translation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "unsampled-route",
+            "expectedFailingCheck": "translation",
+            "observedFailingChecks": [
+              "translation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "variant-redundant-flat-rules",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "changed-rejected-attributes",
+            "expectedFailingCheck": "translation",
+            "observedFailingChecks": [
+              "preservation",
+              "scoped_behavior",
+              "translation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "original-preference",
+            "expectedFailingCheck": "translation",
+            "observedFailingChecks": [
+              "positive_change",
+              "scoped_behavior",
+              "translation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "mutated-scope",
+            "expectedFailingCheck": "translation",
+            "observedFailingChecks": [
+              "positive_change",
+              "scoped_behavior",
+              "translation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "pass": true,
+        "gradeSummarySha256": "f648247b33f4dd028173c73f8c0b2c79ffad1d9830d93187bc95e0262c8de3f7"
+      },
+      "usage": {
+        "cachedInputTokens": 17135272,
+        "costUsd": 17.161566,
+        "inputTokens": 17424540,
+        "outputTokens": 228042,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "5d744f38632971583d5116a979337a9e219b0f8057246ff229932526235cdd06",
+      "resultSha256": "e02038add7e509e32134d3b9fc4ca3fcc13e694dc1c758e98035639ca23d2c3c",
+      "gradeSha256": "b031742640ef5be5d51bfb02c58d808bfa4ea7377e57bd58885b1e604fe10fb7",
+      "manifestFilesVerified": 889,
+      "manifestBytesVerified": 46917030,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "clean-solver-pass",
+      "publicationRecovery": null
+    },
+    {
+      "id": "browser-replay-repair",
+      "target": "claude",
+      "runId": "browser-replay-repair-attempt-1",
+      "analysis": "reports/screening/original-five/03-browser-replay-repair.md",
+      "packageDigest": "7511a91b15231268c3fe86e12e67b644805efc35e546edd83a5629eba2508ace",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "serviceOutcome": "semantic-pass",
+      "reward": 1,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 2518048,
+      "dispatchedAt": "2026-09-11T01:13:36.985Z",
+      "completedAt": "2026-09-11T01:57:28.291Z",
+      "service": {
+        "scenarios": 19,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "total": 12,
+        "correct": 12,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "pending-complete",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "exact_effects"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "out-of-order-effects",
+            "expectedFailingCheck": "exact_effects",
+            "observedFailingChecks": [
+              "exact_effects"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "incorrect-completion-report",
+            "expectedFailingCheck": "reports",
+            "observedFailingChecks": [
+              "reports"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "variant-repeat-committed-operation",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "wrong-action-after-effects",
+            "expectedFailingCheck": "current_preconditions",
+            "observedFailingChecks": [
+              "current_preconditions"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "skip-later-steps",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "exact_effects"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "exact_effects"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "competing-dialog",
+            "expectedFailingCheck": "preservation",
+            "observedFailingChecks": [
+              "completion",
+              "current_preconditions",
+              "exact_effects",
+              "preservation",
+              "reports"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "tuple-identity",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "exact_effects"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "exact_effects"
+            ],
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "pass": true,
+        "gradeSummarySha256": "8972d6193ab9835158d44c5c3981102693ddd0f9048fcf3fee1c22f3f46ed120"
+      },
+      "usage": {
+        "cachedInputTokens": 5858441,
+        "costUsd": 7.2901915,
+        "inputTokens": 6011476,
+        "outputTokens": 113202,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "c637ece78ff2c3f09cbf523cc5a99dd9297bd1ca4d1b79489c3a1b0848b3fa70",
+      "resultSha256": "adbf5ae94ab9e00dec45371cdc9d8c570efb7bd7cb638576c998a00fcf39c915",
+      "gradeSha256": "a8d25d300d94e57b4961114dcfd6e02a7fd105809d880c6f36f9a24b5bc768d5",
+      "manifestFilesVerified": 1236,
+      "manifestBytesVerified": 67444811,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "clean-solver-pass",
+      "publicationRecovery": null
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "target": "codex",
+      "runId": "recurring-calendar-repair-attempt-1",
+      "analysis": "reports/screening/fourth-five/18-recurring-calendar-repair.md",
+      "packageDigest": "8f438cc74fc23c4357caa4c2a6ce64edd068eb899b5c335bdecd81884444fde3",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "serviceOutcome": "semantic-pass",
+      "reward": 0,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 619091,
+      "dispatchedAt": "2026-09-11T01:13:37.059Z",
+      "completedAt": null,
+      "service": {
+        "scenarios": 37,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "total": 16,
+        "correct": 14,
+        "falsePositives": 2,
+        "missed": 0,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "fixed-zone-offset",
+            "expectedFailingCheck": "civil_time",
+            "observedFailingChecks": [
+              "bookings",
+              "civil_time",
+              "history",
+              "occurrence_identity",
+              "preservation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "repaired-event-corruption",
+            "expectedFailingCheck": "preservation",
+            "observedFailingChecks": [
+              "preservation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "missing-acknowledgement",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "repaired-booking-deletion",
+            "expectedFailingCheck": "bookings",
+            "observedFailingChecks": [
+              "bookings"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "bookings",
+              "completion",
+              "preservation",
+              "source_revisions"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "display-window",
+            "expectedFailingCheck": "occurrence_identity",
+            "observedFailingChecks": [
+              "bookings",
+              "civil_time",
+              "history",
+              "occurrence_identity",
+              "preservation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "arrival-order",
+            "expectedFailingCheck": "source_revisions",
+            "observedFailingChecks": [
+              "preservation",
+              "source_revisions"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "false-positive"
+          },
+          {
+            "candidateId": "drop-foreign",
+            "expectedFailingCheck": "bookings",
+            "observedFailingChecks": [
+              "bookings"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "display-time-identity",
+            "expectedFailingCheck": "occurrence_identity",
+            "observedFailingChecks": [
+              "bookings",
+              "civil_time",
+              "history",
+              "occurrence_identity",
+              "preservation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "bookings",
+              "completion",
+              "preservation",
+              "source_revisions"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "bookings",
+              "completion",
+              "preservation",
+              "source_revisions"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "append-bookings",
+            "expectedFailingCheck": "bookings",
+            "observedFailingChecks": [
+              "bookings"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "repaired-source-corruption",
+            "expectedFailingCheck": "source_revisions",
+            "observedFailingChecks": [
+              "source_revisions"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "variant-republish-and-reack",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "false-positive"
+          }
+        ],
+        "pass": false,
+        "gradeSummarySha256": "6368a58d9acf53b2d40e9f0bdab9231013f16888c088b9d051e38b858b08bbbd"
+      },
+      "usage": {
+        "cachedInputTokens": 605952,
+        "costUsd": null,
+        "inputTokens": 665003,
+        "outputTokens": 29023,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "177125813859b1d49b355ca94b61467939421154e28a5784eee22e49c9344872",
+      "resultSha256": "da5588b0a05111d049cc53388a3edae023fef678de3290e22f61b60e2b04dde1",
+      "gradeSha256": "db5e9fb702345e8bcc7873d591b87b1709caf60309ff6fa6553a4a5b8052649d",
+      "manifestFilesVerified": 982,
+      "manifestBytesVerified": 177006489,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "required-checker-failed",
+      "publicationRecovery": {
+        "incident": "EVIDENCE_BYTE_LIMIT",
+        "originalDispatchErrorAt": "2026-09-11T01:25:19.226Z",
+        "originalDispatchError": ".local/hardened-next-five-trial-one-2026-09-10/real-campaign-frozen/dispatch-errors/recurring-calendar-repair.json",
+        "recoveredAt": "2026-09-11T02:20:34.905Z",
+        "recoveryToolPath": "publication-recovery-2026-09-11/recover.mjs",
+        "recoveryToolSha256": "ff5d5b53cc812d6a0a68a0508021cf5a7d18560393a80b02ea572ce89f06c4a1",
+        "recoveryManifest": ".local/hardened-next-five-trial-one-2026-09-10/publication-recovery-2026-09-11/manifest.json",
+        "note": "This tool is separate from, and not a substitute for, the original frozen executor (153bdf9d0675e7d4ca59a7fe9b21430e887d24e889db7bbfb134e5dc4d7fa41d). It performed no solve, capture, or grading step; it only completed the interrupted publish of evidence the frozen executor had already produced in full, using the live repository's patched publishEvidence with the corrected budget. Every field recorded under recovered[].originalExecutorDigest below was read verbatim from each stage's own prepared.json, not reconstructed."
+      }
+    },
+    {
+      "id": "workflow-authority-repair",
+      "target": "codex",
+      "runId": "workflow-authority-repair-attempt-1",
+      "analysis": "reports/screening/fourth-five/20-workflow-authority-repair.md",
+      "packageDigest": "f7e8ebedfb12bad0fa67e7841e213d78991620e5266cc115a01f98b79bf8cdd0",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "serviceOutcome": "semantic-pass",
+      "reward": 0,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 846911,
+      "dispatchedAt": "2026-09-11T01:13:37.119Z",
+      "completedAt": "2026-09-11T01:28:05.764Z",
+      "service": {
+        "scenarios": 36,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "total": 15,
+        "correct": 13,
+        "falsePositives": 2,
+        "missed": 0,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "wrong-payload",
+            "expectedFailingCheck": "effect_payload",
+            "observedFailingChecks": [
+              "effect_payload"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "deny-all",
+            "expectedFailingCheck": "positive_work",
+            "observedFailingChecks": [
+              "positive_work"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "admission-only",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "terminal_history"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "terminal_history"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "terminal_history"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "wrong-delivery-association",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "superseded-payload",
+            "expectedFailingCheck": "effect_payload",
+            "observedFailingChecks": [
+              "effect_payload"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "wrong-origin",
+            "expectedFailingCheck": "origin_identity",
+            "observedFailingChecks": [
+              "origin_identity"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "empty-path",
+            "expectedFailingCheck": "policy_at_effect",
+            "observedFailingChecks": [
+              "policy_at_effect"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "variant-replacement-and-retry",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "false-positive"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "false-positive"
+          },
+          {
+            "candidateId": "superseded-path",
+            "expectedFailingCheck": "policy_at_effect",
+            "observedFailingChecks": [
+              "policy_at_effect"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "superseded-origin",
+            "expectedFailingCheck": "origin_identity",
+            "observedFailingChecks": [
+              "origin_identity"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "pending-complete",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion"
+            ],
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "pass": false,
+        "gradeSummarySha256": "6048071ea4bc1dd8ed4f7b196560c96f1d5df7efb77ec6ad78bdc0b6c349b238"
+      },
+      "usage": {
+        "cachedInputTokens": 673408,
+        "costUsd": null,
+        "inputTokens": 735794,
+        "outputTokens": 31023,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "3fb9aa8ddc8ce97f44ab4f80795c4a3684ea9f6301baf7c724c2b1c127c3b130",
+      "resultSha256": "d7ec81d597ac26b588216f5b0e4d4fe7e07554d017fe9c8c11d47e4ca861820f",
+      "gradeSha256": "4405f13427ba67d7667ada47bdc39bfed2ba96fb6c5a629406ee7f4f048b16ab",
+      "manifestFilesVerified": 868,
+      "manifestBytesVerified": 83070973,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "required-checker-failed",
+      "publicationRecovery": null
+    },
+    {
+      "id": "delegated-budget-repair",
+      "target": "codex",
+      "runId": "delegated-budget-repair-attempt-1",
+      "analysis": "reports/screening/original-five/04-delegated-budget-repair.md",
+      "packageDigest": "db688724f5b932b9e0ee619e1202da3de81a636a37ef90976490702fb24c5f66",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "serviceOutcome": "semantic-pass",
+      "reward": 0,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 650268,
+      "dispatchedAt": "2026-09-11T01:13:37.181Z",
+      "completedAt": null,
+      "service": {
+        "scenarios": 21,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "total": 17,
+        "correct": 14,
+        "falsePositives": 3,
+        "missed": 0,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "reuse-reservation",
+            "expectedFailingCheck": "aggregate_budget",
+            "observedFailingChecks": [
+              "aggregate_budget"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "cross-wallet",
+            "expectedFailingCheck": "aggregate_budget",
+            "observedFailingChecks": [
+              "aggregate_budget"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "wrong-owner-admission",
+            "expectedFailingCheck": "aggregate_budget",
+            "observedFailingChecks": [
+              "aggregate_budget"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "over-settlement",
+            "expectedFailingCheck": "aggregate_budget",
+            "observedFailingChecks": [
+              "aggregate_budget"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "decisions"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reject-valid-reservation",
+            "expectedFailingCheck": "aggregate_budget",
+            "observedFailingChecks": [
+              "aggregate_budget"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "wrong-report-receipt",
+            "expectedFailingCheck": "decisions",
+            "observedFailingChecks": [
+              "completion",
+              "decisions"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "wrong-delegate-admission",
+            "expectedFailingCheck": "aggregate_budget",
+            "observedFailingChecks": [
+              "aggregate_budget"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "variant-idempotent-settlement",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "false-positive"
+          },
+          {
+            "candidateId": "settle-current-version",
+            "expectedFailingCheck": "aggregate_budget",
+            "observedFailingChecks": [
+              "aggregate_budget"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "ignore-holds",
+            "expectedFailingCheck": "aggregate_budget",
+            "observedFailingChecks": [
+              "aggregate_budget"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "stale-reserve-version",
+            "expectedFailingCheck": "aggregate_budget",
+            "observedFailingChecks": [
+              "aggregate_budget"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "decisions"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "false-positive"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "false-positive"
+          },
+          {
+            "candidateId": "release-captured",
+            "expectedFailingCheck": "aggregate_budget",
+            "observedFailingChecks": [
+              "aggregate_budget"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "uncertain-abandon",
+            "expectedFailingCheck": "decisions",
+            "observedFailingChecks": [
+              "completion",
+              "decisions"
+            ],
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "pass": false,
+        "gradeSummarySha256": "552c5bc4caba51bf10b4ce445ce52f325486dfee4ffe46144b96bb6fb1c651c4"
+      },
+      "usage": {
+        "cachedInputTokens": 452096,
+        "costUsd": null,
+        "inputTokens": 492326,
+        "outputTokens": 24477,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "ce82994a2ef11ead1688a54ed2b1ef584fc9ea921ee2b2067aef8900a06b2442",
+      "resultSha256": "43e824e9d270e162accbbb3dcb79a05ea52746e132de302aa4c1de2a6176ccc9",
+      "gradeSha256": "ced3898c39f675942c006d89c8e77221332e9f2038d611392d4cc60b7cfc469b",
+      "manifestFilesVerified": 1399,
+      "manifestBytesVerified": 287584711,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "required-checker-failed",
+      "publicationRecovery": {
+        "incident": "EVIDENCE_BYTE_LIMIT",
+        "originalDispatchErrorAt": "2026-09-11T01:25:13.633Z",
+        "originalDispatchError": ".local/hardened-next-five-trial-one-2026-09-10/real-campaign-frozen/dispatch-errors/delegated-budget-repair.json",
+        "recoveredAt": "2026-09-11T02:20:34.905Z",
+        "recoveryToolPath": "publication-recovery-2026-09-11/recover.mjs",
+        "recoveryToolSha256": "ff5d5b53cc812d6a0a68a0508021cf5a7d18560393a80b02ea572ce89f06c4a1",
+        "recoveryManifest": ".local/hardened-next-five-trial-one-2026-09-10/publication-recovery-2026-09-11/manifest.json",
+        "note": "This tool is separate from, and not a substitute for, the original frozen executor (153bdf9d0675e7d4ca59a7fe9b21430e887d24e889db7bbfb134e5dc4d7fa41d). It performed no solve, capture, or grading step; it only completed the interrupted publish of evidence the frozen executor had already produced in full, using the live repository's patched publishEvidence with the corrected budget. Every field recorded under recovered[].originalExecutorDigest below was read verbatim from each stage's own prepared.json, not reconstructed."
+      }
+    }
+  ]
+}

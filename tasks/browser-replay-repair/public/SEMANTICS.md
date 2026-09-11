@@ -1,57 +1,70 @@
-# Workflow playback contract, version one
+# Replay against Meridian Records — successor 3.0
+The supplied app/ directory is a working local application, its server protocol and
+Chromium bridge. Run node dev.mjs [port] to inspect it and node replay.mjs to exercise
+your entry.mjs against fixture.json. Playwright is preinstalled in the native author
+image. npm install uses the pinned public package if developing elsewhere.
+The demo fixtures contain application facts, not grading answers. /debug shows
+actual server operations, effects, sessions and actions. app/driver.mjs implements
+the same bridge used during evaluation. Public application copies are byte-identical
+to verifier application code; private recordings and expected outcomes are separate.
 
-Submission directory bounds: at most 256 directories and 16 nested path components.
+## Recorded intent and operation identity
+view is {traceId,events,attempt,storage}. Events are {step,entity,field,value,selector,
+path}, with unique integer steps in recorded order. path is a /records/ path.
+The business operation ID is JSON.stringify([traceId,step]). Distinct steps can have
+identical entity/field/value and selectors; they are still distinct operations.
+Complete all effects once in recorded order, preserving unrelated work. Independent
+delivery and process restart must not add effects. Selectors are hints, not identity.
+The application deduplicates by operation ID and exact payload. Repeating that same
+operation is legal; using its key with a different payload returns CONFLICT.
 
-The input is a recorded form workflow: `{traceId, events, attempt, storage}`.
-Events contain `{step, entity, field, value, selector}`. Step and trace identities
-are stable over repeated attempts. Each event requires one form submission with
-that entity, field and exact string value. All requested events must complete in
-recorded order. Repeating the trace must not submit its effects again. Unrequested
-forms and previously completed effects must remain untouched.
+## Browser and server interface
+All APIs are asynchronous and take one object. Handles belong to a DOM mount and
+may become disconnected after query or fill; navigation invalidates old handles.
+Query lists ALL forms on the current page, including decoys and other steps.
+There is no step-filtered search. Sessions can expire when entering a different page.
+location({}) returns {path,authenticated,session}; navigate({path}) changes pages;
+renew({}) renews the session and remounts the current page.
+query({}) returns form records with handle plus the fields below.
+observe({handle}) returns {connected,operationId,entity,field,generation,ready,value,
+session}, or {connected:false}. fill({handle,value}) returns {ok:true,state} (the
+post-fill form state), or {ok:false,code}. A later remount may invalidate that state.
 
-The driver runs a real DOM with input/button pairs, possible locator decoys,
-remounts, enabled-state changes and confirmation dialogs. Recorded selectors are
-location hints, not enduring entity identities. `aria-busy` is advisory. DOM
-generation and actual input values are observable. A live handle may become
-disconnected after a query; recoverable API results are not execution failures.
-Render work advances only on `settle`, except a single possible remount immediately
-after a query. Remounts may discard unsubmitted form values. After at most four
-settle calls the current page is stable; opening a confirmation may add one more.
-Settling does not itself submit anything. There are no wall-clock race deadlines.
+submit({handle,expected}) uses a REAL conditional UI precondition: expected must
+match the current connected, ready form's operationId,entity,field,value,generation,
+session. The bridge checks and dispatches in one browser JS turn, returning
+{ok:true,pending:true} or {ok:false,code:"STALE"|"SESSION"|"CONFLICT"|...}.
+No specific observe-after-fill call sequence is required. A returned fill state or
+other current observation is equally valid evidence for the conditional request.
+Only intended entity/field/value/operation combinations may be submitted, including
+when a later correction could repair the final visible value.
 
-All API methods take one object and return JSON:
+dialogs({}) lists ALL visible confirmations {id,operationId,entity,field,value,
+session,stale?}. Stale/competing dialogs may share entity/field/value with another
+step. confirm({id,operationId,session}) conditionally clicks that dialog; success
+is {ok:true,pending:true}, stale/session/conflict responses are recoverable.
+Required confirmations bind to operation ID; a dialog from another step cannot
+authorize this one. Repeated same-operation confirmation is idempotent.
 
-- `query({step})`: candidate `{handle, entity, field, selector}` records, including
-  plausible decoys. Only candidates for the current recorded step are returned.
-- `observe({handle})`: `{connected, entity, field, generation, ready, value}`.
-- `act({handle, kind:'fill', value})`: fills that form. `kind:'submit'` dispatches
-  its real button click. Returns `{ok, pending}` or `{ok:false, code}`. A successful
-  dispatch is not proof of a committed effect.
-- `settle({})`: advances render work; returns `{stable}`.
-- `dialog({})`: null or `{handle, entity, field, value, generation}` for the current
-  confirmation. `confirm({handle})` clicks that actual dialog's confirmation.
-- `receipts({})`: committed `{traceId, step, entity, field, value}` records for this
-  trace, including earlier attempts. These records are durable.
+operation({operationId}) returns {status:"ABSENT"}, {status:"PENDING"}, or
+{status:"COMMITTED",receipt:{operationId,entity,field,value}}. PENDING spans queued
+work and already committed work whose receipt is not visible. It is not absence.
+settle({}) advances deterministic background work and remounts the page, returning
+{stable}. An admitted operation commits by the first settle; its receipt is visible
+by the third. Form readiness stabilizes within two settles. UI success/navigation
+may precede receipt visibility. There are no wall-clock races or sleeps to guess.
+Error results permit recovery; successful dispatch alone is not proof of completion.
 
-Before each submission, observe its current connected, ready form and exact value
-after the last fill/remount. Before confirmation, observe the dialog and ensure it
-still represents the intended event. Never submit an action for the wrong entity
-or value, even if a later action corrects it. Confirmations are required only when
-present. Retrying a stale handle is allowed; repeating a committed effect is not.
+Return {traceId,steps:[{step,status:"completed"}]} once per event, in event order,
+on every completed attempt. Reports must agree with real effects at that boundary.
+A process may be killed after an operation completes before its response arrives;
+the same attempt is redelivered with DOM, server state and storage retained.
+Independent later deliveries may start on another page; server identity remains.
+At most one interruption per trace. No disk/journal strategy is prescribed.
 
-Return `{traceId, steps:[{step, status:'completed'}]}` covering every event exactly
-once on each attempt, in event order. Reports must agree with real effects by the end of that attempt.
-
-The process may be interrupted after an API operation has completed externally
-but before its response arrives. The same trace and attempt are then redelivered
-to a fresh process; DOM state, effects and storage survive. At most one such
-interruption occurs per trace. Local files are not interrupted during writes.
-
-Bounds: one to four events, one to three attempts, finite noncyclic render work,
-strings up to 256 characters. Node ESM, `entry.mjs` exports `subject` with `run`.
-Public modules can use normal Node APIs and write under `view.storage`; code is
-read-only while grading. At most 128 regular single-link files, 8 MiB total; no
-symlinks or special files. Each process has 45 seconds and 4000 RPC requests;
-each JSON frame is at most 64 KiB and each channel at most 16 MiB. The enclosing
-container has 2 CPUs, 2 GiB RAM, 256 PIDs and no external network during replay.
-These execution errors are invalid results, not semantic difficulty evidence.
+## Bounds
+1–4 events,1–3 attempts, <=4 intended forms and4 decoys/page, <=8 dialogs,
+strings<=256 characters. Node24 built-ins;128 regular files/8 MiB/depth16, storage
+writable and code read-only.45 seconds/process,4000 protocol frames,64 KiB/frame,
+16 MiB/channel. Supplied views and compact correct calls fit48 KiB. Authoring has
+internet access; deterministic local browser evaluation requires no outside network.
