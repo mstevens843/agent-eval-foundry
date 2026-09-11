@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "kind": "recorded-checker-defect-replay",
+  "task": "incremental-build-repair",
+  "submission": "incremental-build-repair-attempt-1",
+  "sourceReport": "reports/screening/fifth-five/21-incremental-build-repair.md",
+  "sourceEvidence": "reports/screening/evidence/2026-09-08-fifth-five.json",
+  "checkerSha256": "5db9104ae7c0525c760a52fa4c6f51820b83a27cf453d687b949056ab598530a",
+  "tracePackageDigest": "2e301ac8162eba893389aa02963699ea9980ed0bc9f61344d32117c1d3d04a09",
+  "traceOrigin": "Model-free Docker execution of reference, alternative and premature-publication control; case-024; 2026-09-11",
+  "expected": {
+    "reference": {
+      "submittedCheckerAccepts": true,
+      "orderingOracleAccepts": true
+    },
+    "alternative": {
+      "submittedCheckerAccepts": true,
+      "orderingOracleAccepts": true
+    },
+    "premature-publication": {
+      "submittedCheckerAccepts": true,
+      "orderingOracleAccepts": false
+    }
+  },
+  "scope": "One original checker, three retained single-scenario traces and a scoped temporal oracle. This is not a replay of an entire model trial or the six-run matrix."
+}

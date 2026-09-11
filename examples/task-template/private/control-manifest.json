@@ -1,0 +1,7 @@
+[
+  { "id": "stale-value", "overlay": { "entry.mjs": "controls/stale-value.mjs" }, "check": "latest_value", "clean": "empty" },
+  { "id": "missing-key", "overlay": { "entry.mjs": "controls/missing-key.mjs" }, "check": "key_scope", "clean": "empty" },
+  { "id": "duplicate-key", "overlay": { "entry.mjs": "controls/duplicate-key.mjs" }, "check": "key_scope", "clean": "empty" },
+  { "id": "no-publication", "overlay": { "entry.mjs": "controls/no-publication.mjs" }, "check": "completion" },
+  { "id": "isolation", "overlay": { "entry.mjs": "controls/isolation.mjs" }, "check": "completion", "isolation": true }
+]

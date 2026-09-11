@@ -19,6 +19,7 @@ import {
 } from "./assurance.js";
 import { hashFile, localProcess } from "./local-process.js";
 import { decidePackage } from "./policy.js";
+import { nativeRecipientReadme } from "./recipient-readme.js";
 import {
   COMPONENTS,
   type Component,
@@ -780,6 +781,9 @@ export async function exportNativeCaa(
     taskParity: true,
     recipientOnly: ["store", "runtime.tar", "assurance.json"],
     note: "Offline runtime archive plus exact task graph. Give subjects ONLY the public instruction/environment, never this recipient bundle. Local export is not official release qualification.",
+  });
+  writeFileSync(join(destination, "README.md"), nativeRecipientReadme(snapshot.record.digest), {
+    flag: "wx",
   });
   return snapshot.record.digest;
 }

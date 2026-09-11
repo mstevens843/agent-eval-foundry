@@ -2,6 +2,8 @@
 
 A task-production system for building, testing, and improving benchmarks that expose gaps in coding agents.
 
+**Use it:** [Quickstart](docs/quickstart.md) · [Create a task](docs/task-authoring.md) · [Replay a checker defect](examples/replays/premature-publication/README.md) · [Run one model trial](docs/first-model-trial.md) · [Contribute](CONTRIBUTING.md)
+
 **25 task packages screened. Nine tasks meet the ≥5/6 failure target: seven at 6/6 and two at 5/6.**
 
 ## Measured results
@@ -71,6 +73,11 @@ node scripts/verify-publication.mjs
 These checks require no model credentials or paid provider calls. The publication verifier checks evidence identities, trial accounting, provider balance, and navigation using tracked files.
 
 For Docker, browser, native execution, full tests, and report reproduction, follow the [testing guide](docs/testing.md). To assemble and inspect a task, follow the [package production guide](docs/package-production.md). The [artifact policy](docs/artifact-lifecycle.md) explains why raw solver captures and runtime archives remain private while sanitized evidence and source are tracked.
+
+For a complete first run with expected outputs, follow the [0.2.0 quickstart](docs/quickstart.md).
+It covers a runnable template, grading, standalone exports and recipient reproduction with no model calls.
+`pnpm foundry --help` lists the developer commands; `pnpm axis` retains historical research commands.
+The [source release guide](docs/releases.md) explains versioned candidates and verification.
 
 ## Reading the evidence
 

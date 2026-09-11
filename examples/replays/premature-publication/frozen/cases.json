@@ -1,0 +1,465 @@
+{
+  "cases": [
+    {
+      "token": "reference",
+      "cells": [
+        {
+          "scenarioId": "case-024",
+          "input": {
+            "rounds": [
+              {
+                "actions": [
+                  {
+                    "deps": [],
+                    "entry": "a.txt",
+                    "flags": "identity",
+                    "id": "a",
+                    "tool": "compiler-1"
+                  }
+                ],
+                "callBudget": 1,
+                "files": {
+                  "a.txt": "hello"
+                },
+                "id": "r",
+                "targets": [
+                  "a"
+                ]
+              }
+            ]
+          },
+          "actual": {
+            "artifacts": [
+              {
+                "bytes": "[\"compiler-1\",\"identity\",\"hello\",[]]",
+                "handle": "built-1",
+                "recipe": {
+                  "action": "a",
+                  "dependencies": [],
+                  "entry": "a.txt",
+                  "files": [
+                    {
+                      "path": "a.txt",
+                      "text": "hello"
+                    }
+                  ],
+                  "flags": "identity",
+                  "tool": "compiler-1"
+                }
+              }
+            ],
+            "calls": [
+              1
+            ],
+            "publications": [
+              {
+                "after": 0,
+                "outputs": [
+                  {
+                    "handle": "built-1",
+                    "target": "a"
+                  }
+                ],
+                "round": "r"
+              }
+            ]
+          },
+          "observations": [
+            {
+              "method": "next",
+              "request": {},
+              "seq": 0,
+              "value": {
+                "actions": [
+                  {
+                    "deps": [],
+                    "entry": "a.txt",
+                    "flags": "identity",
+                    "id": "a",
+                    "tool": "compiler-1"
+                  }
+                ],
+                "callBudget": 1,
+                "files": {
+                  "a.txt": "hello"
+                },
+                "id": "r",
+                "targets": [
+                  "a"
+                ]
+              }
+            },
+            {
+              "method": "artifacts",
+              "request": {},
+              "seq": 1,
+              "value": []
+            },
+            {
+              "method": "compile",
+              "request": {
+                "action": "a",
+                "dependencies": [],
+                "entry": "a.txt",
+                "files": [
+                  {
+                    "path": "a.txt",
+                    "text": "hello"
+                  }
+                ],
+                "flags": "identity",
+                "tool": "compiler-1"
+              },
+              "seq": 2,
+              "value": {
+                "handle": "built-1"
+              }
+            },
+            {
+              "method": "publish",
+              "request": {
+                "outputs": [
+                  {
+                    "handle": "built-1",
+                    "target": "a"
+                  }
+                ],
+                "round": "r"
+              },
+              "seq": 3,
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "method": "next",
+              "request": {},
+              "seq": 4,
+              "value": null
+            }
+          ],
+          "reports": [
+            {
+              "complete": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "alternative",
+      "cells": [
+        {
+          "scenarioId": "case-024",
+          "input": {
+            "rounds": [
+              {
+                "actions": [
+                  {
+                    "deps": [],
+                    "entry": "a.txt",
+                    "flags": "identity",
+                    "id": "a",
+                    "tool": "compiler-1"
+                  }
+                ],
+                "callBudget": 1,
+                "files": {
+                  "a.txt": "hello"
+                },
+                "id": "r",
+                "targets": [
+                  "a"
+                ]
+              }
+            ]
+          },
+          "actual": {
+            "artifacts": [
+              {
+                "bytes": "[\"compiler-1\",\"identity\",\"hello\",[]]",
+                "handle": "built-1",
+                "recipe": {
+                  "action": "a",
+                  "dependencies": [],
+                  "entry": "a.txt",
+                  "files": [
+                    {
+                      "path": "a.txt",
+                      "text": "hello"
+                    }
+                  ],
+                  "flags": "identity",
+                  "tool": "compiler-1"
+                }
+              }
+            ],
+            "calls": [
+              1
+            ],
+            "publications": [
+              {
+                "after": 0,
+                "outputs": [
+                  {
+                    "handle": "built-1",
+                    "target": "a"
+                  }
+                ],
+                "round": "r"
+              }
+            ]
+          },
+          "observations": [
+            {
+              "method": "next",
+              "request": {},
+              "seq": 0,
+              "value": {
+                "actions": [
+                  {
+                    "deps": [],
+                    "entry": "a.txt",
+                    "flags": "identity",
+                    "id": "a",
+                    "tool": "compiler-1"
+                  }
+                ],
+                "callBudget": 1,
+                "files": {
+                  "a.txt": "hello"
+                },
+                "id": "r",
+                "targets": [
+                  "a"
+                ]
+              }
+            },
+            {
+              "method": "artifacts",
+              "request": {},
+              "seq": 1,
+              "value": []
+            },
+            {
+              "method": "compile",
+              "request": {
+                "action": "a",
+                "dependencies": [],
+                "entry": "a.txt",
+                "files": [
+                  {
+                    "path": "a.txt",
+                    "text": "hello"
+                  }
+                ],
+                "flags": "identity",
+                "tool": "compiler-1"
+              },
+              "seq": 2,
+              "value": {
+                "handle": "built-1"
+              }
+            },
+            {
+              "method": "inspect",
+              "request": {
+                "handle": "built-1"
+              },
+              "seq": 3,
+              "value": {
+                "bytes": "[\"compiler-1\",\"identity\",\"hello\",[]]",
+                "recipe": {
+                  "action": "a",
+                  "dependencies": [],
+                  "entry": "a.txt",
+                  "files": [
+                    {
+                      "path": "a.txt",
+                      "text": "hello"
+                    }
+                  ],
+                  "flags": "identity",
+                  "tool": "compiler-1"
+                }
+              }
+            },
+            {
+              "method": "publish",
+              "request": {
+                "outputs": [
+                  {
+                    "handle": "built-1",
+                    "target": "a"
+                  }
+                ],
+                "round": "r"
+              },
+              "seq": 4,
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "method": "next",
+              "request": {},
+              "seq": 5,
+              "value": null
+            }
+          ],
+          "reports": [
+            {
+              "complete": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "premature-publication",
+      "cells": [
+        {
+          "scenarioId": "case-024",
+          "input": {
+            "rounds": [
+              {
+                "actions": [
+                  {
+                    "deps": [],
+                    "entry": "a.txt",
+                    "flags": "identity",
+                    "id": "a",
+                    "tool": "compiler-1"
+                  }
+                ],
+                "callBudget": 1,
+                "files": {
+                  "a.txt": "hello"
+                },
+                "id": "r",
+                "targets": [
+                  "a"
+                ]
+              }
+            ]
+          },
+          "actual": {
+            "artifacts": [
+              {
+                "bytes": "[\"compiler-1\",\"identity\",\"hello\",[]]",
+                "handle": "built-1",
+                "recipe": {
+                  "action": "a",
+                  "dependencies": [],
+                  "entry": "a.txt",
+                  "files": [
+                    {
+                      "path": "a.txt",
+                      "text": "hello"
+                    }
+                  ],
+                  "flags": "identity",
+                  "tool": "compiler-1"
+                }
+              }
+            ],
+            "calls": [
+              1
+            ],
+            "publications": [
+              {
+                "after": 0,
+                "outputs": [
+                  {
+                    "handle": "built-1",
+                    "target": "a"
+                  }
+                ],
+                "round": "r"
+              }
+            ]
+          },
+          "observations": [
+            {
+              "method": "next",
+              "request": {},
+              "seq": 0,
+              "value": {
+                "actions": [
+                  {
+                    "deps": [],
+                    "entry": "a.txt",
+                    "flags": "identity",
+                    "id": "a",
+                    "tool": "compiler-1"
+                  }
+                ],
+                "callBudget": 1,
+                "files": {
+                  "a.txt": "hello"
+                },
+                "id": "r",
+                "targets": [
+                  "a"
+                ]
+              }
+            },
+            {
+              "method": "artifacts",
+              "request": {},
+              "seq": 1,
+              "value": []
+            },
+            {
+              "method": "publish",
+              "request": {
+                "outputs": [
+                  {
+                    "handle": "built-1",
+                    "target": "a"
+                  }
+                ],
+                "round": "r"
+              },
+              "seq": 2,
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "method": "compile",
+              "request": {
+                "action": "a",
+                "dependencies": [],
+                "entry": "a.txt",
+                "files": [
+                  {
+                    "path": "a.txt",
+                    "text": "hello"
+                  }
+                ],
+                "flags": "identity",
+                "tool": "compiler-1"
+              },
+              "seq": 3,
+              "value": {
+                "handle": "built-1"
+              }
+            },
+            {
+              "method": "next",
+              "request": {},
+              "seq": 4,
+              "value": null
+            }
+          ],
+          "reports": [
+            {
+              "complete": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

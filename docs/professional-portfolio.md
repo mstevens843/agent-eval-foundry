@@ -1,5 +1,8 @@
 # Professional package portfolio
 
+New users: start with the [quickstart](quickstart.md). This page explains the maintained
+production route; use [task authoring](task-authoring.md) for a new custom task.
+
 This page describes the original Prompt 4 layer and shared production path. See the [current 25-package status](project-status.md) for all maintained packages and screening results. The original layer added four professional descendants to
 the existing native CAA package. Twelve protected generic families remain available
 for calibration; they are not twelve additional professional contenders. The 22
@@ -34,15 +37,15 @@ those dependencies are not cached; all later grading is offline:
 ```sh
 docker build --provenance=false -t foundry-portfolio-runtime:v1 tasks/portfolio-runtime
 pnpm build
-pnpm package:local portfolio runtime /absolute/new/runtime-directory
+pnpm package:local portfolio runtime .local/portfolio-example/runtime
 ```
 
 For any of the twenty-four Node portfolio IDs (CAA uses the native path below):
 
 ```sh
-pnpm package:local portfolio build browser-replay-repair /absolute/new/build /absolute/runtime-directory
-pnpm package:local portfolio validate /absolute/build /absolute/new/verification
-pnpm package:local portfolio export /absolute/build /absolute/new/recipient /absolute/verification/assurance.json
+pnpm package:local portfolio build browser-replay-repair .local/portfolio-example/build .local/portfolio-example/runtime
+pnpm package:local portfolio validate .local/portfolio-example/build .local/portfolio-example/verification
+pnpm package:local portfolio export .local/portfolio-example/build .local/portfolio-example/recipient .local/portfolio-example/verification/assurance.json
 ```
 
 Outputs must be new directories: no silent merge with an older package. Validation

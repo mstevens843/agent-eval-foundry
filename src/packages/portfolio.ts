@@ -34,6 +34,7 @@ import {
 } from "./checker-contract.js";
 import { hashFile, localProcess } from "./local-process.js";
 import { decidePackage } from "./policy.js";
+import { recipientReadme } from "./recipient-readme.js";
 import {
   COMPONENTS,
   type Component,
@@ -194,6 +195,27 @@ export async function buildPortfolioPackage(
   runtimeDirectory: string,
 ) {
   if (!Object.hasOwn(PORTFOLIO_PACKAGES, id)) throw Error("PORTFOLIO_UNKNOWN_PACKAGE");
+  return buildPortfolioTask(
+    root,
+    {
+      directory: join(root, "tasks", id),
+      id,
+      familyId: PORTFOLIO_PACKAGES[id],
+      version: "professional-v3",
+    },
+    output,
+    runtimeDirectory,
+  );
+}
+
+/** Trusted task-author source uses the same assembly and grading route as maintained packages. */
+export async function buildPortfolioTask(
+  root: string,
+  source: { directory: string; id: string; familyId: string; version: string },
+  output: string,
+  runtimeDirectory: string,
+) {
+  const { directory, id, familyId, version } = source;
   fresh(output);
   const runtime = json<Runtime>(join(runtimeDirectory, "runtime.json"));
   if (
@@ -201,7 +223,6 @@ export async function buildPortfolioPackage(
     (await hashFile(join(runtimeDirectory, "runtime.tar"))) !== runtime.archive.sha256
   )
     throw Error("PORTFOLIO_RUNTIME_BYTES");
-  const directory = join(root, "tasks", id);
   const tree = readPackageTree(directory, "", true);
   tree.push({ path: "tooling/local-cli.mjs", bytes: readFileSync(join(root, "dist/packages/local-cli.js")) });
   const generator = (await import(pathToFileURL(join(directory, "private/scenarios.mjs")).href)) as {
@@ -261,8 +282,8 @@ export async function buildPortfolioPackage(
     join(output, "store"),
     {
       id,
-      familyId: PORTFOLIO_PACKAGES[id],
-      version: "professional-v3",
+      familyId,
+      version,
       kind: "professional-package",
       dependencies: { strategy: "conservative-repository-closure", unresolved: [] },
       files,
@@ -1337,6 +1358,9 @@ export async function exportPortfolioPackage(directory: string, output: string, 
     writeFileSync(path, f.bytes, { flag: "wx" });
   }
   write(join(output, "verification/assurance.json"), receipt);
+  writeFileSync(join(output, "README.md"), recipientReadme(snapshot.record.id, snapshot.record.digest), {
+    flag: "wx",
+  });
   return { packageDigest: snapshot.record.digest, output };
 }
 

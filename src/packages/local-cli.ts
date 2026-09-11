@@ -1,22 +1,21 @@
-import { executionCommand } from "../execution/command.js";
-import { learningCommand } from "../learning/command.js";
-import { nativePackageCommand } from "./native-caa.js";
-import { portfolioCommand } from "./portfolio.js";
+#!/usr/bin/env node
+import { developerCommand, explainError } from "./developer-command.js";
 
 async function main() {
   try {
     const args = process.argv.slice(2);
-    const result =
-      args[0] === "learning"
-        ? await learningCommand(process.cwd(), args.slice(1))
-        : args[0] === "execution"
-          ? await executionCommand(process.cwd(), args.slice(1))
-          : args[0] === "portfolio"
-            ? await portfolioCommand(process.cwd(), args.slice(1))
-            : await nativePackageCommand(process.cwd(), args);
+    const result = await developerCommand(process.cwd(), args);
     process.stdout.write(`${typeof result === "string" ? result : JSON.stringify(result, null, 2)}\n`);
+    if (
+      args[0] === "doctor" &&
+      typeof result === "object" &&
+      result !== null &&
+      "ok" in result &&
+      result.ok === false
+    )
+      process.exitCode = 1;
   } catch (error) {
-    process.stderr.write(`${String(error)}\n`);
+    process.stderr.write(explainError(error));
     process.exitCode = 1;
   }
 }

@@ -34,6 +34,8 @@ jobs:
       - run: pnpm build
       - name: Fast pure tier
         run: pnpm test:pure
+      - name: Public frozen checker replay
+        run: pnpm replay:example
 
   runtime:
     needs: verify
@@ -75,6 +77,9 @@ jobs:
         run: |
           mkdir -p .local
           pnpm test:integration .local/ci-integration
+      - name: New developer and standalone recipient walkthrough
+        if: matrix.suite == 'integration'
+        run: pnpm test:onboarding .local/ci-onboarding
       - name: Registry and report reproduction
         if: matrix.suite == 'reproduction'
         run: pnpm verify

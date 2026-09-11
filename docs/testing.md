@@ -5,6 +5,7 @@ Use the pinned Node and pnpm versions. Dependencies are installed with the froze
 | Tier | Command | Purpose |
 | --- | --- | --- |
 | Fast pure checks | `pnpm test:pure` | Exact statistics, missingness, policy and semantic integrity fixtures |
+| Developer onboarding | `pnpm test:onboarding .local/onboarding-NEW` | Custom task, correct/broken grading, standalone export, frozen replay and trial planning; Docker, no provider calls |
 | Family semantics | `pnpm test:semantic` | Full selected local reference/negative sweeps, package contracts and research compatibility |
 | Execution failures | `pnpm test:execution` | Inert processes, durable reservations, recovery, capture and immutable results |
 | Historical evidence | `pnpm test:history` | Preserved outcomes, adjudications, inspection, findings, correction propagation and current prose |
@@ -72,6 +73,11 @@ The workflow runs fast quality checks first, then runs the maintained test suite
 Phase 15's frozen corpus originally named two Outbox documents in the author's sibling repository. Exact copies now live in `data/phase-15-source-snapshots/`, verified against the original corpus hashes. A fresh checkout audits those copies without accessing the author's filesystem. Missing and modified snapshots still fail; the historical preregistration and source corpus remain unchanged.
 
 ## Retained service audit
+
+A small public [checker-defect replay](../examples/replays/premature-publication/README.md)
+is available through `pnpm replay:example`. It includes an original submitted checker,
+three retained traces and a scoped frozen oracle. Its documented scope is one defect;
+the full historical model matrices remain a different reproduction claim.
 
 The service-replay regression always verifies the published scenario coverage and results in a clean checkout. An additional Docker replay uses private retained submissions and frozen runtime archives; enable it explicitly on the authoring machine:
 

@@ -45,6 +45,8 @@ export const tierFor = (path) => {
       "engineering-integration.test.ts",
       "integration-exports.test.ts",
       "runtime-readiness.test.ts",
+      "developer-experience.test.ts",
+      "first-trial.test.ts",
       "report-readonly.test.ts",
       "test-result-diagnostics.test.ts",
       "secure-runner-transport.test.ts",
